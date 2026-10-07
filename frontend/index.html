@@ -409,11 +409,8 @@
         </div>
       </div>
 
-      <!-- Service Selection & Pricing Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Left 2 Cols: Service Catalogue & Pricing Plan -->
-        <div class="lg:col-span-2 space-y-6">
+      <!-- Service Selection & Pricing Layout -->
+      <div class="space-y-6">
 
           <!-- Category Grid -->
           <div class="glass-card rounded-3xl p-6">
@@ -538,138 +535,12 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5" id="service-grid">
-              <!-- Dynamically populated via app.js with reduced prices and active search filter -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5" id="service-grid">
+              <!-- Dynamically populated via app.js with modern cards, photos & color coding -->
             </div>
           </div>
 
 
-
-          <!-- Cooperative Samriddhi Pass / Subscription Card -->
-          <div class="glass-card rounded-3xl p-6 border-amber-200 relative overflow-hidden"
-            id="subscription-feature-card">
-            <div
-              class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2 mb-4">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span
-                    class="w-6 h-6 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center font-black">★</span>
-                  <h2 class="text-base font-black text-slate-900" data-i18n="sub-card-title">Seva Setu Samriddhi
-                    Subscription Pass</h2>
-                  <span
-                    class="bg-amber-100 text-amber-900 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-300">VIP
-                    Citizen Offers</span>
-                </div>
-                <p class="text-xs text-slate-500 mt-0.5" data-i18n="sub-card-sub">Subscribe to unlock up to 30% discount
-                  offers, zero emergency fees & exclusive vouchers</p>
-              </div>
-              <div id="subscription-active-status"
-                class="hidden text-xs font-black text-amber-900 bg-amber-100 px-3 py-1.5 rounded-2xl border border-amber-300 flex items-center gap-1.5 shadow-sm">
-                <i data-lucide="crown" class="w-4 h-4 text-amber-600"></i>
-                <span id="sub-active-badge-text">Pass Active: 25% Off Applied</span>
-                <button onclick="openOffersModal()" class="text-blue-700 underline ml-1 font-extrabold text-[11px]">View
-                  Offers</button>
-              </div>
-            </div>
-
-            <!-- Tier Selector: Monthly & Yearly Only -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              <!-- Tier 1: Monthly -->
-              <div
-                class="p-4 rounded-2xl border-2 border-amber-400 bg-amber-50/50 relative cursor-pointer hover:border-amber-500 transition btn-tactile shadow-sm"
-                onclick="selectSubTier('monthly_pass')" id="tier-card-monthly_pass">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <span class="font-black text-slate-900 text-sm">Monthly Citizen Pass</span>
-                    <p class="text-[10px] text-slate-500 font-medium">Standard flexible monthly household coverage</p>
-                  </div>
-                  <span
-                    class="text-[10px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">Monthly</span>
-                </div>
-                <div class="mt-2.5 flex items-baseline gap-1.5">
-                  <span class="text-3xl font-black text-slate-900">₹199</span>
-                  <span class="text-xs text-slate-400 font-medium">/ month</span>
-                </div>
-                <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
-                  <li class="flex items-center gap-1.5"><i data-lucide="check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>20% Flat Discount</strong>
-                      on all tasks & repairs</span></li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Zero platform fee</strong>
-                      (Save 3.5% on every booking)</span></li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Priority emergency
-                        triage</strong> (<15 min dispatch)</span>
-                  </li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span>Free monthly household safety
-                      audit</span></li>
-                </ul>
-              </div>
-
-              <!-- Tier 2: Annual (Includes all Monthly Benefits + Exclusive Yearly Perks) -->
-              <div
-                class="p-4 rounded-2xl border border-slate-200 bg-white relative cursor-pointer hover:border-amber-400 transition btn-tactile shadow-sm"
-                onclick="selectSubTier('annual_samriddhi')" id="tier-card-annual_samriddhi">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <span class="font-black text-slate-900 text-sm flex items-center gap-1.5">
-                      <span>Yearly Samriddhi Pass</span>
-                      <span
-                        class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300">Save
-                        ₹389/yr</span>
-                    </span>
-                    <p class="text-[10px] text-emerald-700 font-bold">12 Months Total Peace of Mind</p>
-                  </div>
-                  <span
-                    class="text-[10px] bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-full shadow">Yearly</span>
-                </div>
-                <div class="mt-2.5 flex items-baseline gap-1.5">
-                  <span class="text-3xl font-black text-slate-900">₹1,999</span>
-                  <span class="text-xs text-slate-400 font-medium">/ year</span>
-                  <span class="text-[11px] text-slate-400 line-through ml-1">₹2,388</span>
-                </div>
-
-                <!-- Highlight: All Monthly Benefits Included -->
-                <div
-                  class="mt-2 py-1 px-2 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800 flex items-center gap-1">
-                  <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i>
-                  <span>Includes ALL Monthly Pass Benefits</span>
-                </div>
-
-                <ul class="mt-2 space-y-1.5 text-xs text-slate-600">
-                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Upgraded 30% Flat
-                        Discount</strong> on all services & artisan crafts</span></li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Full Family
-                        Coverage</strong> (up to 4 members registered)</span></li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>₹500 Seasonal Festival
-                        Voucher Pack</strong></span></li>
-                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
-                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span>Dedicated PACS artisan & cooperative
-                      concierge</span></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- CTA -->
-            <div
-              class="flex flex-wrap items-center justify-between gap-3 bg-amber-50 p-3 rounded-2xl border border-amber-200">
-              <div class="text-xs text-amber-950 font-medium flex items-center gap-1.5">
-                <i data-lucide="gift" class="w-4 h-4 text-amber-600"></i>
-                <span id="sub-cta-desc">Instant voucher code <code
-                    class="font-bold bg-white px-1.5 py-0.5 rounded text-amber-700">SAMRIDDHI25</code> generated upon
-                  checkout!</span>
-              </div>
-              <button type="button" onclick="openSubscriptionCheckoutModal()"
-                class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-blue-950 font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5 btn-tactile">
-                <i data-lucide="credit-card" class="w-4 h-4"></i>
-                <span id="btn-subscribe-text">Subscribe to Pass via Gateway →</span>
-              </button>
-            </div>
-          </div>
 
           <!-- Active Booking Live Status Card (Revealed upon booking) -->
           <div id="booking-status-card"
@@ -819,93 +690,163 @@
 
           </div>
 
-        </div>
+        <!-- Secondary Features Row: Samriddhi Subscription Pass (Left) & Worker Proximity Radar Map (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <!-- Right Col: Live OpenStreetMap & Transparent Quotation Card -->
-        <div class="space-y-6">
-
-          <!-- Leaflet OSM Map -->
-          <div class="glass-card rounded-3xl p-4 overflow-hidden">
-            <div class="flex items-center justify-between mb-2.5 px-1">
-              <h3 class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-                <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
-                <span data-i18n="txt-map-title">Worker Proximity Radar Map</span>
-              </h3>
-              <span
-                class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200"
-                data-i18n="txt-map-live">OpenStreetMap Live</span>
+          <!-- Cooperative Samriddhi Pass / Subscription Card -->
+          <div class="glass-card rounded-3xl p-6 border-amber-200 relative overflow-hidden flex flex-col justify-between"
+            id="subscription-feature-card">
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2 mb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span
+                    class="w-6 h-6 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center font-black">★</span>
+                  <h2 class="text-base font-black text-slate-900" data-i18n="sub-card-title">Seva Setu Samriddhi
+                    Subscription Pass</h2>
+                  <span
+                    class="bg-amber-100 text-amber-900 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-300">VIP
+                    Citizen Offers</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5" data-i18n="sub-card-sub">Subscribe to unlock up to 30% discount
+                  offers, zero emergency fees & exclusive vouchers</p>
+              </div>
+              <div id="subscription-active-status"
+                class="hidden text-xs font-black text-amber-900 bg-amber-100 px-3 py-1.5 rounded-2xl border border-amber-300 flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="crown" class="w-4 h-4 text-amber-600"></i>
+                <span id="sub-active-badge-text">Pass Active: 25% Off Applied</span>
+                <button onclick="openOffersModal()" class="text-blue-700 underline ml-1 font-extrabold text-[11px]">View
+                  Offers</button>
+              </div>
             </div>
-            <div id="client-map" class="h-60 w-full rounded-2xl border border-slate-200 shadow-inner"></div>
-            <div class="flex items-center justify-between mt-2 px-1 text-[11px] text-slate-500 font-medium">
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> <span
-                  data-i18n="txt-map-you">You (Connaught Place)</span></span>
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> <span
-                  data-i18n="txt-map-workers">Cooperative Workers</span></span>
+
+            <!-- Tier Selector: Monthly & Yearly Only -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <!-- Tier 1: Monthly -->
+              <div
+                class="p-4 rounded-2xl border-2 border-amber-400 bg-amber-50/50 relative cursor-pointer hover:border-amber-500 transition btn-tactile shadow-sm"
+                onclick="selectSubTier('monthly_pass')" id="tier-card-monthly_pass">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="font-black text-slate-900 text-sm">Monthly Citizen Pass</span>
+                    <p class="text-[10px] text-slate-500 font-medium">Standard flexible monthly household coverage</p>
+                  </div>
+                  <span
+                    class="text-[10px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">Monthly</span>
+                </div>
+                <div class="mt-2.5 flex items-baseline gap-1.5">
+                  <span class="text-3xl font-black text-slate-900">₹199</span>
+                  <span class="text-xs text-slate-400 font-medium">/ month</span>
+                </div>
+                <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
+                  <li class="flex items-center gap-1.5"><i data-lucide="check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>20% Flat Discount</strong>
+                      on all tasks & repairs</span></li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Zero platform fee</strong>
+                      (Save 3.5% on every booking)</span></li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Priority emergency
+                        triage</strong> (<15 min dispatch)</span>
+                  </li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span>Free monthly household safety
+                      audit</span></li>
+                </ul>
+              </div>
+
+              <!-- Tier 2: Annual (Includes all Monthly Benefits + Exclusive Yearly Perks) -->
+              <div
+                class="p-4 rounded-2xl border border-slate-200 bg-white relative cursor-pointer hover:border-amber-400 transition btn-tactile shadow-sm"
+                onclick="selectSubTier('annual_samriddhi')" id="tier-card-annual_samriddhi">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="font-black text-slate-900 text-sm flex items-center gap-1.5">
+                      <span>Yearly Samriddhi Pass</span>
+                      <span
+                        class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300">Save
+                        ₹389/yr</span>
+                    </span>
+                    <p class="text-[10px] text-emerald-700 font-bold">12 Months Total Peace of Mind</p>
+                  </div>
+                  <span
+                    class="text-[10px] bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-full shadow">Yearly</span>
+                </div>
+                <div class="mt-2.5 flex items-baseline gap-1.5">
+                  <span class="text-3xl font-black text-slate-900">₹1,999</span>
+                  <span class="text-xs text-slate-400 font-medium">/ year</span>
+                  <span class="text-[11px] text-slate-400 line-through ml-1">₹2,388</span>
+                </div>
+
+                <!-- Highlight: All Monthly Benefits Included -->
+                <div
+                  class="mt-2 py-1 px-2 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800 flex items-center gap-1">
+                  <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i>
+                  <span>Includes ALL Monthly Pass Benefits</span>
+                </div>
+
+                <ul class="mt-2 space-y-1.5 text-xs text-slate-600">
+                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Upgraded 30% Flat
+                        Discount</strong> on all services & artisan crafts</span></li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>Full Family
+                        Coverage</strong> (up to 4 members registered)</span></li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span><strong>₹500 Seasonal Festival
+                        Voucher Pack</strong></span></li>
+                  <li class="flex items-center gap-1.5"><i data-lucide="check-check"
+                      class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i> <span>Dedicated PACS artisan & cooperative
+                      concierge</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 bg-amber-50 p-3 rounded-2xl border border-amber-200">
+              <div class="text-xs text-amber-950 font-medium flex items-center gap-1.5">
+                <i data-lucide="gift" class="w-4 h-4 text-amber-600"></i>
+                <span id="sub-cta-desc">Instant voucher code <code
+                    class="font-bold bg-white px-1.5 py-0.5 rounded text-amber-700">SAMRIDDHI25</code> generated upon
+                  checkout!</span>
+              </div>
+              <button type="button" onclick="openSubscriptionCheckoutModal()"
+                class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-blue-950 font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5 btn-tactile">
+                <i data-lucide="credit-card" class="w-4 h-4"></i>
+                <span id="btn-subscribe-text">Subscribe to Pass via Gateway →</span>
+              </button>
             </div>
           </div>
 
-          <!-- Cooperative Direct Fair-Wage & Booking Guidance Card -->
-          <div
-            class="glass-card rounded-3xl p-5 border-blue-100 bg-gradient-to-br from-blue-50/70 to-indigo-50/50 space-y-4 shadow-sm">
-            <div class="flex items-center space-x-2.5 pb-2 border-b border-blue-200/60">
-              <div
-                class="w-9 h-9 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold shadow-sm">
-                <i data-lucide="shield-check" class="w-5 h-5 text-amber-300"></i>
+          <!-- Leaflet OSM Map -->
+          <div class="glass-card rounded-3xl p-5 overflow-hidden flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3 px-1">
+                <h3 class="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                  </div>
+                  <span data-i18n="txt-map-title">Worker Proximity Radar Map</span>
+                </h3>
+                <span
+                  class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200"
+                  data-i18n="txt-map-live">OpenStreetMap Live</span>
               </div>
-              <div>
-                <h4 class="font-black text-slate-900 text-sm">How Seva Setu Booking Works</h4>
-                <p class="text-[11px] text-slate-500 font-medium">100% Direct Fair Wage to Cooperative Technicians</p>
-              </div>
+              <div id="client-map" class="h-72 sm:h-80 w-full rounded-2xl border border-slate-200 shadow-inner"></div>
             </div>
-
-            <p class="text-xs text-slate-600 leading-relaxed">
-              Click any of the <strong>12 Certified Trades</strong> in the catalogue to open the <strong>Interactive
-                Booking Pop-up</strong>. Choose your specific task, pick instant or advance scheduling, and get
-              real-time transparent tariffs!
-            </p>
-
-            <div class="space-y-2.5 text-xs text-slate-700 pt-1">
-              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/80 border border-blue-100">
-                <span
-                  class="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-                <div>
-                  <strong class="text-slate-900 block">Click Any Trade Card</strong>
-                  <span class="text-slate-500 text-[11px]">Instant pop-up menu opens showing specific sub-services (e.g.
-                    Electrician fan fitting, short circuit fix, etc.).</span>
-                </div>
-              </div>
-              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/80 border border-blue-100">
-                <span
-                  class="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
-                <div>
-                  <strong class="text-slate-900 block">Choose Dispatch & Schedule Mode</strong>
-                  <span class="text-slate-500 text-[11px]">Choose between Instant SOS (&lt;30 min dispatch) or Schedule
-                    for later with custom arrival windows.</span>
-                </div>
-              </div>
-              <div class="flex items-start gap-2.5 p-2 rounded-xl bg-white/80 border border-blue-100">
-                <span
-                  class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
-                <div>
-                  <strong class="text-slate-900 block">Dual-OTP Protected Arrival & Pay</strong>
-                  <span class="text-slate-500 text-[11px]">100% transparent invoice with zero aggregator cut and safe
-                    NPCI cooperative escrow.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="pt-2 border-t border-blue-200/60 flex items-center justify-between text-xs">
-              <span class="text-slate-500 font-semibold flex items-center gap-1">
-                <i data-lucide="headphones" class="w-3.5 h-3.5 text-blue-600"></i>
-                <span>Toll-Free Helpline:</span>
-              </span>
-              <strong class="text-blue-900 font-mono font-black">1800-200-SEVA</strong>
+            <div class="flex items-center justify-between mt-3 px-1 text-[11px] text-slate-500 font-medium pt-2 border-t border-slate-100">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> <span
+                  data-i18n="txt-map-you">You (Connaught Place)</span></span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> <span
+                  data-i18n="txt-map-workers">Cooperative Workers</span></span>
             </div>
           </div>
 
         </div>
 
       </div>
+
 
       <!-- ================= CITIZEN REVIEWS & RATINGS (BOTTOM OF CUSTOMER INTERFACE) ================= -->
       <div class="glass-card rounded-3xl p-6 sm:p-8 border-blue-100 space-y-6 mt-8" id="section-citizen-reviews">

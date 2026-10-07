@@ -860,13 +860,14 @@ WORKERS.forEach(w => {
   if (w.freelance_earned === undefined) w.freelance_earned = 0.0;
 });
 
-// Trade Rates & Metadata with REDUCED Grassroots Cooperative Pricing & Synonyms for Search
+// Trade Rates & Metadata with REDUCED Grassroots Cooperative Pricing, Realistic Photos & Synonyms for Search
 const SERVICES = [
   {
     id: "electrician",
     name: "Electrician",
     name_hi: "इलेक्ट्रीशियन",
     icon: "zap",
+    photo: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
     base: 120,
     badge: "ITI Trade Certified",
     badge_hi: "आईटीआई प्रमाणित",
@@ -880,6 +881,7 @@ const SERVICES = [
     name: "Plumber",
     name_hi: "प्लम्बर सेवा",
     icon: "wrench",
+    photo: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80",
     base: 110,
     badge: "Skill India Vetted",
     badge_hi: "स्किल इंडिया सत्यापित",
@@ -893,6 +895,7 @@ const SERVICES = [
     name: "Carpentry & Woodcraft",
     name_hi: "बढ़ईगीरी एवं काष्ठकला",
     icon: "hammer",
+    photo: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80",
     base: 115,
     badge: "ITI Carpentry Certified",
     badge_hi: "आईटीआई काष्ठकला प्रमाणित",
@@ -906,6 +909,7 @@ const SERVICES = [
     name: "Deep Cleaning",
     name_hi: "गहन सफाई सेवा",
     icon: "sparkles",
+    photo: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
     base: 90,
     badge: "Green Sanitation",
     badge_hi: "हरित स्वच्छता",
@@ -919,6 +923,7 @@ const SERVICES = [
     name: "Tailoring & Handloom Repair",
     name_hi: "दर्जी एवं हथकरघा शिल्प",
     icon: "scissors",
+    photo: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80",
     base: 90,
     badge: "Weavers Federation Vetted",
     badge_hi: "बुनकर संघ सत्यापित",
@@ -932,6 +937,7 @@ const SERVICES = [
     name: "Emergency Driver",
     name_hi: "आपातकालीन चालक",
     icon: "car",
+    photo: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80",
     base: 130,
     badge: "Commercial PSV",
     badge_hi: "वाणिज्यिक पीएसवी",
@@ -945,6 +951,7 @@ const SERVICES = [
     name: "Pottery & Terracotta",
     name_hi: "मृत्तिका शिल्प एवं कुम्हार कला",
     icon: "flower-2",
+    photo: "assets/pottery.jpg",
     base: 95,
     badge: "KVIC Heritage Certified",
     badge_hi: "केवीआईसी विरासत प्रमाणित",
@@ -959,6 +966,7 @@ const SERVICES = [
     name: "Blacksmith & Metalcraft",
     name_hi: "लोहार एवं धातु शिल्प",
     icon: "shield",
+    photo: "assets/blacksmith.jpg",
     base: 120,
     badge: "Labour Guild Certified",
     badge_hi: "श्रम गिल्ड प्रमाणित",
@@ -973,6 +981,7 @@ const SERVICES = [
     name: "Painting & Wall Artisan",
     name_hi: "रंग रोगन एवं पेंटिंग कारीगर",
     icon: "palette",
+    photo: "assets/painting.jpg",
     base: 105,
     badge: "NSDC Decorative Master",
     badge_hi: "एनएसडीसी मास्टर पेंटर",
@@ -983,6 +992,101 @@ const SERVICES = [
     keywords: ["paint", "painter", "wall", "color", "whitewash", "distemper", "putty", "texture", "rang", "safedi", "seepage", "damp", "पेंट", "पेंटर", "रंग", "सफेदी", "पुट्टी", "दीवार", "टेक्सचर", "सीलन"]
   }
 ];
+
+// Color Coding Themes for Service Tabs:
+// Blue for electrician, Orange for plumbing, Green for cleaning, etc.
+const SERVICE_THEMES = {
+  electrician: {
+    name: "blue",
+    colorHex: "#2563eb",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-blue-400 hover:shadow-blue-500/15",
+    selectedBg: "bg-[#eff6ff]", // Soft electric blue
+    selectedBorder: "border-blue-600 ring-4 ring-blue-500/25 shadow-xl shadow-blue-500/20",
+    badgeColor: "text-blue-700",
+    timeGradient: "from-blue-600 to-indigo-500"
+  },
+  plumber: {
+    name: "orange",
+    colorHex: "#ea580c",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-orange-400 hover:shadow-orange-500/15",
+    selectedBg: "bg-[#f8ede3]", // Warm peach/cream as seen in Canva design
+    selectedBorder: "border-orange-500 ring-4 ring-orange-400/25 shadow-xl shadow-orange-500/20",
+    badgeColor: "text-orange-700",
+    timeGradient: "from-blue-500 to-pink-500" // Vibrant gradient from screenshot
+  },
+  cleaning: {
+    name: "green",
+    colorHex: "#059669",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-emerald-400 hover:shadow-emerald-500/15",
+    selectedBg: "bg-[#ecfdf5]", // Fresh emerald green
+    selectedBorder: "border-emerald-600 ring-4 ring-emerald-500/25 shadow-xl shadow-emerald-500/20",
+    badgeColor: "text-emerald-700",
+    timeGradient: "from-emerald-500 to-teal-500"
+  },
+  carpentry: {
+    name: "amber",
+    colorHex: "#d97706",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-amber-400 hover:shadow-amber-500/15",
+    selectedBg: "bg-[#fef3c7]/60", // Warm wood amber
+    selectedBorder: "border-amber-600 ring-4 ring-amber-500/25 shadow-xl shadow-amber-500/20",
+    badgeColor: "text-amber-800",
+    timeGradient: "from-amber-500 to-orange-500"
+  },
+  tailoring: {
+    name: "purple",
+    colorHex: "#7c3aed",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-purple-400 hover:shadow-purple-500/15",
+    selectedBg: "bg-[#faf5ff]", // Royal purple
+    selectedBorder: "border-purple-600 ring-4 ring-purple-500/25 shadow-xl shadow-purple-500/20",
+    badgeColor: "text-purple-700",
+    timeGradient: "from-purple-500 to-pink-500"
+  },
+  driver: {
+    name: "sky",
+    colorHex: "#0284c7",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-sky-400 hover:shadow-sky-500/15",
+    selectedBg: "bg-[#f0f9ff]", // Sky blue
+    selectedBorder: "border-sky-600 ring-4 ring-sky-500/25 shadow-xl shadow-sky-500/20",
+    badgeColor: "text-sky-700",
+    timeGradient: "from-sky-500 to-blue-600"
+  },
+  pottery: {
+    name: "terracotta",
+    colorHex: "#c2410c",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-amber-600 hover:shadow-amber-700/15",
+    selectedBg: "bg-[#fff7ed]", // Terracotta peach
+    selectedBorder: "border-amber-700 ring-4 ring-amber-600/25 shadow-xl shadow-amber-800/20",
+    badgeColor: "text-amber-900",
+    timeGradient: "from-orange-600 to-amber-600"
+  },
+  blacksmith: {
+    name: "slate",
+    colorHex: "#334155",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-slate-500 hover:shadow-slate-500/15",
+    selectedBg: "bg-[#f1f5f9]", // Iron slate
+    selectedBorder: "border-slate-800 ring-4 ring-slate-600/25 shadow-xl shadow-slate-700/20",
+    badgeColor: "text-slate-800",
+    timeGradient: "from-slate-700 to-zinc-600"
+  },
+  painting: {
+    name: "rose",
+    colorHex: "#e11d48",
+    unselectedBg: "bg-white",
+    unselectedBorder: "border-stone-300/80 hover:border-rose-400 hover:shadow-rose-500/15",
+    selectedBg: "bg-[#fff1f2]", // Coral rose
+    selectedBorder: "border-rose-600 ring-4 ring-rose-500/25 shadow-xl shadow-rose-500/20",
+    badgeColor: "text-rose-700",
+    timeGradient: "from-rose-500 to-pink-500"
+  }
+};
 
 // ==========================================
 // SPECIFIC WORK / SUB-SERVICES CATALOG (6 ESSENTIAL COOPERATIVE TRADES)
@@ -2926,7 +3030,7 @@ function initServiceGrid(filteredList = null) {
   if (list.length === 0) {
     // Helpful empty state with 1-click restore
     const emptyDiv = document.createElement("div");
-    emptyDiv.className = "col-span-2 sm:col-span-3 p-8 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200";
+    emptyDiv.className = "col-span-1 sm:col-span-2 lg:col-span-3 p-8 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200";
     emptyDiv.innerHTML = `
       <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-2.5">
         <i data-lucide="search-x" class="w-6 h-6"></i>
@@ -2962,7 +3066,7 @@ function initServiceGrid(filteredList = null) {
       artisanHeaderAdded = true;
       const artisanDivider = document.createElement("div");
       artisanDivider.id = "artisan-guilds-section-header";
-      artisanDivider.className = "col-span-2 sm:col-span-3 mt-3 mb-1 p-3.5 bg-gradient-to-r from-amber-500/15 via-amber-100 to-amber-500/15 border-2 border-amber-400 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-xs transition-all";
+      artisanDivider.className = "col-span-1 sm:col-span-2 lg:col-span-3 mt-3 mb-1 p-3.5 bg-gradient-to-r from-amber-500/15 via-amber-100 to-amber-500/15 border-2 border-amber-400 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shadow-xs transition-all";
       artisanDivider.innerHTML = `
         <div class="flex items-center space-x-2.5">
           <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-white flex items-center justify-center shadow-xs flex-shrink-0">
@@ -2986,7 +3090,10 @@ function initServiceGrid(filteredList = null) {
       grid.appendChild(artisanDivider);
     }
 
+    const theme = SERVICE_THEMES[s.id] || SERVICE_THEMES.plumber;
+
     const card = document.createElement("div");
+    card.id = `service-card-${s.id}`;
     card.setAttribute("data-service-id", s.id);
     card.setAttribute("onclick", `selectService('${s.id}', true)`);
     card.onclick = (e) => {
@@ -2995,54 +3102,68 @@ function initServiceGrid(filteredList = null) {
       selectService(s.id, true);
     };
 
-    let borderClass = isSelected 
-      ? (s.isArtisan ? "border-amber-600 bg-amber-50/90 shadow-md ring-2 ring-amber-500/30" : "border-blue-600 bg-blue-50/80 shadow-md ring-2 ring-blue-500/20")
-      : (s.isArtisan ? "border-amber-300 bg-amber-50/40 hover:border-amber-500 hover:bg-amber-50/80 shadow-xs" : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm");
-
+    let activeClasses = "";
     if (isDebarred) {
-      borderClass = "border-red-400 bg-red-50/50 hover:border-red-600 opacity-90";
+      activeClasses = "border-red-400 bg-red-50/60 hover:border-red-600 opacity-90 shadow-sm";
+    } else if (isSelected) {
+      activeClasses = `${theme.selectedBg} ${theme.selectedBorder}`;
+    } else {
+      activeClasses = `${theme.unselectedBg} ${theme.unselectedBorder} shadow-sm`;
     }
 
-    card.className = `p-4 rounded-2xl border-2 transition cursor-pointer flex flex-col items-start justify-between text-left space-y-2 btn-tactile relative ${borderClass}`;
+    card.className = `service-tab-card rounded-[28px] p-4 sm:p-5 border-2 transition-all duration-300 ease-out cursor-pointer group flex flex-col justify-between text-left relative overflow-hidden transform hover:-translate-y-1.5 hover:scale-[1.01] active:scale-[0.99] h-full ${activeClasses}`;
 
     card.innerHTML = `
-      <div class="flex items-center justify-between w-full">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center ${
-          isDebarred ? "bg-red-100 text-red-700" : (isSelected ? (s.isArtisan ? "bg-amber-600 text-white shadow-sm" : "bg-blue-600 text-white shadow-sm") : (s.isArtisan ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-xs" : "bg-slate-100 text-slate-700"))
-        }">
-          <i data-lucide="${s.icon}" class="w-5 h-5"></i>
-        </div>
-        <div class="flex items-center gap-1.5 flex-wrap justify-end">
+      <!-- Top Section: Photo Thumbnail on Left, Title, Vetted Tag & Gradient Time Pill on Right -->
+      <div class="flex items-start gap-3 sm:gap-4 w-full">
+        <!-- Service Photo Thumbnail with Hover Zoom -->
+        <div class="w-24 sm:w-28 md:w-32 h-22 sm:h-24 md:h-26 rounded-2xl overflow-hidden flex-shrink-0 shadow-xs border border-stone-200/90 relative bg-slate-100">
+          <img src="${s.photo}" alt="${name}" loading="lazy" class="service-img-thumb w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&q=80';" />
           ${s.isArtisan ? `
-            <span class="text-[9px] font-black text-amber-900 bg-amber-200 border border-amber-400 px-2 py-0.5 rounded-full flex items-center gap-0.5">
-              <i data-lucide="sparkles" class="w-2.5 h-2.5 text-amber-700"></i> ${isHi ? "अतिरिक्त कारीगर" : "Additional Artisan"}
+            <span class="absolute top-1.5 left-1.5 bg-amber-600/95 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-xs backdrop-blur-xs whitespace-nowrap">
+              ${isHi ? "धरोहर" : "Artisan"}
             </span>
           ` : ""}
-          ${isDebarred ? `
-            <span class="text-[10px] font-black text-red-700 bg-red-100 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <i data-lucide="shield-x" class="w-3 h-3"></i> Debarred
+        </div>
+
+        <!-- Right Column: Name, Vetted Tag & Gradient Time Pill -->
+        <div class="flex-1 min-w-0 flex flex-col justify-between min-h-[5.5rem] sm:min-h-[6rem] py-0.5 space-y-1.5">
+          <div class="min-w-0">
+            <h4 class="font-black text-base sm:text-lg text-slate-900 tracking-tight leading-snug break-words service-tab-title line-clamp-2 group-hover:text-black transition-colors ${isSelected ? 'text-slate-950 font-black' : ''}">
+              ${name}
+            </h4>
+            <span class="text-xs sm:text-sm font-semibold text-[#7c6a96] block leading-tight mt-0.5">
+              ${isDebarred ? "🚫 Debarred by Ministry" : badge}
             </span>
-          ` : `
-            <span class="text-[10px] font-black ${isSelected ? (s.isArtisan ? "text-amber-900 bg-amber-200" : "text-blue-800 bg-blue-100/90") : (s.isArtisan ? "text-amber-800 bg-amber-100" : "text-slate-500 bg-slate-100")} px-2.5 py-0.5 rounded-full">
-              ${time}
-            </span>
-          `}
+          </div>
+
+          <div>
+            ${isDebarred ? `
+              <span class="text-[9px] font-black text-red-700 bg-red-100 border border-red-300 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 whitespace-nowrap shadow-xs">
+                <i data-lucide="shield-x" class="w-2.5 h-2.5"></i> Debarred
+              </span>
+            ` : `
+              <span class="bg-gradient-to-r ${theme.timeGradient} text-white font-bold text-xs px-3 sm:px-3.5 py-1 rounded-full shadow-xs inline-flex items-center justify-center w-fit whitespace-nowrap leading-normal">
+                ${time}
+              </span>
+            `}
+          </div>
         </div>
       </div>
-      <div>
-        <h4 class="font-black text-sm ${isDebarred ? "text-red-950" : (isSelected ? (s.isArtisan ? "text-amber-950" : "text-blue-950") : (s.isArtisan ? "text-amber-950" : "text-slate-900"))}">${name}</h4>
-        <span class="text-[10px] ${isDebarred ? "text-red-600" : (s.isArtisan ? "text-amber-800 font-bold" : "text-emerald-700")} font-bold block mt-0.5">
-          ${isDebarred ? "🚫 Debarred by Ministry" : `✓ ${badge}`}
-        </span>
-      </div>
-      <div class="flex items-center justify-between w-full pt-1.5 border-t ${s.isArtisan ? "border-amber-200/80" : "border-slate-100"} text-xs">
-        <div class="flex items-center gap-1.5 flex-wrap">
-          <span class="font-black ${s.isArtisan ? "text-amber-950" : "text-slate-900"}">₹${s.base}${hrSuffix}</span>
+
+      <!-- Bottom Section: Floating Rate Box on Left, Floating Rating Box on Right -->
+      <div class="flex items-center justify-between w-full mt-4 pt-1 gap-2.5">
+        <div class="bg-white/95 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl shadow-xs border border-stone-200/80 font-black text-xs sm:text-sm text-slate-900 tracking-tight inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap max-w-[70%]">
+          <span>₹${s.base}${hrSuffix}</span>
           ${state.ngoVerified && s.isArtisan ? `
-            <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-1.5 py-0.5 rounded">NGO: ₹${Math.round(s.base * 0.8)}${hrSuffix}</span>
+            <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-bold shrink-0">NGO: ₹${Math.round(s.base * 0.8)}</span>
           ` : ""}
         </div>
-        <span class="text-amber-500 font-bold text-[11px]">★ ${s.rating}</span>
+
+        <div class="bg-white/95 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl shadow-xs border border-stone-200/80 font-black text-xs sm:text-sm text-slate-900 inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+          <span class="text-amber-500 text-sm font-black">★</span>
+          <span>${s.rating}</span>
+        </div>
       </div>
     `;
 
@@ -3053,29 +3174,41 @@ function initServiceGrid(filteredList = null) {
   if (!state.ngoVerified && !isSearchActive) {
     const teaserCard = document.createElement("div");
     teaserCard.id = "artisan-teaser-card";
-    teaserCard.className = "p-4 rounded-2xl border-2 border-dashed border-indigo-200 bg-gradient-to-br from-indigo-50/50 via-purple-50/30 to-amber-50/30 transition flex flex-col items-start justify-between text-left space-y-2 cursor-pointer hover:border-indigo-400 group btn-tactile";
+    teaserCard.className = "service-tab-card p-4 sm:p-5 rounded-[28px] border-2 border-dashed border-indigo-300 bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-amber-50/40 transition-all duration-300 ease-out flex flex-col justify-between text-left cursor-pointer hover:border-indigo-500 group transform hover:-translate-y-1.5 hover:scale-[1.01] shadow-sm h-full col-span-1 sm:col-span-2 lg:col-span-3";
     teaserCard.onclick = (e) => {
       e.stopPropagation();
       sfx.playClick();
       openNgoVerificationModal();
     };
     teaserCard.innerHTML = `
-      <div class="flex items-center justify-between w-full">
-        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center group-hover:scale-105 transition">
-          <i data-lucide="sparkles" class="w-5 h-5 text-indigo-600"></i>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+        <div class="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
+          <div class="w-24 sm:w-28 md:w-32 h-20 sm:h-22 rounded-2xl overflow-hidden flex-shrink-0 shadow-xs border border-indigo-200 bg-indigo-100 flex items-center justify-center relative">
+            <img src="assets/pottery.jpg" alt="Heritage Crafts" class="service-img-thumb w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=400&q=80';" />
+            <div class="absolute inset-0 bg-indigo-900/40 flex items-center justify-center">
+              <i data-lucide="lock" class="w-6 h-6 text-white drop-shadow"></i>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0 space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="font-black text-base sm:text-lg text-indigo-950 tracking-tight leading-snug service-tab-title break-words">${isHi ? "धरोहर कारीगर संघ" : "Heritage Crafts Guilds"}</h4>
+              <span class="bg-gradient-to-r from-amber-500 to-indigo-600 text-white font-bold text-xs px-2.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+                ${isHi ? "एनजीओ हेतु उपलब्ध" : "NGO Partner Guilds"}
+              </span>
+            </div>
+            <p class="text-xs text-indigo-700 font-medium">
+              ${isHi ? "कुम्हार, लोहार व पेंटिंग कारीगर • 20% सामाजिक कल्याण सब्सिडी" : "Pottery, Blacksmith & Metalcraft, and Wall Painting Artisans unlocked with NITI Aayog DARPAN"}
+            </p>
+          </div>
         </div>
-        <span class="text-[10px] font-black text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-          <i data-lucide="lock" class="w-3 h-3 text-amber-600"></i> NGO Access
-        </span>
-      </div>
-      <div>
-        <h4 class="font-black text-sm text-indigo-950">${isHi ? "धरोहर कारीगर सेवाएं" : "Heritage Artisan Crafts"}</h4>
-        <span class="text-[10px] text-indigo-600 font-bold block mt-0.5">
-          ${isHi ? "कुम्हार, लुहार व पेंटिंग सेवाएं" : "Pottery, Blacksmith & Painting"}
-        </span>
-      </div>
-      <div class="flex items-center justify-between w-full pt-1.5 border-t border-indigo-100 text-xs text-indigo-700 font-bold">
-        <span>${isHi ? "दर्पण सत्यापन आवश्यक →" : "Verify DARPAN to Unlock →"}</span>
+        <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+          <div class="bg-white/95 px-3 py-1.5 rounded-xl shadow-xs border border-amber-200 text-amber-700 font-black text-xs sm:text-sm inline-flex items-center gap-1">
+            <span>20% Subsidy</span>
+          </div>
+          <div class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl shadow-sm text-xs font-black inline-flex items-center gap-1.5 transition">
+            <span>${isHi ? "दर्पण आईडी से अनलॉक करें →" : "DARPAN ID Unlock →"}</span>
+          </div>
+        </div>
       </div>
     `;
     grid.appendChild(teaserCard);
@@ -3219,9 +3352,13 @@ function updateServiceBookingModalUI() {
       : "100% Direct Fair Wage to Cooperative Technician • Zero Hidden Cut • NPCI Escrow";
   }
 
-  const iconEl = document.getElementById("booking-modal-service-icon");
-  if (iconEl) {
-    iconEl.setAttribute("data-lucide", sObj.icon || "wrench");
+  const iconBox = document.getElementById("booking-modal-service-icon-box");
+  if (iconBox) {
+    if (sObj.photo) {
+      iconBox.innerHTML = `<img src="${sObj.photo}" alt="${sObj.name}" class="w-full h-full object-cover rounded-2xl" />`;
+    } else {
+      iconBox.innerHTML = `<i data-lucide="${sObj.icon || "wrench"}" class="w-6 h-6 text-amber-300" id="booking-modal-service-icon"></i>`;
+    }
   }
 
   // 2. Stepper labels
@@ -3317,35 +3454,35 @@ function renderSubServices(serviceId) {
       toggleSubServiceSelection(sub.id);
     };
 
-    card.className = `p-4 rounded-2xl border-2 cursor-pointer transition flex flex-col justify-between text-left space-y-2 btn-tactile relative ${
+    card.className = `p-3.5 sm:p-4 rounded-2xl border-2 cursor-pointer transition flex flex-col justify-between text-left space-y-2.5 btn-tactile relative h-full ${
       isSelected
         ? "border-blue-600 bg-blue-50/90 shadow-md ring-2 ring-blue-500/20"
         : "border-slate-200 bg-white hover:border-blue-400 hover:shadow-sm"
     }`;
 
     card.innerHTML = `
-      <div class="flex items-start justify-between w-full">
-        <div class="flex items-center gap-2">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-blue-600 text-white shadow-sm" : "bg-blue-50 text-blue-700"}">
-            <i data-lucide="${sub.icon || "wrench"}" class="w-5 h-5"></i>
+      <div class="flex items-start justify-between w-full gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isSelected ? "bg-blue-600 text-white shadow-sm" : "bg-blue-50 text-blue-700"}">
+            <i data-lucide="${sub.icon || "wrench"}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
           </div>
-          <div>
-            <span class="text-[10px] font-black ${isSelected ? "text-blue-800 bg-blue-100" : "text-emerald-700 bg-emerald-50 border border-emerald-200"} px-2.5 py-0.5 rounded-full">
+          <div class="min-w-0">
+            <span class="text-[10px] font-black ${isSelected ? "text-blue-800 bg-blue-100" : "text-emerald-700 bg-emerald-50 border border-emerald-200"} px-2.5 py-0.5 rounded-full whitespace-nowrap inline-block">
               ${badge}
             </span>
           </div>
         </div>
-        <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-xs" : "border-slate-300 bg-white"}">
-          ${isSelected ? `<i data-lucide="check" class="w-4 h-4 text-white"></i>` : ""}
+        <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-xs" : "border-slate-300 bg-white"}">
+          ${isSelected ? `<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>` : ""}
         </div>
       </div>
-      <div>
-        <h4 class="font-black text-sm ${isSelected ? "text-blue-950" : "text-slate-900"}">${title}</h4>
-        <p class="text-xs text-slate-500 mt-1 leading-relaxed">${desc}</p>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-black text-sm ${isSelected ? "text-blue-950" : "text-slate-900"} tracking-tight leading-snug line-clamp-2 break-words">${title}</h4>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2 break-words">${desc}</p>
       </div>
-      <div class="flex items-center justify-between w-full pt-2 border-t border-slate-100 text-xs">
-        <span class="font-bold text-slate-500">${isHi ? "श्रम दर:" : "Base Labor:"}</span>
-        <span class="font-black text-slate-900 text-sm">₹${sub.base}${isHi ? "/कार्य" : "/job"}</span>
+      <div class="flex items-center justify-between w-full pt-2.5 border-t border-slate-100 text-xs gap-2">
+        <span class="font-bold text-slate-500 shrink-0">${isHi ? "श्रम दर:" : "Base Labor:"}</span>
+        <span class="font-black text-slate-900 text-xs sm:text-sm shrink-0 whitespace-nowrap">₹${sub.base}${isHi ? "/कार्य" : "/job"}</span>
       </div>
     `;
 
