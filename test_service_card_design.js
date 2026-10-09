@@ -107,44 +107,46 @@ sandbox.initServiceGrid();
 const renderedCards = mockGrid.children.filter(c => c.getAttribute("data-service-id"));
 assert.strictEqual(renderedCards.length, 6, "Expected 6 default services (3 artisan hidden without NGO)");
 
-// Check Plumber card (should be color-coded orange)
+// Check Plumber card (should be color-coded orange with darker shade when selected)
 const plumberCard = renderedCards.find(c => c.getAttribute("data-service-id") === "plumber");
 assert(plumberCard, "Plumber card must exist");
 assert(plumberCard.className.includes("border-orange-500"), "Plumber card must have orange border when selected");
-assert(plumberCard.className.includes("bg-[#f8ede3]"), "Plumber card must have warm peach/cream background when selected");
+assert(plumberCard.className.includes("bg-[#fed7aa]"), "Plumber card must have darker orange shade background when selected");
 assert(plumberCard.innerHTML.includes("<img src="), "Plumber card must contain photo thumbnail");
 assert(plumberCard.innerHTML.includes("Skill India Vetted"), "Plumber card must contain 'Skill India Vetted'");
 assert(plumberCard.innerHTML.includes("12 mins"), "Plumber card must contain time pill");
 assert(plumberCard.innerHTML.includes("₹110/hr"), "Plumber card must contain rate box");
 assert(plumberCard.innerHTML.includes("4.8"), "Plumber card must contain rating");
-console.log("✓ Test 4A: Plumber card renders Canva design with photo and orange color coding (PASSED)");
+console.log("✓ Test 4A: Plumber card renders Canva design with photo and darker orange selected color coding (PASSED)");
 
-// Check Electrician card (when unselected, should have unselected styling and blue hover glow)
+// Check Electrician card (when unselected, should have lighter blue tint background, not white)
 const elecCard = renderedCards.find(c => c.getAttribute("data-service-id") === "electrician");
 assert(elecCard, "Electrician card must exist");
+assert(elecCard.className.includes("bg-[#eff6ff]"), "Unselected Electrician card must have lighter blue shade background, not white");
+assert(!elecCard.className.includes("bg-white"), "Unselected Electrician card must not have plain white background");
 assert(elecCard.innerHTML.includes("<img src="), "Electrician card must contain photo thumbnail");
 assert(elecCard.innerHTML.includes("ITI Trade Certified"), "Electrician card must contain vetted badge");
-console.log("✓ Test 4B: Unselected Electrician card has photo and hover classes (PASSED)");
+console.log("✓ Test 4B: Unselected Electrician card has lighter shade tint (not white) and hover classes (PASSED)");
 
-// Test 4C: Select Electrician -> verify it turns blue
+// Test 4C: Select Electrician -> verify it turns darker blue
 sandbox.state.selectedService = "electrician";
 mockGrid.children = [];
 sandbox.initServiceGrid();
 
 const elecCardSelected = mockGrid.children.find(c => c.getAttribute("data-service-id") === "electrician");
 assert(elecCardSelected.className.includes("border-blue-600"), "Electrician card must have blue border when selected");
-assert(elecCardSelected.className.includes("bg-[#eff6ff]"), "Electrician card must have light blue background when selected");
-console.log("✓ Test 4C: Electrician selected state color-coded blue (PASSED)");
+assert(elecCardSelected.className.includes("bg-[#bfdbfe]"), "Electrician card must have darker blue background when selected");
+console.log("✓ Test 4C: Electrician selected state color-coded darker blue (PASSED)");
 
-// Test 4D: Select Cleaning -> verify it turns green
+// Test 4D: Select Cleaning -> verify it turns darker green
 sandbox.state.selectedService = "cleaning";
 mockGrid.children = [];
 sandbox.initServiceGrid();
 
 const cleanCardSelected = mockGrid.children.find(c => c.getAttribute("data-service-id") === "cleaning");
 assert(cleanCardSelected.className.includes("border-emerald-600"), "Cleaning card must have emerald border when selected");
-assert(cleanCardSelected.className.includes("bg-[#ecfdf5]"), "Cleaning card must have emerald background when selected");
-console.log("✓ Test 4D: Cleaning selected state color-coded green (PASSED)");
+assert(cleanCardSelected.className.includes("bg-[#a7f3d0]"), "Cleaning card must have darker emerald green background when selected");
+console.log("✓ Test 4D: Cleaning selected state color-coded darker green (PASSED)");
 
 console.log("\n=======================================================");
 console.log(" ALL SERVICE CARD DESIGN & COLOR CODING TESTS PASSED! ");
