@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import uvicorn
+import datetime
 from fastapi import FastAPI, HTTPException, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -19,7 +20,9 @@ from dispatch import (
     verify_start_otp,
     complete_job_with_proof,
     BOOKINGS_DB,
-    find_nearest_workers
+    find_nearest_workers,
+    get_customer_service_history,
+    get_worker_service_history
 )
 from seed_data import (
     WORKERS,
@@ -86,6 +89,48 @@ class StartOtpRequest(BaseModel):
 class CompleteJobRequest(BaseModel):
     otp: str
     proof_image: Optional[str] = None
+    work_notes: Optional[str] = None
+    odometer_reading: Optional[str] = None
+
+class DriverTelemetryUpdateRequest(BaseModel):
+    booking_id: int
+    lat: float
+    lng: float
+    speed_kmh: float = 38.5
+    heading_deg: float = 315.0
+    heading_cardinal: str = "NW"
+    altitude_m: float = 216.0
+    accuracy_m: float = 1.8
+    satellites_locked: int = 16
+    distance_traveled_km: float = 6.4
+    estimated_remaining_km: float = 2.1
+    route_status: str = "EN_ROUTE_OPTIMAL"
+
+class EmergencyHelplineCallRequest(BaseModel):
+    customer_name: str
+    customer_phone: Optional[str] = None
+    booking_id: Optional[int] = None
+    service_type: str = "driver"
+    vehicle_number: Optional[str] = "DL-1Z-9021"
+    driver_name: Optional[str] = "Vikram Singh"
+    driver_phone: Optional[str] = "+91 97123 45678"
+    lat: float = 28.6315
+    lng: float = 77.2167
+    speed_kmh: float = 38.0
+    emergency_type: str = "FEMALE_SAFETY_POLICE_SOS" # FEMALE_SAFETY_POLICE_SOS, ROUTE_DEVIATION, HARASSMENT
+    notes: Optional[str] = "Passenger triggered Female Safety Helpline demonstration in transit"
+
+class WorkerEscalationRequest(BaseModel):
+    worker_id: int
+    worker_name: str
+    customer_name: str
+    customer_phone: Optional[str] = None
+    booking_id: Optional[int] = None
+    category: str = "CUSTOMER_MISBEHAVIOR"
+    priority: str = "HIGH" # ROUTINE, URGENT, RED_SOS
+    delay_hours: Optional[float] = 0.0
+    description: str
+
 
 class DocumentVerifyRequest(BaseModel):
     worker_name: str
@@ -347,13 +392,255 @@ def submit_start_otp(booking_id: int, req: StartOtpRequest):
         raise HTTPException(status_code=400, detail=result["message"])
     return result
 
-# 7. Complete Job with Proof & END_OTP
+# 7. Complete Job with Proof & END_OTP (Mandatory Proof of Work)
 @app.post("/api/bookings/{booking_id}/complete", tags=["Bookings"])
 def finalize_booking(booking_id: int, req: CompleteJobRequest):
-    result = complete_job_with_proof(booking_id=booking_id, entered_otp=req.otp, proof_image=req.proof_image)
+    result = complete_job_with_proof(
+        booking_id=booking_id,
+        entered_otp=req.otp,
+        proof_image=req.proof_image,
+        work_notes=req.work_notes,
+        odometer_reading=req.odometer_reading
+    )
     if not result["success"]:
         raise HTTPException(status_code=400, detail=result["message"])
     return result
+
+class ServiceCompleteWithProofRequest(BaseModel):
+    booking_id: int
+    worker_id: Optional[int] = None
+    end_otp: Optional[str] = None
+    otp: Optional[str] = None
+    proof_image: Optional[str] = None
+    work_notes: Optional[str] = None
+    odometer_reading: Optional[str] = None
+
+@app.post("/api/service/complete-with-proof", tags=["Bookings"])
+def service_complete_with_proof(req: ServiceCompleteWithProofRequest):
+    entered_otp = req.end_otp or req.otp or ""
+    result = complete_job_with_proof(
+        booking_id=req.booking_id,
+        entered_otp=entered_otp,
+        proof_image=req.proof_image,
+        work_notes=req.work_notes,
+        odometer_reading=req.odometer_reading
+    )
+    if not result["success"]:
+        raise HTTPException(status_code=400, detail=result["message"])
+    return result
+
+# 7A. Customer Service History API
+@app.get("/api/history/customer/{customer_name}", tags=["Service History"])
+def fetch_customer_service_history(customer_name: str):
+    history = get_customer_service_history(customer_name)
+    return {
+        "customer_name": customer_name,
+        "total_services": len(history),
+        "history": history
+    }
+
+# 7B. Worker Service & Job History API
+@app.get("/api/history/worker/{worker_id}", tags=["Service History"])
+def fetch_worker_service_history(worker_id: int):
+    history = get_worker_service_history(worker_id)
+    total_earned = sum(b.get("pricing", {}).get("cooperative_wage_payout", 0.0) for b in history if b.get("status") == "COMPLETED")
+    return {
+        "worker_id": worker_id,
+        "completed_count": len([b for b in history if b.get("status") == "COMPLETED"]),
+        "total_earned": round(total_earned, 2),
+        "jobs": history,
+        "history": history
+    }
+
+# 7C. Driver Service GPS Telemetry In-Memory Store & Endpoints
+DRIVER_TELEMETRY_DB: Dict[int, Dict[str, Any]] = {}
+
+@app.get("/api/driver/telemetry/{booking_id}", tags=["Driver Services"])
+def get_driver_telemetry(booking_id: int):
+    if booking_id in DRIVER_TELEMETRY_DB:
+        data = DRIVER_TELEMETRY_DB[booking_id]
+    else:
+        # Default initial telemetry centered near Connaught Place / route
+        data = {
+            "booking_id": booking_id,
+            "lat": 28.6328,
+            "lng": 77.2197,
+            "speed_kmh": 41.2,
+            "heading_deg": 315.0,
+            "heading_cardinal": "NW",
+            "altitude_m": 216.5,
+            "accuracy_m": 1.8,
+            "satellites_locked": 16,
+            "distance_traveled_km": 6.4,
+            "estimated_remaining_km": 2.1,
+            "route_status": "EN_ROUTE_OPTIMAL",
+            "last_ping": "Live Stream Active"
+        }
+    return {
+        "success": True,
+        "telemetry": data,
+        **data
+    }
+
+@app.post("/api/driver/telemetry/{booking_id}", tags=["Driver Services"])
+def update_driver_telemetry(booking_id: int, req: DriverTelemetryUpdateRequest):
+    data = req.model_dump()
+    data["updated_at"] = "2026-10-22T14:40:00Z"
+    DRIVER_TELEMETRY_DB[booking_id] = data
+    return {"success": True, "telemetry": data}
+
+# 7D. Worker Incident Escalation at All Given Times
+WORKER_ESCALATIONS_LOG: List[Dict[str, Any]] = []
+
+@app.post("/api/worker/escalate", tags=["Worker Protection"])
+def escalate_worker_grievance(req: WorkerEscalationRequest):
+    ticket_id = f"WRK-ESC-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}" if 'datetime' in globals() else f"WRK-ESC-{len(WORKER_ESCALATIONS_LOG)+101}"
+    record = {
+        "ticket_id": ticket_id,
+        "worker_id": req.worker_id,
+        "worker_name": req.worker_name,
+        "customer_name": req.customer_name,
+        "customer_phone": req.customer_phone or "+91 98990 01122",
+        "booking_id": req.booking_id,
+        "category": req.category,
+        "priority": req.priority,
+        "delay_hours": req.delay_hours or 0.0,
+        "description": req.description,
+        "status": "ESCALATED_TO_NODAL_OFFICER",
+        "timestamp": "2026-10-22T14:40:00Z"
+    }
+    WORKER_ESCALATIONS_LOG.insert(0, record)
+    CUSTOMER_COMPLAINTS_DB.insert(0, {
+        "id": len(CUSTOMER_COMPLAINTS_DB) + 900,
+        "customer_name": req.customer_name,
+        "customer_phone": req.customer_phone or "+91 98990 01122",
+        "worker_id": req.worker_id,
+        "worker_name": req.worker_name,
+        "booking_id": req.booking_id,
+        "category": req.category,
+        "category_title": f"Worker 24x7 Escalation ({req.category})",
+        "description": req.description,
+        "delay_hours": req.delay_hours or 0.0,
+        "severity": req.priority,
+        "timestamp": "2026-10-22 14:40",
+        "status": "ESCALATED_TO_MINISTRY",
+        "ministry_action": "High Priority Review Triggered"
+    })
+    return {
+        "success": True,
+        "ticket_id": ticket_id,
+        "message": f"Escalation ticket {ticket_id} registered and dispatched to Cooperative Nodal Officer and Ministry Cockpit.",
+        "record": record
+    }
+
+# 7E. Female Safety & Police Helpline Demonstration Call API
+EMERGENCY_HELPLINE_LOGS: List[Dict[str, Any]] = []
+
+@app.post("/api/emergency/helpline-call", tags=["Emergency Services"])
+def register_emergency_helpline_call(req: EmergencyHelplineCallRequest):
+    call_id = f"SOS-112-{len(EMERGENCY_HELPLINE_LOGS)+1001}"
+    call_log = {
+        "call_id": call_id,
+        "customer_name": req.customer_name,
+        "customer_phone": req.customer_phone or "+91 98765 43210",
+        "booking_id": req.booking_id,
+        "service_type": req.service_type,
+        "vehicle_number": req.vehicle_number,
+        "driver_name": req.driver_name,
+        "driver_phone": req.driver_phone,
+        "gps_coords": [req.lat, req.lng],
+        "speed_kmh": req.speed_kmh,
+        "emergency_type": req.emergency_type,
+        "notes": req.notes,
+        "dispatched_unit": "PCR Van #14 (Connaught Place Sector Patrol)",
+        "call_status": "DEMONSTRATION_CONNECTED",
+        "timestamp": "2026-10-22T14:40:00Z"
+    }
+    EMERGENCY_HELPLINE_LOGS.insert(0, call_log)
+    return {
+        "success": True,
+        "call_id": call_id,
+        "message": "Emergency broadcast successfully received by Simulated Police & Women Safety Response Desk.",
+        "call_log": call_log
+    }
+
+# 7F. Customer Driver Crime & Misconduct Reporting API
+class CustomerDriverCrimeReportRequest(BaseModel):
+    booking_id: Optional[int] = None
+    customer_name: str
+    customer_phone: Optional[str] = "+91 98765 43210"
+    driver_name: str
+    driver_id: Optional[int] = None
+    vehicle_number: Optional[str] = "DL-1Z-9021"
+    category: str
+    priority: str = "CRITICAL"
+    description: str
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+    speed_kmh: Optional[float] = None
+    call_helpline_now: bool = False
+
+POLICE_CRIME_REPORTS_DB: List[Dict[str, Any]] = []
+
+@app.post("/api/customer/driver/report-crime", tags=["Customer Safety"])
+def report_driver_crime(req: CustomerDriverCrimeReportRequest):
+    now_ts = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    ticket_id = f"POLICE-CRIME-{now_ts}"
+    record = {
+        "ticket_id": ticket_id,
+        "booking_id": req.booking_id,
+        "customer_name": req.customer_name,
+        "customer_phone": req.customer_phone,
+        "driver_name": req.driver_name,
+        "driver_id": req.driver_id,
+        "vehicle_number": req.vehicle_number,
+        "category": req.category,
+        "priority": req.priority,
+        "description": req.description,
+        "telemetry": {
+            "lat": req.lat or 28.6328,
+            "lng": req.lng or 77.2197,
+            "speed_kmh": req.speed_kmh or 41.2
+        },
+        "police_nodal_station": "Connaught Place PCR / Central Delhi Women Safety Cell (112 / 1091)",
+        "pcr_van_dispatched": True,
+        "driver_action": "DRIVER_SUSPENDED_PENDING_POLICE_INQUIRY",
+        "timestamp": datetime.datetime.now().isoformat(),
+        "call_helpline_now": req.call_helpline_now
+    }
+    POLICE_CRIME_REPORTS_DB.insert(0, record)
+    
+    # Also log into CUSTOMER_COMPLAINTS_DB so Ministry Cockpit sees the high-severity crime
+    CUSTOMER_COMPLAINTS_DB.insert(0, {
+        "id": len(CUSTOMER_COMPLAINTS_DB) + 950,
+        "customer_name": req.customer_name,
+        "customer_phone": req.customer_phone,
+        "worker_name": req.driver_name,
+        "worker_id": req.driver_id or 104,
+        "category": req.category,
+        "category_title": f"Police Crime Report: {req.category}",
+        "description": req.description,
+        "severity": "CRITICAL_CRIME",
+        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "status": "POLICE_FIR_INITIATED",
+        "ministry_action": "Driver suspended immediately from radar. PCR dispatched."
+    })
+    
+    # If driver worker exists in WORKERS, immediately suspend them from radar
+    if req.driver_id:
+        for w in WORKERS:
+            if w["id"] == req.driver_id:
+                w["is_available"] = False
+                w["disciplinary_status"] = "SUSPENDED_POLICE_INQUIRY"
+                break
+
+    return {
+        "success": True,
+        "ticket_id": ticket_id,
+        "message": f"Police Crime Ticket {ticket_id} registered. Interceptor dispatched and driver suspended.",
+        "record": record
+    }
+
 
 # 8. AI Document Verification (Gemini 1.5 Flash)
 @app.post("/api/workers/verify-credentials", tags=["AI Verification"])

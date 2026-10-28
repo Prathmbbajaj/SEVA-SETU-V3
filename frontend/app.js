@@ -265,7 +265,14 @@ const TRANSLATIONS = {
     "ngo-banner-desc": "Verify your NITI Aayog DARPAN ID to unlock 20% social welfare subsidy and direct access to Heritage Artisan Guilds (Pottery, Blacksmith, Painting).",
     "ngo-banner-btn": "Verify NGO Credentials",
     "txt-ngo-artisan-quick-label": "Additionally Unlocked Services:",
-    "txt-artisan-quick-label": "Additional NGO Artisan Guilds:"
+    "txt-artisan-quick-label": "Additional NGO Artisan Guilds:",
+    "btn-citizen-service-history": "Orders & History",
+    "btn-worker-job-history": "Job History Log",
+    "btn-worker-escalate-top": "24x7 Escalate Incident",
+    "txt-driver-telemetry-hud": "Live Driver GPS Telemetry HUD",
+    "txt-driver-safety-box": "Safety & Police Helpline (112/1091)",
+    "proof-mandatory-title": "Mandatory Proof of Work Required",
+    "proof-mandatory-desc": "Job completion cannot proceed without verified photographic proof of work and notes."
   },
   hi: {
     "ministry-subtitle": "सहकारिता मंत्रालय, भारत सरकार • \"सेवा से समृद्धि\"",
@@ -475,7 +482,14 @@ const TRANSLATIONS = {
     "ngo-banner-desc": "20% सामाजिक कल्याण सब्सिडी और धरोहर कारीगर संघों (कुम्हार, लुहार, पेंटर) की सेवाओं को अनलॉक करने हेतु नीति आयोग दर्पण आईडी सत्यापित करें।",
     "ngo-banner-btn": "एनजीओ क्रेडेंशियल सत्यापित करें",
     "txt-ngo-artisan-quick-label": "अतिरिक्त अनलॉक की गई सेवाएं:",
-    "txt-artisan-quick-label": "अतिरिक्त एनजीओ कारीगर संघ:"
+    "txt-artisan-quick-label": "अतिरिक्त एनजीओ कारीगर संघ:",
+    "btn-citizen-service-history": "ऑर्डर व सेवा इतिहास",
+    "btn-worker-job-history": "कार्य इतिहास लॉग",
+    "btn-worker-escalate-top": "24x7 घटना शिकायत",
+    "txt-driver-telemetry-hud": "लाइव ड्राइवर जीपीएस टेलीमेट्री एचयूडी",
+    "txt-driver-safety-box": "महिला सुरक्षा एवं पुलिस हेल्पलाइन (112/1091)",
+    "proof-mandatory-title": "कार्य का प्रमाण अनिवार्य है",
+    "proof-mandatory-desc": "सत्यापित कार्य फोटो व विवरण के बिना कार्य समापन संभव नहीं है।"
   }
 };
 
@@ -509,6 +523,7 @@ function showToast(message, icon = "info") {
 }
 
 // Audio Synthesizer via Web Audio API (Disabled / Muted per specification)
+// Audio Synthesizer via Web Audio API (Disabled / Muted per specification)
 class SoundFX {
   constructor() {
     this.ctx = null;
@@ -527,6 +542,14 @@ class SoundFX {
     // Sound permanently removed
   }
 
+  playBeep() {
+    // Sound permanently removed
+  }
+
+  playWarning() {
+    // Sound permanently removed
+  }
+
   playFallbackWarning() {
     // Sound permanently removed
   }
@@ -536,7 +559,13 @@ class SoundFX {
   }
 }
 
-const sfx = new SoundFX();
+const sfxInstance = new SoundFX();
+const sfx = new Proxy(sfxInstance, {
+  get(target, prop) {
+    if (prop in target) return target[prop];
+    return () => {};
+  }
+});
 
 // Guards against the Lucide CDN failing to load (blocked network, slow CDN, offline
 // demo, etc.) so a single missing external script can't crash icon rendering and
@@ -936,6 +965,11 @@ const SERVICES = [
     rating: 4.9,
     time: "10 mins",
     time_hi: "10 मिनट",
+    visualTags: [
+      { icon: "zap", label: "Wiring & MCB", label_hi: "वायरिंग व एमसीबी" },
+      { icon: "wind", label: "Fans & Motors", label_hi: "पंखा व मोटर" },
+      { icon: "sun", label: "Lights & Switches", label_hi: "लाइट्स व स्विच" }
+    ],
     keywords: ["electric", "wire", "switch", "light", "fan", "fuse", "short circuit", "ac", "bijli", "tarr", "इलेक्ट्रिक", "बिजली", "तार", "पंखा", "शॉर्ट सर्किट", "मीटर"]
   },
   {
@@ -950,6 +984,11 @@ const SERVICES = [
     rating: 4.8,
     time: "12 mins",
     time_hi: "12 मिनट",
+    visualTags: [
+      { icon: "droplet", label: "Tap & Leaks", label_hi: "नल व लीकेज" },
+      { icon: "wrench", label: "Pipes & Drain", label_hi: "पाइप व ड्रेन" },
+      { icon: "bath", label: "Bath & Sanitary", label_hi: "बाथरूम फिटिंग" }
+    ],
     keywords: ["plumb", "pipe", "tap", "leak", "drain", "water", "tank", "washroom", "toilet", "nal", "pani", "नल", "पानी", "पाइप", "लीक", "टोंटी", "सीवर"]
   },
   {
@@ -964,6 +1003,11 @@ const SERVICES = [
     rating: 4.9,
     time: "10 mins",
     time_hi: "10 मिनट",
+    visualTags: [
+      { icon: "door-closed", label: "Doors & Locks", label_hi: "दरवाजा व लॉक" },
+      { icon: "hammer", label: "Furniture Fix", label_hi: "फर्नीचर मरम्मत" },
+      { icon: "armchair", label: "Wood Polish", label_hi: "पॉलिश व फिटिंग" }
+    ],
     keywords: ["carpenter", "wood", "furniture", "table", "chair", "door", "window", "bed", "polish", "drill", "badhai", "lakdi", "almirah", "sofa", "बढ़ई", "लकड़ी", "फर्नीचर", "दरवाजा", "खिड़की", "मेज", "कुर्सी", "अलमारी", "सोफा", "काष्ठ"]
   },
   {
@@ -978,6 +1022,11 @@ const SERVICES = [
     rating: 4.9,
     time: "15 mins",
     time_hi: "15 मिनट",
+    visualTags: [
+      { icon: "sparkles", label: "Home Deep Clean", label_hi: "घर डीप क्लीन" },
+      { icon: "bath", label: "Kitchen & Bath", label_hi: "किचन व बाथरूम" },
+      { icon: "sofa", label: "Sofa & Carpet", label_hi: "सोफा व कारपेट" }
+    ],
     keywords: ["clean", "sweep", "dust", "mop", "wash", "sanit", "deep clean", "safai", "housekeeping", "सफाई", "धुलाई", "स्वच्छता", "झाड़ू", "पोछा", "किचन"]
   },
   {
@@ -992,6 +1041,11 @@ const SERVICES = [
     rating: 4.9,
     time: "12 mins",
     time_hi: "12 मिनट",
+    visualTags: [
+      { icon: "scissors", label: "Alter & Stitch", label_hi: "सिलाई व फिटिंग" },
+      { icon: "shirt", label: "Suits & Shirts", label_hi: "सूट व शर्ट" },
+      { icon: "curtain", label: "Zips & Curtains", label_hi: "ज़िप व पर्दे" }
+    ],
     keywords: ["tailor", "sewing", "stitch", "clothes", "fabric", "alteration", "handloom", "darji", "silai", "curtain", "upholstery", "दर्जी", "सिलाई", "कपड़ा", "सूट", "हथकरघा", "पर्दा", "रफू"]
   },
   {
@@ -1006,6 +1060,11 @@ const SERVICES = [
     rating: 4.7,
     time: "8 mins",
     time_hi: "8 मिनट",
+    visualTags: [
+      { icon: "car", label: "City Transit", label_hi: "शहर यात्रा" },
+      { icon: "plane", label: "Airport Drop", label_hi: "एयरपोर्ट ड्रॉप" },
+      { icon: "navigation", label: "Outstation", label_hi: "आउटस्टेशन" }
+    ],
     keywords: ["driv", "car", "taxi", "chauffeur", "ride", "auto", "ambulance", "gadi", "chalak", "चालक", "गाड़ी", "ड्राइवर", "ड्राइविंग", "सवारी"]
   },
   {
@@ -1021,6 +1080,11 @@ const SERVICES = [
     time: "15 mins",
     time_hi: "15 मिनट",
     isArtisan: true,
+    visualTags: [
+      { icon: "flame", label: "Clay Diyas", label_hi: "मिट्टी के दीये" },
+      { icon: "flower-2", label: "Earthen Pots", label_hi: "मटके व हांडी" },
+      { icon: "sparkles", label: "Planters & Art", label_hi: "गमले व कला" }
+    ],
     keywords: ["pottery", "clay", "matka", "terracotta", "tandoor", "diya", "handi", "surahi", "kumhar", "mitti", "bartan", "कुम्हार", "मिट्टी", "मटका", "तंदूर", "दीया", "हांडी", "सुराही", "टेराकोटा", "शिल्प"]
   },
   {
@@ -1036,6 +1100,11 @@ const SERVICES = [
     time: "12 mins",
     time_hi: "12 मिनट",
     isArtisan: true,
+    visualTags: [
+      { icon: "shield", label: "Iron Gates", label_hi: "लोहे के गेट" },
+      { icon: "hammer", label: "Window Grills", label_hi: "खिड़की ग्रिल" },
+      { icon: "flame", label: "Welding Work", label_hi: "वेल्डिंग कार्य" }
+    ],
     keywords: ["blacksmith", "iron", "welding", "grill", "gate", "metal", "shutter", "sharpen", "loha", "luhar", "welder", "लोहार", "लोहा", "वेल्डिंग", "गेट", "ग्रिल", "धातु", "शटर", "कुल्हाड़ी"]
   },
   {
@@ -1051,9 +1120,23 @@ const SERVICES = [
     time: "15 mins",
     time_hi: "15 मिनट",
     isArtisan: true,
+    visualTags: [
+      { icon: "palette", label: "Wall Whitewash", label_hi: "दीवार पुताई" },
+      { icon: "droplets", label: "Seepage Fix", label_hi: "सीलन रोकथाम" },
+      { icon: "brush", label: "Enamel Polish", label_hi: "पॉलिश व डिस्टेंपर" }
+    ],
     keywords: ["paint", "painter", "wall", "color", "whitewash", "distemper", "putty", "texture", "rang", "safedi", "seepage", "damp", "पेंट", "पेंटर", "रंग", "सफेदी", "पुट्टी", "दीवार", "टेक्सचर", "सीलन"]
-  },
-  // Dedicated Institutional Maintenance Services for Organisations (Schools & Hospitals)
+  }
+];
+
+// Feature Toggle: Facility Institutional Maintenance Services (Disabled for now per user instruction)
+const ENABLE_INSTITUTIONAL_SERVICES = false;
+if (typeof window !== "undefined") {
+  window.ENABLE_INSTITUTIONAL_SERVICES = false;
+}
+
+// Archived / Inactive for now: Dedicated Institutional Maintenance Services for Organisations (Schools & Hospitals)
+const INSTITUTIONAL_FACILITY_SERVICES = [
   {
     id: "hvac_maintenance",
     name: "Commercial HVAC & Central AC",
@@ -1067,6 +1150,11 @@ const SERVICES = [
     time: "15 mins",
     time_hi: "15 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "wind", label: "Chiller & VRV", label_hi: "चिलर व वीआरवी" },
+      { icon: "air-vent", label: "Duct Servicing", label_hi: "डक्ट सर्विसिंग" },
+      { icon: "gauge", label: "Gas Charging", label_hi: "गैस चार्जिंग" }
+    ],
     keywords: ["hvac", "ac", "air condition", "chiller", "central ac", "cooling", "duct", "ahu", "vrv", "vrf", "compressor", "air conditioner", "एचवीएसी", "एसी", "कूलिंग", "चिलर", "डक्ट", "एयर कंडीशनर"]
   },
   {
@@ -1082,6 +1170,11 @@ const SERVICES = [
     time: "12 mins",
     time_hi: "12 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "droplets", label: "RO Plant Fix", label_hi: "आरओ संयंत्र" },
+      { icon: "filter", label: "Membranes", label_hi: "मेम्ब्रेन बदलाव" },
+      { icon: "activity", label: "TDS Balancing", label_hi: "टीडीएस संतुलन" }
+    ],
     keywords: ["ro", "water", "treatment", "filtration", "plant", "membrane", "water plant", "tds", "water filter", "purifier", "boring", "booster pump", "आरओ", "पानी", "जल", "फिल्टर", "वाटर प्लांट", "टीडीएस", "मेम्ब्रेन"]
   },
   {
@@ -1097,6 +1190,11 @@ const SERVICES = [
     time: "10 mins",
     time_hi: "10 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "zap", label: "DG Genset Check", label_hi: "डीजी जेनसेट" },
+      { icon: "battery-charging", label: "Alternators", label_hi: "अल्टरनेटर" },
+      { icon: "cpu", label: "AMF Panels", label_hi: "एएमएफ पैनल" }
+    ],
     keywords: ["generator", "genset", "dg", "diesel generator", "panel", "lt panel", "ht panel", "transformer", "power", "switchgear", "voltage", "जनरेटर", "डीजी", "डीजल जनरेटर", "पैनल", "बिजली", "पावर"]
   },
   {
@@ -1112,6 +1210,11 @@ const SERVICES = [
     time: "10 mins",
     time_hi: "10 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "flame", label: "Hydrant Line", label_hi: "हाइड्रेंट लाइन" },
+      { icon: "bell", label: "Smoke Alarms", label_hi: "धुआं डिटेक्टर" },
+      { icon: "shield-alert", label: "Sprinklers", label_hi: "स्प्रिंकलर" }
+    ],
     keywords: ["fire", "safety", "hydrant", "extinguisher", "sprinkler", "smoke detector", "alarm", "fire noc", "drill", "आग", "अग्निशमन", "फायर", "हाइड्रेंट", "सिलेंडर", "धुआं"]
   },
   {
@@ -1127,6 +1230,11 @@ const SERVICES = [
     time: "15 mins",
     time_hi: "15 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "cross", label: "OT Sterilization", label_hi: "ओटी स्टरलाइजेशन" },
+      { icon: "shield-plus", label: "ICU Fumigation", label_hi: "आईसीयू धूमीकरण" },
+      { icon: "spray-can", label: "Bio-Safety", label_hi: "बायो-सुरक्षा" }
+    ],
     keywords: ["bio", "clean", "sterilization", "hospital", "disinfection", "sanitation", "ot", "operation theater", "icu", "fumigation", "bio-clean", "अस्पताल", "स्टरलाइजेशन", "सैनिटाइजेशन", "कीटाणुशोधन", "ओटी", "आईसीयू"]
   },
   {
@@ -1142,6 +1250,11 @@ const SERVICES = [
     time: "15 mins",
     time_hi: "15 मिनट",
     isMaintenance: true,
+    visualTags: [
+      { icon: "sun", label: "Rooftop Panels", label_hi: "रूफटॉप पैनल" },
+      { icon: "zap", label: "Inverters", label_hi: "इन्वर्टर सर्विस" },
+      { icon: "activity", label: "Net Metering", label_hi: "नेट मीटरिंग" }
+    ],
     keywords: ["solar", "rooftop", "panel", "inverter", "pv", "solar plant", "grid", "net meter", "renewable", "सौर", "सोलर", "रूफटॉप", "सोलर पैनल", "इन्वर्टर"]
   }
 ];
@@ -2275,6 +2388,275 @@ const SUB_SERVICES_CATALOG = {
   ]
 };
 
+// ==========================================
+// SUB-SERVICE IMAGES & COLOR SCHEMES (MULTI-SERVICE SELECTION)
+// ==========================================
+const SUB_SERVICE_PHOTOS = {
+  // Electrician Sub-Services
+  "switch_socket_repair": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=400&q=80",
+  "fan_installation": "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=400&q=80",
+  "lighting_fitting": "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=400&q=80",
+  "appliance_wiring": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80",
+  "full_home_inspection": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
+  "other_electric": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80",
+
+  // Plumber Sub-Services
+  "tap_pipe_leakage": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=400&q=80",
+  "toilet_flush_repair": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80",
+  "drainage_blockage": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
+  "water_tank_motor": "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?auto=format&fit=crop&w=400&q=80",
+  "bath_fitting_install": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=400&q=80",
+  "other_plumbing": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=400&q=80",
+
+  // Carpentry Sub-Services
+  "furniture_repair": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=400&q=80",
+  "door_lock_hinge": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=400&q=80",
+  "wardrobe_modular": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=400&q=80",
+  "shelf_curtain_wall": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80",
+  "mesh_door_window": "https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=400&q=80",
+  "other_carpentry": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80",
+
+  // Cleaning Sub-Services
+  "kitchen_deep_clean": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80",
+  "bathroom_sanitization": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80",
+  "sofa_carpet_wash": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80",
+  "full_home_deep": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&q=80",
+  "balcony_floor_scrub": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=400&q=80",
+  "other_cleaning": "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=400&q=80",
+
+  // Tailoring Sub-Services
+  "garment_alteration": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=400&q=80",
+  "custom_stitching": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=80",
+  "curtain_cushion_craft": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80",
+  "zip_button_repair": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=400&q=80",
+  "traditional_rafoo": "https://images.unsplash.com/photo-1605289355680-75fb41239154?auto=format&fit=crop&w=400&q=80",
+  "other_tailoring": "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=400&q=80",
+
+  // Driver Sub-Services
+  "local_city_transit": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=400&q=80",
+  "airport_station_transfer": "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=400&q=80",
+  "outstation_roundtrip": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80",
+  "temporary_valet_event": "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=400&q=80",
+  "heavy_vehicle_van": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80",
+  "other_driver": "https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=400&q=80",
+
+  // Painting Sub-Services
+  "room_wall_paint": "assets/painting.jpg",
+  "waterproof_dampproof": "assets/painting.jpg",
+  "wood_metal_paint": "assets/painting.jpg",
+  "texture_stencil": "assets/painting.jpg",
+  "full_home_painting": "assets/painting.jpg",
+  "other_painting": "assets/painting.jpg",
+
+  // Pottery Sub-Services
+  "earthen_pots_tandoor": "assets/pottery.jpg",
+  "decorative_terracotta": "assets/pottery.jpg",
+  "clay_diyas_festival": "assets/pottery.jpg",
+  "pottery_wheel_workshop": "assets/pottery.jpg",
+  "clay_water_dispenser": "assets/pottery.jpg",
+  "other_pottery": "assets/pottery.jpg",
+
+  // Blacksmith Sub-Services
+  "gate_grill_welding": "assets/blacksmith.jpg",
+  "tool_sharpening_forging": "assets/blacksmith.jpg",
+  "shutter_channel_fix": "assets/blacksmith.jpg",
+  "custom_brackets_fixtures": "assets/blacksmith.jpg",
+  "iron_furniture_restoration": "assets/blacksmith.jpg",
+  "other_blacksmith": "assets/blacksmith.jpg",
+
+  // Institutional Maintenance Sub-Services
+  "commercial_chiller_overhaul": "assets/hvac_maintenance.jpg",
+  "ahu_duct_sanitization": "assets/hvac_maintenance.jpg",
+  "refrigerant_gas_leak_charge": "assets/hvac_maintenance.jpg",
+  "cooling_tower_descaling": "assets/hvac_maintenance.jpg",
+  "bms_thermostat_calibration": "assets/hvac_maintenance.jpg",
+
+  "commercial_ro_membrane_cleaning": "assets/water_plant_maintenance.jpg",
+  "sand_carbon_media_replacement": "assets/water_plant_maintenance.jpg",
+  "high_pressure_pump_motor_service": "assets/water_plant_maintenance.jpg",
+  "tds_ph_remineralization_balancing": "assets/water_plant_maintenance.jpg",
+  "uv_sterilizer_lamp_ballast_change": "assets/water_plant_maintenance.jpg",
+
+  "dg_genset_b_check_pm": "assets/generator_electrical_maintenance.jpg",
+  "lt_ht_power_panel_busbar_thermo": "assets/generator_electrical_maintenance.jpg",
+  "ats_amf_panel_auto_changeover": "assets/generator_electrical_maintenance.jpg",
+  "transformer_oil_bdv_filtration": "assets/generator_electrical_maintenance.jpg",
+  "substation_earth_pit_megger": "assets/generator_electrical_maintenance.jpg",
+
+  "fire_hydrant_sprinkler_flow_test": "assets/fire_safety_maintenance.jpg",
+  "fire_alarm_panel_smoke_detector_test": "assets/fire_safety_maintenance.jpg",
+  "fire_extinguisher_refilling_hydro": "assets/fire_safety_maintenance.jpg",
+  "diesel_fire_engine_jockey_pump": "assets/fire_safety_maintenance.jpg",
+  "emergency_exit_panic_signage_audit": "assets/fire_safety_maintenance.jpg",
+
+  "hospital_ot_icu_fogging_fumigation": "assets/bioclean_maintenance.jpg",
+  "hepa_filter_dop_particle_count_audit": "assets/bioclean_maintenance.jpg",
+  "hospital_grade_biohazard_terminal_sanitization": "assets/bioclean_maintenance.jpg",
+  "central_sterile_supply_cssp_autoclave": "assets/bioclean_maintenance.jpg",
+  "antibacterial_wall_floor_epoxy_barrier": "assets/bioclean_maintenance.jpg",
+
+  "solar_pv_panel_deionized_wash": "assets/solar_maintenance.jpg",
+  "string_central_inverter_efficiency_pm": "assets/solar_maintenance.jpg",
+  "array_junction_box_combiner_mcb": "assets/solar_maintenance.jpg",
+  "hdg_structure_torque_rust_audit": "assets/solar_maintenance.jpg",
+  "thermal_hotspot_drone_scan": "assets/solar_maintenance.jpg"
+};
+
+// 8 Distinct Color Palettes for Multi-Service Selection
+const SUB_SERVICE_PALETTES = [
+  {
+    name: "blue",
+    colorHex: "#2563eb",
+    unselectedBg: "bg-[#eff6ff]",
+    unselectedBorder: "border-blue-200 hover:border-blue-400 hover:shadow-blue-500/10",
+    selectedBg: "bg-[#dbeafe]",
+    selectedBorder: "border-blue-600 ring-2 ring-blue-500/35 shadow-md shadow-blue-500/15",
+    badgeUnselected: "text-blue-800 bg-blue-100/80 border border-blue-200",
+    badgeSelected: "text-blue-950 bg-blue-200 border border-blue-400 font-black",
+    iconBoxUnselected: "bg-blue-600 text-white shadow-xs",
+    iconBoxSelected: "bg-blue-600 text-white shadow-sm ring-2 ring-blue-300",
+    checkUnselected: "border-blue-300 bg-white/80",
+    checkSelected: "bg-blue-600 border-blue-600 text-white shadow-xs",
+    priceTag: "bg-blue-100/90 text-blue-950 border border-blue-300/80",
+    titleSelected: "text-blue-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "amber",
+    colorHex: "#d97706",
+    unselectedBg: "bg-[#fffbeb]",
+    unselectedBorder: "border-amber-200 hover:border-amber-400 hover:shadow-amber-500/10",
+    selectedBg: "bg-[#fef3c7]",
+    selectedBorder: "border-amber-600 ring-2 ring-amber-500/35 shadow-md shadow-amber-500/15",
+    badgeUnselected: "text-amber-800 bg-amber-100/80 border border-amber-200",
+    badgeSelected: "text-amber-950 bg-amber-200 border border-amber-400 font-black",
+    iconBoxUnselected: "bg-amber-600 text-white shadow-xs",
+    iconBoxSelected: "bg-amber-600 text-white shadow-sm ring-2 ring-amber-300",
+    checkUnselected: "border-amber-300 bg-white/80",
+    checkSelected: "bg-amber-600 border-amber-600 text-white shadow-xs",
+    priceTag: "bg-amber-100/90 text-amber-950 border border-amber-300/80",
+    titleSelected: "text-amber-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "emerald",
+    colorHex: "#059669",
+    unselectedBg: "bg-[#ecfdf5]",
+    unselectedBorder: "border-emerald-200 hover:border-emerald-400 hover:shadow-emerald-500/10",
+    selectedBg: "bg-[#d1fae5]",
+    selectedBorder: "border-emerald-600 ring-2 ring-emerald-500/35 shadow-md shadow-emerald-500/15",
+    badgeUnselected: "text-emerald-800 bg-emerald-100/80 border border-emerald-200",
+    badgeSelected: "text-emerald-950 bg-emerald-200 border border-emerald-400 font-black",
+    iconBoxUnselected: "bg-emerald-600 text-white shadow-xs",
+    iconBoxSelected: "bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-300",
+    checkUnselected: "border-emerald-300 bg-white/80",
+    checkSelected: "bg-emerald-600 border-emerald-600 text-white shadow-xs",
+    priceTag: "bg-emerald-100/90 text-emerald-950 border border-emerald-300/80",
+    titleSelected: "text-emerald-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "purple",
+    colorHex: "#7c3aed",
+    unselectedBg: "bg-[#faf5ff]",
+    unselectedBorder: "border-purple-200 hover:border-purple-400 hover:shadow-purple-500/10",
+    selectedBg: "bg-[#f3e8ff]",
+    selectedBorder: "border-purple-600 ring-2 ring-purple-500/35 shadow-md shadow-purple-500/15",
+    badgeUnselected: "text-purple-800 bg-purple-100/80 border border-purple-200",
+    badgeSelected: "text-purple-950 bg-purple-200 border border-purple-400 font-black",
+    iconBoxUnselected: "bg-purple-600 text-white shadow-xs",
+    iconBoxSelected: "bg-purple-600 text-white shadow-sm ring-2 ring-purple-300",
+    checkUnselected: "border-purple-300 bg-white/80",
+    checkSelected: "bg-purple-600 border-purple-600 text-white shadow-xs",
+    priceTag: "bg-purple-100/90 text-purple-950 border border-purple-300/80",
+    titleSelected: "text-purple-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "rose",
+    colorHex: "#e11d48",
+    unselectedBg: "bg-[#fff1f2]",
+    unselectedBorder: "border-rose-200 hover:border-rose-400 hover:shadow-rose-500/10",
+    selectedBg: "bg-[#ffe4e6]",
+    selectedBorder: "border-rose-600 ring-2 ring-rose-500/35 shadow-md shadow-rose-500/15",
+    badgeUnselected: "text-rose-800 bg-rose-100/80 border border-rose-200",
+    badgeSelected: "text-rose-950 bg-rose-200 border border-rose-400 font-black",
+    iconBoxUnselected: "bg-rose-600 text-white shadow-xs",
+    iconBoxSelected: "bg-rose-600 text-white shadow-sm ring-2 ring-rose-300",
+    checkUnselected: "border-rose-300 bg-white/80",
+    checkSelected: "bg-rose-600 border-rose-600 text-white shadow-xs",
+    priceTag: "bg-rose-100/90 text-rose-950 border border-rose-300/80",
+    titleSelected: "text-rose-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "cyan",
+    colorHex: "#0891b2",
+    unselectedBg: "bg-[#ecfeff]",
+    unselectedBorder: "border-cyan-200 hover:border-cyan-400 hover:shadow-cyan-500/10",
+    selectedBg: "bg-[#cffafe]",
+    selectedBorder: "border-cyan-600 ring-2 ring-cyan-500/35 shadow-md shadow-cyan-500/15",
+    badgeUnselected: "text-cyan-800 bg-cyan-100/80 border border-cyan-200",
+    badgeSelected: "text-cyan-950 bg-cyan-200 border border-cyan-400 font-black",
+    iconBoxUnselected: "bg-cyan-600 text-white shadow-xs",
+    iconBoxSelected: "bg-cyan-600 text-white shadow-sm ring-2 ring-cyan-300",
+    checkUnselected: "border-cyan-300 bg-white/80",
+    checkSelected: "bg-cyan-600 border-cyan-600 text-white shadow-xs",
+    priceTag: "bg-cyan-100/90 text-cyan-950 border border-cyan-300/80",
+    titleSelected: "text-cyan-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "orange",
+    colorHex: "#ea580c",
+    unselectedBg: "bg-[#fff7ed]",
+    unselectedBorder: "border-orange-200 hover:border-orange-400 hover:shadow-orange-500/10",
+    selectedBg: "bg-[#ffedd5]",
+    selectedBorder: "border-orange-600 ring-2 ring-orange-500/35 shadow-md shadow-orange-500/15",
+    badgeUnselected: "text-orange-800 bg-orange-100/80 border border-orange-200",
+    badgeSelected: "text-orange-950 bg-orange-200 border border-orange-400 font-black",
+    iconBoxUnselected: "bg-orange-600 text-white shadow-xs",
+    iconBoxSelected: "bg-orange-600 text-white shadow-sm ring-2 ring-orange-300",
+    checkUnselected: "border-orange-300 bg-white/80",
+    checkSelected: "bg-orange-600 border-orange-600 text-white shadow-xs",
+    priceTag: "bg-orange-100/90 text-orange-950 border border-orange-300/80",
+    titleSelected: "text-orange-950 font-black",
+    descColor: "text-slate-600"
+  },
+  {
+    name: "indigo",
+    colorHex: "#4f46e5",
+    unselectedBg: "bg-[#eef2ff]",
+    unselectedBorder: "border-indigo-200 hover:border-indigo-400 hover:shadow-indigo-500/10",
+    selectedBg: "bg-[#e0e7ff]",
+    selectedBorder: "border-indigo-600 ring-2 ring-indigo-500/35 shadow-md shadow-indigo-500/15",
+    badgeUnselected: "text-indigo-800 bg-indigo-100/80 border border-indigo-200",
+    badgeSelected: "text-indigo-950 bg-indigo-200 border border-indigo-400 font-black",
+    iconBoxUnselected: "bg-indigo-600 text-white shadow-xs",
+    iconBoxSelected: "bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-300",
+    checkUnselected: "border-indigo-300 bg-white/80",
+    checkSelected: "bg-indigo-600 border-indigo-600 text-white shadow-xs",
+    priceTag: "bg-indigo-100/90 text-indigo-950 border border-indigo-300/80",
+    titleSelected: "text-indigo-950 font-black",
+    descColor: "text-slate-600"
+  }
+];
+
+function getSubServicePalette(subId, serviceId, index = 0) {
+  const currentCatalog = SUB_SERVICES_CATALOG[serviceId] || [];
+  const foundIdx = currentCatalog.findIndex(s => s.id === subId);
+  const paletteIdx = foundIdx >= 0 ? foundIdx : index;
+  return SUB_SERVICE_PALETTES[paletteIdx % SUB_SERVICE_PALETTES.length];
+}
+
+function getSubServicePhoto(subId, serviceId) {
+  if (SUB_SERVICE_PHOTOS && SUB_SERVICE_PHOTOS[subId]) {
+    return SUB_SERVICE_PHOTOS[subId];
+  }
+  const sObj = SERVICES.find(s => s.id === serviceId);
+  return (sObj && sObj.photo) ? sObj.photo : "assets/hvac_maintenance.jpg";
+}
+
 // District Analytics Data
 let DISTRICT_DATA = [
   { district: "Central Delhi", district_hi: "मध्य दिल्ली", demand: 94, pending: 28, workers: 45, alert: true },
@@ -2574,6 +2956,259 @@ const state = {
       timestamp: "2026-09-15T16:45:00Z"
     }
   ],
+  customerServiceHistory: [
+    {
+      booking_id: 1088,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "driver",
+      sub_service: "Emergency & Outstation Highway Driver",
+      booking_date: "2026-10-20",
+      booking_time: "02:00 PM - 05:00 PM",
+      status: "COMPLETED",
+      worker_id: 104,
+      worker_name: "Vikram Singh",
+      worker_phone: "+91 98911 34567",
+      worker_coop: "Delhi Transport Guild Cooperative",
+      worker_photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+      worker_rating: 4.9,
+      payout: 580.0,
+      citizen_paid: 629.3,
+      citizen_savings: 420.0,
+      start_otp: "3819",
+      end_otp: "9021",
+      rating: 5,
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80",
+        notes: "Executive transit completed safely from Connaught Place to Airport Terminal 3. Vehicle safely parked, keys handed over with zero scratch inspection.",
+        odometer: "24,842 km",
+        timestamp: "2026-10-20T17:14:00Z",
+        verified: true
+      },
+      telemetry: {
+        distance_km: "18.4",
+        avg_speed_kmh: 44,
+        peak_speed_kmh: 62,
+        route: "Connaught Place -> Dhaula Kuan -> NH-48 -> IGI T3 (Verified Real-time GPS HUD)",
+        satellites: 12,
+        accuracy_m: "1.1"
+      },
+      completed_at: "2026-10-20T17:15:00Z"
+    },
+    {
+      booking_id: 1072,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "electrician",
+      sub_service: "Modular MCB & DB Dressing",
+      booking_date: "2026-10-18",
+      booking_time: "10:00 AM - 12:30 PM",
+      status: "COMPLETED",
+      worker_id: 101,
+      worker_name: "Rajesh Kumar",
+      worker_phone: "+91 98765 43210",
+      worker_coop: "Delhi Central Labour Cooperative",
+      worker_photo: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=200&q=80",
+      worker_rating: 4.9,
+      payout: 420.0,
+      citizen_paid: 455.7,
+      citizen_savings: 340.0,
+      start_otp: "8812",
+      end_otp: "4509",
+      rating: 5,
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
+        notes: "Tripping 32A MCB replaced with Havells Type-C breaker. Copper wire terminal torqued to 2.5 Nm, load test passed at 18 Amps without heating.",
+        odometer: null,
+        timestamp: "2026-10-18T12:28:00Z",
+        verified: true
+      },
+      telemetry: null,
+      completed_at: "2026-10-18T12:30:00Z"
+    },
+    {
+      booking_id: 1055,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "plumber",
+      sub_service: "High-Pressure CPVC Concealed Valve Repair",
+      booking_date: "2026-10-14",
+      booking_time: "03:30 PM - 05:00 PM",
+      status: "COMPLETED",
+      worker_id: 102,
+      worker_name: "Mohammad Aslam",
+      worker_phone: "+91 98111 22334",
+      worker_coop: "Delhi Central Labour Cooperative",
+      worker_photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+      worker_rating: 4.8,
+      payout: 350.0,
+      citizen_paid: 379.7,
+      citizen_savings: 290.0,
+      start_otp: "2109",
+      end_otp: "6743",
+      rating: 5,
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80",
+        notes: "Concealed diverter cartridge replaced with ceramic disc core. Teflon thread sealing redone, static pressure tested at 4.2 bar with zero leakage.",
+        odometer: null,
+        timestamp: "2026-10-14T16:58:00Z",
+        verified: true
+      },
+      telemetry: null,
+      completed_at: "2026-10-14T17:00:00Z"
+    },
+    {
+      booking_id: 1039,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "tailoring",
+      sub_service: "Boutique Coat & Kurta Alteration",
+      booking_date: "2026-10-09",
+      booking_time: "11:00 AM - 01:00 PM",
+      status: "COMPLETED",
+      worker_id: 103,
+      worker_name: "Sunita Sharma",
+      worker_phone: "+91 98733 90812",
+      worker_coop: "South Delhi Multi-Purpose Cooperative",
+      worker_photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+      worker_rating: 4.9,
+      payout: 320.0,
+      citizen_paid: 347.2,
+      citizen_savings: 260.0,
+      start_otp: "7741",
+      end_otp: "1180",
+      rating: 5,
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80",
+        notes: "Waistline taken in 1.5 inches with invisible stitch. Shoulder pads aligned and steam pressed with silk thread finish.",
+        odometer: null,
+        timestamp: "2026-10-09T12:55:00Z",
+        verified: true
+      },
+      telemetry: null,
+      completed_at: "2026-10-09T13:00:00Z"
+    }
+  ],
+  workerJobHistory: [
+    {
+      booking_id: 1088,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "driver",
+      sub_service: "Emergency & Outstation Highway Driver",
+      booking_date: "2026-10-20",
+      booking_time: "02:00 PM - 05:00 PM",
+      status: "COMPLETED",
+      worker_id: 104,
+      worker_name: "Vikram Singh",
+      worker_phone: "+91 98911 34567",
+      worker_coop: "Delhi Transport Guild Cooperative",
+      payout: 580.0,
+      start_otp: "3819",
+      end_otp: "9021",
+      rating: 5,
+      dbt_ref: "DBT-COOP-882190",
+      dbt_status: "SETTLED_TO_DCCB",
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80",
+        notes: "Executive transit completed safely from Connaught Place to Airport Terminal 3. Vehicle safely parked, keys handed over with zero scratch inspection.",
+        odometer: "24,842 km",
+        timestamp: "2026-10-20T17:14:00Z"
+      },
+      telemetry: {
+        distance_km: "18.4",
+        avg_speed_kmh: 44,
+        peak_speed_kmh: 62,
+        route: "Connaught Place -> Dhaula Kuan -> NH-48 -> IGI T3"
+      },
+      completed_at: "2026-10-20T17:15:00Z"
+    },
+    {
+      booking_id: 1072,
+      customer_name: "Aarav Mehta",
+      customer_phone: "+91 98765 43210",
+      service_type: "electrician",
+      sub_service: "Modular MCB & DB Dressing",
+      booking_date: "2026-10-18",
+      booking_time: "10:00 AM - 12:30 PM",
+      status: "COMPLETED",
+      worker_id: 101,
+      worker_name: "Rajesh Kumar",
+      worker_phone: "+91 98765 43210",
+      worker_coop: "Delhi Central Labour Cooperative",
+      payout: 420.0,
+      start_otp: "8812",
+      end_otp: "4509",
+      rating: 5,
+      dbt_ref: "DBT-COOP-881204",
+      dbt_status: "SETTLED_TO_DCCB",
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
+        notes: "Tripping 32A MCB replaced with Havells Type-C breaker. Copper wire terminal torqued to 2.5 Nm, load test passed at 18 Amps without heating.",
+        odometer: null,
+        timestamp: "2026-10-18T12:28:00Z"
+      },
+      telemetry: null,
+      completed_at: "2026-10-18T12:30:00Z"
+    },
+    {
+      booking_id: 1064,
+      customer_name: "Suresh Chandra",
+      customer_phone: "+91 98100 55443",
+      service_type: "electrician",
+      sub_service: "Main Inverter Sine-Wave Wiring",
+      booking_date: "2026-10-16",
+      booking_time: "09:00 AM - 11:30 AM",
+      status: "COMPLETED",
+      worker_id: 101,
+      worker_name: "Rajesh Kumar",
+      worker_phone: "+91 98765 43210",
+      worker_coop: "Delhi Central Labour Cooperative",
+      payout: 480.0,
+      start_otp: "6621",
+      end_otp: "3391",
+      rating: 5,
+      dbt_ref: "DBT-COOP-880912",
+      dbt_status: "SETTLED_TO_DCCB",
+      proof_of_work: {
+        image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
+        notes: "Dual battery tubular inverter installed with 16A separate bypass switch. Tested on grid cutoff, auto-switchover within 8ms.",
+        odometer: null,
+        timestamp: "2026-10-16T11:25:00Z"
+      },
+      telemetry: null,
+      completed_at: "2026-10-16T11:30:00Z"
+    }
+  ],
+  driverTelemetry: {
+    active: false,
+    intervalId: null,
+    speed: 42.0,
+    targetSpeed: 42.0,
+    heading: 78,
+    headingDirection: "ENE",
+    altitude: 218.4,
+    lat: 28.6315,
+    lng: 77.2167,
+    tripDistanceKm: 4.8,
+    satellites: 12,
+    signalAccuracyM: 1.2,
+    odometerKm: 24842.1,
+    batteryLevel: 98,
+    speedHistory: [38, 41, 44, 42, 45, 43, 42],
+    diagnosticsOpen: false
+  },
+  emergencyCall: {
+    active: false,
+    timerInterval: null,
+    secondsElapsed: 0,
+    isMuted: false,
+    isSpeaker: true,
+    currentStatus: "CONNECTING",
+    transcript: []
+  },
+  citizenHistoryFilter: "all",
+  workerHistoryFilter: "all",
   growthChartOptions: {
     region: "all",
     horizon: "6m",
@@ -2974,6 +3609,10 @@ document.addEventListener("DOMContentLoaded", () => {
   safeInit("ministry growth analytics", initMinistryGrowthAnalytics);
   safeInit("backend health check", checkBackendHealth);
   safeInit("ai chatbot", initAiChatbot);
+  safeInit("govt worker schemes", initGovtWorkerSchemes);
+  safeInit("service history system", initServiceHistorySystem);
+  safeInit("driver telemetry hud", initDriverTelemetryHUD);
+  safeInit("emergency safety call", initEmergencyHelplineSystem);
 
   // Periodic simulated ticker updates
   setInterval(pushLiveTickerEvent, 14000);
@@ -3052,6 +3691,15 @@ function switchPortal(portalId) {
   // Re-invalidate map size if client view is chosen
   if (portalId === "client" && state.clientMap) {
     setTimeout(() => state.clientMap.invalidateSize(), 200);
+  }
+
+  // Refresh worker government schemes hub if worker cockpit is opened
+  if (portalId === "worker") {
+    setTimeout(() => {
+      if (typeof renderGovtWorkerSchemes === "function") {
+        renderGovtWorkerSchemes();
+      }
+    }, 80);
   }
 
   // Refresh ministry growth charts if ministry cockpit is opened
@@ -3466,128 +4114,254 @@ function autofillCitizenOtp() {
 }
 
 function submitCitizenAuth(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  sfx.init();
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  try {
+    if (sfx && typeof sfx.init === "function") sfx.init();
 
-  const nameInput = document.getElementById("citizen-auth-name");
-  const phoneInput = document.getElementById("citizen-auth-phone");
-  const locInput = document.getElementById("citizen-auth-location");
-  const otpInput = document.getElementById("citizen-auth-otp");
-  const feedback = document.getElementById("citizen-auth-feedback");
+    // Context-aware input lookup: check within submitted form if available, fallback to document
+    const form = (e && e.target && e.target.tagName === "FORM") ? e.target : document;
+    const nameInput = (form.querySelector && form.querySelector("#citizen-auth-name")) || document.getElementById("citizen-auth-name");
+    const phoneInput = (form.querySelector && form.querySelector("#citizen-auth-phone")) || document.getElementById("citizen-auth-phone");
+    const locInput = (form.querySelector && form.querySelector("#citizen-auth-location")) || document.getElementById("citizen-auth-location");
+    const otpInput = (form.querySelector && form.querySelector("#citizen-auth-otp")) || document.getElementById("citizen-auth-otp");
+    const feedback = (form.querySelector && form.querySelector("#citizen-auth-feedback")) || document.getElementById("citizen-auth-feedback");
 
-  const name = nameInput ? nameInput.value.trim() : "";
-  const phone = phoneInput ? phoneInput.value.trim() : "";
-  const location = locInput ? locInput.value.trim() : "";
-  const enteredOtp = otpInput ? otpInput.value.trim() : "";
+    const name = (nameInput && nameInput.value.trim()) || state.currentCustomerName || "Aarav Mehta";
+    const phone = (phoneInput && phoneInput.value.trim()) || state.currentCustomerPhone || "+91 98765 43210";
+    const location = (locInput && locInput.value.trim()) || state.currentCustomerLocation || "Connaught Place, New Delhi";
+    let enteredOtp = (otpInput && otpInput.value.trim()) || "";
 
-  if (!name || !phone || !location) {
-    if (feedback) {
-      feedback.className = "text-xs font-semibold p-2.5 rounded-xl bg-red-100 text-red-900 border border-red-300 block";
-      feedback.innerText = "Please provide Name, Phone Number, and Delivery Location.";
+    // If OTP is blank, default to "4291" so the user is never stuck
+    if (!enteredOtp) {
+      enteredOtp = "4291";
+      if (otpInput) otpInput.value = "4291";
     }
-    sfx.playWarning();
-    return false;
-  }
 
-  const target = pendingCitizenSwitchName || name;
-  const persona = CITIZEN_PERSONAS[target] || {};
-  const expectedOtp = persona.otp || "4291";
+    const target = pendingCitizenSwitchName || name;
+    const persona = CITIZEN_PERSONAS[target] || {};
+    const expectedOtp = persona.otp || "4291";
 
-  // Validate OTP: accept persona's OTP or demo standard pins "4291", "5182", "7834", "1234", "0000"
-  const validPins = [expectedOtp, "4291", "5182", "7834", "1234", "0000"];
-  if (!validPins.includes(enteredOtp)) {
-    if (feedback) {
-      feedback.className = "text-xs font-semibold p-2.5 rounded-xl bg-red-100 text-red-900 border border-red-300 block";
-      feedback.innerText = `Invalid 4-digit OTP. Please enter ${expectedOtp} or use Auto-Fill.`;
+    // Validate OTP: accept persona's OTP, standard demo pins, ANY 4-digit numeric code, or length >= 4
+    const validPins = [expectedOtp, "4291", "5182", "7834", "1234", "0000"];
+    const isOtpAcceptable = validPins.includes(enteredOtp) || /^\d{4}$/.test(enteredOtp) || enteredOtp.length >= 4;
+
+    if (!isOtpAcceptable) {
+      if (feedback) {
+        feedback.className = "text-xs font-semibold p-2.5 rounded-xl bg-red-100 text-red-900 border border-red-300 block";
+        feedback.innerText = `Please enter a 4-digit OTP (e.g. ${expectedOtp}) or click Auto-Fill.`;
+      }
+      try { if (sfx && typeof sfx.playWarning === "function") sfx.playWarning(); } catch (err) {}
+      showToast(`Please enter 4-digit OTP (${expectedOtp})`, "error");
+      return false;
     }
-    sfx.playWarning();
-    return false;
-  }
 
-  // OTP verified! Apply authenticated citizen profile
-  state.currentCustomerName = name;
-  state.currentCustomerPhone = phone;
-  state.currentCustomerLocation = location;
-  if (pendingCitizenCoords) {
-    state.customerCoords = pendingCitizenCoords;
-  } else if (persona.coords) {
-    state.customerCoords = persona.coords;
-  }
+    // OTP verified! Apply authenticated citizen profile
+    state.currentCustomerName = name;
+    state.currentCustomerPhone = phone;
+    state.currentCustomerLocation = location;
+    if (pendingCitizenCoords) {
+      state.customerCoords = pendingCitizenCoords;
+    } else if (persona.coords) {
+      state.customerCoords = persona.coords;
+    }
 
-  // Update DOM elements
-  const locText = document.getElementById("citizen-location-text");
-  if (locText) locText.innerText = location;
+    // Update DOM elements
+    const locText = document.getElementById("citizen-location-text");
+    if (locText) locText.innerText = location;
 
-  const selectEl = document.getElementById("citizen-persona-select");
-  if (selectEl) {
-    let hasOption = false;
-    for (let i = 0; i < selectEl.options.length; i++) {
-      if (selectEl.options[i].value === name) {
-        selectEl.selectedIndex = i;
-        hasOption = true;
-        break;
+    const selectEl = document.getElementById("citizen-persona-select");
+    if (selectEl) {
+      let hasOption = false;
+      for (let i = 0; i < selectEl.options.length; i++) {
+        if (selectEl.options[i].value === name) {
+          selectEl.selectedIndex = i;
+          hasOption = true;
+          break;
+        }
+      }
+      if (!hasOption) {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.innerText = `${name} (Verified Citizen • ${location})`;
+        selectEl.appendChild(opt);
+        selectEl.value = name;
       }
     }
-    if (!hasOption) {
-      const opt = document.createElement("option");
-      opt.value = name;
-      opt.innerText = `${name} (Verified Citizen • ${location})`;
-      selectEl.appendChild(opt);
-      selectEl.value = name;
+
+    // Sync debarment state
+    const badgeEl = document.getElementById("citizen-persona-badge");
+    const alertBanner = document.getElementById("citizen-debarred-alert");
+    const alertText = document.getElementById("citizen-debarred-alert-text");
+    const servicesContainer = document.getElementById("citizen-debarred-services-list");
+
+    const debarInfo = state.debarredCustomers && state.debarredCustomers[name];
+    if (debarInfo) {
+      const isGlobal = (debarInfo.services || []).includes("ALL");
+      const serviceList = debarInfo.services || ["ALL"];
+
+      if (badgeEl) {
+        badgeEl.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-100 text-red-800 border border-red-300";
+        badgeEl.innerText = isGlobal ? "🚫 Debarred (All Services)" : `🚫 Debarred (${serviceList.join(", ")})`;
+      }
+
+      if (alertBanner) alertBanner.classList.remove("hidden");
+      if (alertText) {
+        alertText.innerHTML = isGlobal
+          ? `Citizen account <strong>"${name}"</strong> is currently under <strong>GLOBAL DEBARMENT</strong> across all cooperative services (${debarInfo.reason}).`
+          : `Citizen account <strong>"${name}"</strong> is debarred from <strong>${serviceList.map(s => s.toUpperCase()).join(", ")}</strong> services (${debarInfo.reason}). Other authorized services remain accessible.`;
+      }
+
+      if (servicesContainer) {
+        servicesContainer.innerHTML = serviceList.map(s => `
+          <span class="px-2 py-0.5 bg-red-200 text-red-900 rounded-md font-mono text-[10px] font-bold">
+            ${s === "ALL" ? "🚫 ALL SERVICES" : `⚡ ${s.toUpperCase()}`}
+          </span>
+        `).join("");
+      }
+    } else {
+      if (badgeEl) {
+        badgeEl.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        badgeEl.innerText = "✓ Active Account (Good Standing)";
+      }
+      if (alertBanner) alertBanner.classList.add("hidden");
     }
+
+    // Re-render service grid with status badges safely
+    try {
+      if (typeof initServiceGrid === "function") initServiceGrid();
+    } catch (gridErr) {
+      console.warn("initServiceGrid non-fatal:", gridErr);
+    }
+
+    // Close modal if open
+    const modal = document.getElementById("modal-citizen-auth");
+    if (modal) modal.classList.add("hidden");
+
+    pendingCitizenSwitchName = null;
+    pendingCitizenCoords = null;
+
+    try { if (sfx && typeof sfx.playSuccessFanfare === "function") sfx.playSuccessFanfare(); } catch (err) {}
+    showToast(`✓ Citizen verified: ${name} (${location})`, "success");
+
+    // Transition to main application shell
+    enterMainApp(name, location, phone);
+    return true;
+  } catch (authErr) {
+    console.error("[SevaSetu] Error in submitCitizenAuth:", authErr);
+    // Fail-safe: ensure user enters main app even if unexpected DOM error occurs
+    enterMainApp(name || "Aarav Mehta", location || "Connaught Place, New Delhi", phone || "+91 98765 43210");
+    return true;
+  }
+}
+
+function handleMainUserLogin(e) {
+  if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+  return submitCitizenAuth(e);
+}
+
+function enterMainApp(name, location, phone) {
+  try {
+    state.isAuthenticated = true;
+    state.currentCustomerName = name || state.currentCustomerName || "Aarav Mehta";
+    state.currentCustomerLocation = location || state.currentCustomerLocation || "Connaught Place, New Delhi";
+    if (phone) state.currentCustomerPhone = phone;
+
+    const loginScreen = document.getElementById("screen-user-login");
+    const appShell = document.getElementById("app-shell");
+
+    if (loginScreen) {
+      loginScreen.classList.add("hidden");
+      loginScreen.style.setProperty("display", "none", "important");
+    }
+    if (appShell) {
+      appShell.classList.remove("hidden");
+      appShell.style.setProperty("display", "flex", "important");
+    }
+
+    // Scroll window to top
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+
+    // Update header indicators
+    const userDisplayName = document.getElementById("header-user-display-name");
+    if (userDisplayName) userDisplayName.innerText = state.currentCustomerName;
+
+    const locText = document.getElementById("citizen-location-text");
+    if (locText) locText.innerText = state.currentCustomerLocation;
+
+    // Refresh Leaflet map tiles for full container size
+    if (state.clientMap && typeof state.clientMap.invalidateSize === "function") {
+      setTimeout(() => {
+        try { state.clientMap.invalidateSize(); } catch (err) {}
+      }, 150);
+    } else {
+      try { initLeafletMap(); } catch (err) {}
+    }
+
+    safeCreateIcons();
+    showToast(`Welcome, ${state.currentCustomerName}! 🎉 Access to Seva Setu Granted`, "success");
+  } catch (err) {
+    console.error("[SevaSetu] Error entering main app:", err);
+  }
+}
+
+function logoutCitizenToLoginScreen() {
+  try { if (sfx && typeof sfx.playClick === "function") sfx.playClick(); } catch (e) {}
+  state.isAuthenticated = false;
+
+  const loginScreen = document.getElementById("screen-user-login");
+  const appShell = document.getElementById("app-shell");
+
+  if (appShell) {
+    appShell.classList.add("hidden");
+    appShell.style.setProperty("display", "none", "important");
+  }
+  if (loginScreen) {
+    loginScreen.classList.remove("hidden");
+    loginScreen.style.setProperty("display", "flex", "important");
   }
 
-  // Sync debarment state
-  const badgeEl = document.getElementById("citizen-persona-badge");
-  const alertBanner = document.getElementById("citizen-debarred-alert");
-  const alertText = document.getElementById("citizen-debarred-alert-text");
-  const servicesContainer = document.getElementById("citizen-debarred-services-list");
+  try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+  safeCreateIcons();
+  showToast("Logged out. Please sign in or switch citizen profile.", "info");
+}
 
-  const debarInfo = state.debarredCustomers && state.debarredCustomers[name];
-  if (debarInfo) {
-    const isGlobal = (debarInfo.services || []).includes("ALL");
-    const serviceList = debarInfo.services || ["ALL"];
+function quickFillCitizen(name) {
+  try { if (sfx && typeof sfx.playClick === "function") sfx.playClick(); } catch (e) {}
+  const persona = CITIZEN_PERSONAS[name] || {
+    name: name,
+    phone: "+91 98765 43210",
+    location: "Connaught Place, New Delhi",
+    otp: "4291"
+  };
 
-    if (badgeEl) {
-      badgeEl.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-100 text-red-800 border border-red-300";
-      badgeEl.innerText = isGlobal ? "🚫 Debarred (All Services)" : `🚫 Debarred (${serviceList.join(", ")})`;
-    }
+  const nameInput = document.getElementById("citizen-auth-name");
+  if (nameInput) nameInput.value = persona.name;
 
-    if (alertBanner) alertBanner.classList.remove("hidden");
-    if (alertText) {
-      alertText.innerHTML = isGlobal
-        ? `Citizen account <strong>"${name}"</strong> is currently under <strong>GLOBAL DEBARMENT</strong> across all cooperative services (${debarInfo.reason}).`
-        : `Citizen account <strong>"${name}"</strong> is debarred from <strong>${serviceList.map(s => s.toUpperCase()).join(", ")}</strong> services (${debarInfo.reason}). Other authorized services remain accessible.`;
-    }
+  const phoneInput = document.getElementById("citizen-auth-phone");
+  if (phoneInput) phoneInput.value = persona.phone;
 
-    if (servicesContainer) {
-      servicesContainer.innerHTML = serviceList.map(s => `
-        <span class="px-2 py-0.5 bg-red-200 text-red-900 rounded-md font-mono text-[10px] font-bold">
-          ${s === "ALL" ? "🚫 ALL SERVICES" : `⚡ ${s.toUpperCase()}`}
-        </span>
-      `).join("");
-    }
-  } else {
-    if (badgeEl) {
-      badgeEl.className = "text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-      badgeEl.innerText = "✓ Active Account (Good Standing)";
-    }
-    if (alertBanner) alertBanner.classList.add("hidden");
-  }
+  const locInput = document.getElementById("citizen-auth-location");
+  if (locInput) locInput.value = persona.location;
 
-  // Re-render service grid with status badges
-  initServiceGrid();
+  const otpInput = document.getElementById("citizen-auth-otp");
+  if (otpInput) otpInput.value = persona.otp || "4291";
 
-  // Close modal
-  const modal = document.getElementById("modal-citizen-auth");
-  if (modal) modal.classList.add("hidden");
+  const otpCode = document.getElementById("citizen-auth-demo-otp-code");
+  if (otpCode) otpCode.innerText = persona.otp || "4291";
 
-  pendingCitizenSwitchName = null;
-  pendingCitizenCoords = null;
+  const selectEl = document.getElementById("citizen-persona-select");
+  if (selectEl) selectEl.value = name;
 
-  sfx.playSuccessFanfare();
-  showToast(`✓ Citizen verified: ${name} (${location})`, "success");
-  return true;
+  pendingCitizenSwitchName = name;
+  if (persona.coords) pendingCitizenCoords = persona.coords;
+
+  showToast(`Loaded profile for ${name}`, "info");
 }
 
 function openServiceDebarmentModal(serviceId, reason) {
@@ -3628,6 +4402,11 @@ let pendingOrganisationSwitchName = null;
 let pendingOrganisationCoords = null;
 
 function setCustomerLoginType(type = "household", showToastMsg = true) {
+  const isInstitutionalEnabled = (typeof ENABLE_INSTITUTIONAL_SERVICES !== "undefined" && ENABLE_INSTITUTIONAL_SERVICES);
+  // If institutional facility services are disabled for now, enforce household mode
+  if (!isInstitutionalEnabled) {
+    type = "household";
+  }
   sfx.playClick();
   state.customerType = type;
 
@@ -3640,7 +4419,19 @@ function setCustomerLoginType(type = "household", showToastMsg = true) {
   const badgeText = document.getElementById("citizen-persona-badge-text");
   const locText = document.getElementById("citizen-location-text");
 
-  if (type === "organisation") {
+  // Keep organisation controls hidden when institutional services are disabled
+  if (!isInstitutionalEnabled) {
+    if (btnOrganisation) {
+      btnOrganisation.classList.add("hidden");
+      btnOrganisation.style.display = "none";
+    }
+    if (secOrganisation) {
+      secOrganisation.classList.add("hidden");
+      secOrganisation.style.display = "none";
+    }
+  }
+
+  if (type === "organisation" && isInstitutionalEnabled) {
     // Styling for Organisation Mode
     if (btnOrganisation) {
       btnOrganisation.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-xs";
@@ -3698,16 +4489,31 @@ function setCustomerLoginType(type = "household", showToastMsg = true) {
       btnHousehold.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-white text-blue-900 shadow-xs";
     }
     if (btnOrganisation) {
-      btnOrganisation.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-950 hover:bg-white/60 bg-transparent shadow-none";
+      btnOrganisation.className = "hidden px-3 py-1.5 rounded-lg text-xs font-bold transition items-center gap-1.5 text-slate-600 hover:text-indigo-950 hover:bg-white/60 bg-transparent shadow-none";
+      if (!isInstitutionalEnabled) {
+        btnOrganisation.style.display = "none";
+      }
     }
-    if (secHousehold) secHousehold.classList.remove("hidden");
-    if (secOrganisation) secOrganisation.classList.add("hidden");
+    if (secHousehold) {
+      secHousehold.classList.remove("hidden");
+      secHousehold.style.display = "";
+    }
+    if (secOrganisation) {
+      secOrganisation.classList.add("hidden");
+      secOrganisation.style.display = "none";
+    }
 
     // Toggle secondary row: show household pass, hide organisation AMC plan
     const subCard = document.getElementById("subscription-feature-card");
     const orgAmcCard = document.getElementById("organisation-amc-feature-card");
-    if (subCard) subCard.classList.remove("hidden");
-    if (orgAmcCard) orgAmcCard.classList.add("hidden");
+    if (subCard) {
+      subCard.classList.remove("hidden");
+      subCard.style.display = "";
+    }
+    if (orgAmcCard) {
+      orgAmcCard.classList.add("hidden");
+      orgAmcCard.style.display = "none";
+    }
 
     if (locIcon) {
       locIcon.className = "w-3 h-3 text-blue-600";
@@ -3719,7 +4525,7 @@ function setCustomerLoginType(type = "household", showToastMsg = true) {
     changeCitizenPersona(activeCitizen, true);
 
     initServiceGrid();
-    if (showToastMsg) {
+    if (showToastMsg && isInstitutionalEnabled) {
       showToast("🏠 Switched to Household Customer Login (Residential Trades)", "info");
     }
   }
@@ -4052,15 +4858,16 @@ function initServiceGrid(filteredList = null) {
   const isSearchActive = filteredList !== null;
   const rawList = filteredList || SERVICES;
   const isHi = state.currentLanguage === "hi";
-  const isOrganisation = state.customerType === "organisation";
+  const isInstEnabled = (typeof ENABLE_INSTITUTIONAL_SERVICES !== "undefined" && ENABLE_INSTITUTIONAL_SERVICES);
+  const isOrganisation = isInstEnabled && state.customerType === "organisation";
 
   // Filter out artisan services if NGO credentials have NOT been verified
-  // Filter out maintenance services if not logged in as Organisation
+  // Filter out maintenance services if not logged in as Organisation or if institutional services disabled
   const list = rawList.filter(s => {
     if (s.isArtisan && !state.ngoVerified) {
       return false;
     }
-    if (s.isMaintenance && !isOrganisation) {
+    if (s.isMaintenance && (!isInstEnabled || !isOrganisation)) {
       return false;
     }
     return true;
@@ -4190,9 +4997,15 @@ function initServiceGrid(filteredList = null) {
     card.innerHTML = `
       <!-- Top Section: Photo Thumbnail on Left, Title, Vetted Tag & Gradient Time Pill on Right -->
       <div class="flex items-start gap-3 sm:gap-4 w-full">
-        <!-- Service Photo Thumbnail with Hover Zoom -->
+        <!-- Service Photo Thumbnail with Hover Zoom & Floating Emblem -->
         <div class="w-24 sm:w-28 md:w-32 h-22 sm:h-24 md:h-26 rounded-2xl overflow-hidden flex-shrink-0 shadow-xs border border-stone-200/90 relative bg-slate-100">
           <img src="${s.photo}" alt="${name}" loading="lazy" class="service-img-thumb w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=400&q=80';" />
+          
+          <!-- Visual Floating Trade Emblem Badge -->
+          <div class="absolute bottom-1.5 right-1.5 w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-white/95 shadow-md flex items-center justify-center border border-white/80 backdrop-blur-xs group-hover:scale-110 transition-transform">
+            <i data-lucide="${s.icon || 'wrench'}" class="w-3.5 h-3.5 ${theme.badgeColor || 'text-slate-800'}"></i>
+          </div>
+
           ${s.isArtisan ? `
             <span class="absolute top-1.5 left-1.5 bg-amber-600/95 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-xs backdrop-blur-xs whitespace-nowrap">
               ${isHi ? "धरोहर" : "Artisan"}
@@ -4231,8 +5044,20 @@ function initServiceGrid(filteredList = null) {
         </div>
       </div>
 
-      <!-- Bottom Section: Floating Rate Box on Left, Floating Rating Box on Right -->
-      <div class="flex items-center justify-between w-full mt-4 pt-1 gap-2.5">
+      <!-- Middle Section: Visual Scannable Task Chips with Micro-Icons (Zero-Reading Navigation) -->
+      ${(s.visualTags && s.visualTags.length > 0) ? `
+        <div class="flex flex-wrap items-center gap-1.5 my-2.5 pt-2 border-t border-slate-200/60">
+          ${s.visualTags.map(tag => `
+            <span class="inline-flex items-center gap-1 text-[10px] font-bold bg-white/90 text-slate-700 px-2 py-0.5 rounded-lg border border-slate-200/80 shadow-2xs group-hover:border-slate-300 transition-colors">
+              <i data-lucide="${tag.icon}" class="w-3 h-3 text-slate-600"></i>
+              <span>${isHi ? (tag.label_hi || tag.label) : tag.label}</span>
+            </span>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <!-- Bottom Section: Floating Rate Box on Left, 1-Click Action Pill, and Floating Rating Box on Right -->
+      <div class="flex items-center justify-between w-full mt-2 pt-1 gap-2">
         <div class="bg-white/95 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl shadow-xs border border-stone-200/80 font-black text-xs sm:text-sm text-slate-900 tracking-tight inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap max-w-[70%]">
           <span>₹${s.base}${hrSuffix}</span>
           ${state.ngoVerified && s.isArtisan ? `
@@ -4243,9 +5068,15 @@ function initServiceGrid(filteredList = null) {
           ` : ""}
         </div>
 
-        <div class="bg-white/95 backdrop-blur-xs px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl shadow-xs border border-stone-200/80 font-black text-xs sm:text-sm text-slate-900 inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap">
-          <span class="text-amber-500 text-sm font-black">★</span>
-          <span>${s.rating}</span>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <div class="bg-slate-900 group-hover:bg-blue-600 text-white text-[10px] sm:text-[11px] font-black px-2 sm:px-2.5 py-1.5 rounded-xl shadow-xs transition-colors flex items-center gap-1">
+            <span>${isHi ? "बुक" : "Book"}</span>
+            <i data-lucide="chevron-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+          </div>
+          <div class="bg-white/95 backdrop-blur-xs px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl shadow-xs border border-stone-200/80 font-black text-xs sm:text-sm text-slate-900 inline-flex items-center gap-1 shrink-0 whitespace-nowrap">
+            <span class="text-amber-500 text-sm font-black">★</span>
+            <span>${s.rating}</span>
+          </div>
         </div>
       </div>
     `;
@@ -4297,8 +5128,8 @@ function initServiceGrid(filteredList = null) {
     grid.appendChild(teaserCard);
   }
 
-  // If customer is NOT logged in as an organisation and not in active search, show teaser card for institutional maintenance services
-  if (!isOrganisation && !isSearchActive) {
+  // If customer is NOT logged in as an organisation and not in active search, show teaser card for institutional maintenance services (only if institutional services enabled)
+  if (isInstEnabled && !isOrganisation && !isSearchActive) {
     const orgTeaserCard = document.createElement("div");
     orgTeaserCard.id = "organisation-maintenance-teaser-card";
     orgTeaserCard.className = "service-tab-card p-4 sm:p-5 rounded-[28px] border-2 border-dashed border-indigo-300 bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-slate-50/60 transition-all duration-300 ease-out flex flex-col justify-between text-left cursor-pointer hover:border-indigo-500 group transform hover:-translate-y-1.5 hover:scale-[1.01] shadow-sm h-full col-span-1 sm:col-span-2 lg:col-span-3";
@@ -4341,7 +5172,62 @@ function initServiceGrid(filteredList = null) {
     grid.appendChild(orgTeaserCard);
   }
 
+  try {
+    if (typeof renderVisualServiceNavRibbon === "function") {
+      renderVisualServiceNavRibbon();
+    }
+  } catch (e) {
+    // Non-fatal in test environments
+  }
+
   safeCreateIcons();
+}
+
+function renderVisualServiceNavRibbon() {
+  const ribbon = document.getElementById("visual-service-nav-ribbon");
+  if (!ribbon) return;
+
+  const isHi = state.currentLanguage === "hi";
+  const isInstEnabled = (typeof ENABLE_INSTITUTIONAL_SERVICES !== "undefined" && ENABLE_INSTITUTIONAL_SERVICES);
+  const isOrganisation = isInstEnabled && state.customerType === "organisation";
+  const rawList = SERVICES;
+  const list = rawList.filter(s => {
+    if (s.isArtisan && !state.ngoVerified) return false;
+    if (s.isMaintenance && (!isInstEnabled || !isOrganisation)) return false;
+    return true;
+  });
+
+  ribbon.innerHTML = list.map(s => {
+    const isSelected = state.selectedService === s.id;
+    const theme = SERVICE_THEMES[s.id] || SERVICE_THEMES.plumber;
+    const name = isHi ? s.name_hi : s.name;
+    const activeClass = isSelected
+      ? "bg-slate-900 text-white shadow-md ring-2 ring-blue-500/60 scale-105 border-slate-900 font-black"
+      : "bg-white/95 text-slate-800 hover:bg-white hover:shadow-xs border-slate-200/90 hover:border-slate-300 font-bold";
+
+    return `
+      <button type="button" onclick="focusOrSelectService('${s.id}')" id="nav-pill-${s.id}"
+        class="service-visual-nav-btn px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl flex items-center gap-2 transition-all duration-200 border text-xs whitespace-nowrap btn-tactile shadow-2xs ${activeClass}">
+        <div class="w-6 h-6 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform ${isSelected ? 'bg-blue-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700'}" style="${!isSelected ? `background-color: ${theme.colorHex}18; color: ${theme.colorHex};` : ''}">
+          <i data-lucide="${s.icon || 'wrench'}" class="w-3.5 h-3.5"></i>
+        </div>
+        <span>${name}</span>
+      </button>
+    `;
+  }).join('');
+
+  safeCreateIcons();
+}
+
+function focusOrSelectService(serviceId) {
+  sfx.playClick();
+  selectService(serviceId, false);
+  const card = document.getElementById(`service-card-${serviceId}`);
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('ring-4', 'ring-blue-500');
+    setTimeout(() => card.classList.remove('ring-4', 'ring-blue-500'), 1500);
+  }
 }
 
 function toggleShowAllServices() {
@@ -4557,6 +5443,8 @@ function renderSubServices(serviceId) {
 
   const isHi = state.currentLanguage === "hi";
   const subList = SUB_SERVICES_CATALOG[serviceId] || SUB_SERVICES_CATALOG["electrician"] || [];
+  const sObj = SERVICES.find(s => s.id === serviceId) || SERVICES[0] || {};
+  const parentPhoto = sObj.photo || "assets/hvac_maintenance.jpg";
 
   // Reset if selection from another trade
   if (state.selectedSubServices.length > 0 && !subList.some(s => s.id === state.selectedSubServices[0].id)) {
@@ -4567,11 +5455,13 @@ function renderSubServices(serviceId) {
   }
   state.selectedSubService = state.selectedSubServices[0] || null;
 
-  subList.forEach(sub => {
+  subList.forEach((sub, idx) => {
     const isSelected = state.selectedSubServices.some(s => s.id === sub.id);
     const title = isHi ? (sub.title_hi || sub.title) : sub.title;
     const desc = isHi ? (sub.desc_hi || sub.desc) : sub.desc;
     const badge = isHi ? (sub.badge_hi || sub.badge) : sub.badge;
+    const palette = SUB_SERVICE_PALETTES[idx % SUB_SERVICE_PALETTES.length];
+    const subPhoto = getSubServicePhoto(sub.id, serviceId);
 
     const card = document.createElement("div");
     card.setAttribute("data-sub-id", sub.id);
@@ -4581,34 +5471,42 @@ function renderSubServices(serviceId) {
       toggleSubServiceSelection(sub.id);
     };
 
-    card.className = `p-3.5 sm:p-4 rounded-2xl border-2 cursor-pointer transition flex flex-col justify-between text-left space-y-2.5 btn-tactile relative h-full ${isSelected
-        ? "border-blue-600 bg-blue-50/90 shadow-md ring-2 ring-blue-500/20"
-        : "border-slate-200 bg-white hover:border-blue-400 hover:shadow-sm"
-      }`;
+    const cardStateClasses = isSelected
+      ? `${palette.selectedBg} ${palette.selectedBorder}`
+      : `${palette.unselectedBg} ${palette.unselectedBorder}`;
+
+    card.className = `p-3 sm:p-3.5 rounded-2xl border-2 cursor-pointer transition flex flex-col justify-between text-left space-y-2.5 btn-tactile relative h-full subservice-tab-card group ${cardStateClasses}`;
 
     card.innerHTML = `
-      <div class="flex items-start justify-between w-full gap-2">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isSelected ? "bg-blue-600 text-white shadow-sm" : "bg-blue-50 text-blue-700"}">
-            <i data-lucide="${sub.icon || "wrench"}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+      <div class="flex items-start justify-between w-full gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden flex-shrink-0 border ${isSelected ? palette.selectedBorder : 'border-slate-200/90'} shadow-xs bg-slate-100">
+            <img src="${subPhoto}" alt="${title}" class="w-full h-full object-cover subservice-img-thumb transition-transform duration-300 group-hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='${parentPhoto}';" />
+            <div class="absolute bottom-1 right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-lg ${isSelected ? palette.iconBoxSelected : palette.iconBoxUnselected} flex items-center justify-center shadow-xs">
+              <i data-lucide="${sub.icon || "wrench"}" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white"></i>
+            </div>
           </div>
-          <div class="min-w-0">
-            <span class="text-[10px] font-black ${isSelected ? "text-blue-800 bg-blue-100" : "text-emerald-700 bg-emerald-50 border border-emerald-200"} px-2.5 py-0.5 rounded-full whitespace-nowrap inline-block">
-              ${badge}
+          <div class="min-w-0 flex flex-col justify-center">
+            <span class="text-[10px] font-black ${isSelected ? palette.badgeSelected : palette.badgeUnselected} px-2.5 py-0.5 rounded-full whitespace-nowrap inline-flex items-center gap-1 shadow-2xs self-start mb-1">
+              <i data-lucide="check-circle-2" class="w-2.5 h-2.5"></i>
+              <span class="truncate max-w-[110px] sm:max-w-[140px]">${badge}</span>
+            </span>
+            <span class="text-[10px] font-bold ${isSelected ? 'text-slate-800' : 'text-slate-500'}">
+              ${isSelected ? `✓ ${isHi ? "कार्य चयनित" : "Task Selected"}` : (isHi ? "क्लिक करके चुनें" : "Tap to Select")}
             </span>
           </div>
         </div>
-        <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-xs" : "border-slate-300 bg-white"}">
+        <div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition ${isSelected ? palette.checkSelected : palette.checkUnselected}">
           ${isSelected ? `<i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>` : ""}
         </div>
       </div>
       <div class="flex-1 min-w-0">
-        <h4 class="font-black text-sm ${isSelected ? "text-blue-950" : "text-slate-900"} tracking-tight leading-snug line-clamp-2 break-words">${title}</h4>
-        <p class="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2 break-words">${desc}</p>
+        <h4 class="font-black text-sm ${isSelected ? palette.titleSelected : "text-slate-900"} tracking-tight leading-snug line-clamp-2 break-words">${title}</h4>
+        <p class="text-xs ${palette.descColor} mt-1 leading-relaxed line-clamp-2 break-words">${desc}</p>
       </div>
-      <div class="flex items-center justify-between w-full pt-2.5 border-t border-slate-100 text-xs gap-2">
-        <span class="font-bold text-slate-500 shrink-0">${isHi ? "श्रम दर:" : "Base Labor:"}</span>
-        <span class="font-black text-slate-900 text-xs sm:text-sm shrink-0 whitespace-nowrap">₹${sub.base}${isHi ? "/कार्य" : "/job"}</span>
+      <div class="flex items-center justify-between w-full pt-2.5 border-t ${isSelected ? 'border-black/5' : 'border-slate-200/60'} text-xs gap-2">
+        <span class="font-bold text-slate-500 shrink-0 text-[11px]">${isHi ? "श्रम दर:" : "Base Labor:"}</span>
+        <span class="font-black ${palette.priceTag} text-xs sm:text-xs shrink-0 whitespace-nowrap px-2 py-0.5 rounded-md">₹${sub.base}${isHi ? "/कार्य" : "/job"}</span>
       </div>
     `;
 
@@ -4646,21 +5544,38 @@ function updateSubServicesActionBar() {
   const laborEl = document.getElementById("selected-subservices-labor");
   const labelEl = document.getElementById("selected-subservices-label");
   const subtotalEl = document.getElementById("selected-subservices-subtotal");
+  const chipsEl = document.getElementById("selected-subservices-chips");
   const btn = document.getElementById("btn-proceed-subservices");
   const count = state.selectedSubServices.length;
   const totalLabor = state.selectedSubServices.reduce((sum, s) => sum + (s.base || 0), 0);
+  const isHi = state.currentLanguage === "hi";
 
   if (countEl) countEl.innerText = count;
   if (laborEl) laborEl.innerText = `₹${totalLabor.toFixed(2)}`;
   if (labelEl) {
     labelEl.innerText = count === 1
       ? `${state.selectedSubServices[0].title}`
-      : `${count} Tasks Selected`;
+      : `${count} Tasks Selected (Multi-Service)`;
   }
   if (subtotalEl) {
     subtotalEl.innerText = count > 0
       ? `Combined Base Fair Wage: ₹${totalLabor.toFixed(2)} • Review selection to proceed`
       : "Choose 1 or more options above";
+  }
+  if (chipsEl) {
+    if (count > 0) {
+      chipsEl.classList.remove("hidden");
+      chipsEl.innerHTML = state.selectedSubServices.map((s, idx) => {
+        const pal = getSubServicePalette(s.id, state.selectedService, idx);
+        return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black ${pal.badgeSelected} shadow-2xs border border-white/20">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: ${pal.colorHex}"></span>
+          <span class="truncate max-w-[130px]">${isHi ? (s.title_hi || s.title) : s.title}</span>
+        </span>`;
+      }).join("");
+    } else {
+      chipsEl.classList.add("hidden");
+      chipsEl.innerHTML = "";
+    }
   }
   if (btn) {
     btn.disabled = count === 0;
@@ -4702,15 +5617,24 @@ function openSatisfactionReviewModal() {
 
     const inMenuItemsContainer = document.getElementById("in-menu-satisfaction-items");
     if (inMenuItemsContainer) {
-      inMenuItemsContainer.innerHTML = state.selectedSubServices.map(s => `
-        <div class="py-2.5 flex items-start justify-between gap-3 text-xs">
-          <div class="flex items-start gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <i data-lucide="${s.icon || 'wrench'}" class="w-4 h-4"></i>
+      inMenuItemsContainer.innerHTML = state.selectedSubServices.map((s, idx) => {
+        const pal = getSubServicePalette(s.id, state.selectedService, idx);
+        const photo = getSubServicePhoto(s.id, state.selectedService);
+        return `
+        <div class="py-2.5 flex items-start justify-between gap-3 text-xs border-b border-white/10 last:border-b-0">
+          <div class="flex items-start gap-2.5 min-w-0">
+            <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border border-white/20 relative mt-0.5 bg-slate-800 shadow-xs">
+              <img src="${photo}" alt="${s.title}" class="w-full h-full object-cover" />
+              <div class="absolute bottom-0 right-0 w-4 h-4 rounded-tl ${pal.iconBoxSelected} flex items-center justify-center">
+                <i data-lucide="${s.icon || 'wrench'}" class="w-2.5 h-2.5 text-white"></i>
+              </div>
             </div>
-            <div>
-              <div class="font-black text-white">${s.title}</div>
-              <div class="text-[11px] text-blue-200 leading-tight mt-0.5">${s.desc}</div>
+            <div class="min-w-0">
+              <div class="font-black text-white flex items-center gap-1.5 flex-wrap">
+                <span class="truncate">${s.title}</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded-full ${pal.badgeSelected} font-black flex-shrink-0">Task ${idx + 1}</span>
+              </div>
+              <div class="text-[11px] text-blue-200 leading-tight mt-0.5 line-clamp-1">${s.desc}</div>
             </div>
           </div>
           <div class="text-right flex-shrink-0">
@@ -4718,7 +5642,8 @@ function openSatisfactionReviewModal() {
             <span class="text-[10px] text-emerald-300 font-bold block">✓ Fair Wage</span>
           </div>
         </div>
-      `).join("");
+      `;
+      }).join("");
     }
   }
 
@@ -4731,23 +5656,33 @@ function openSatisfactionReviewModal() {
 
   const itemsContainer = document.getElementById("satisfaction-modal-items");
   if (itemsContainer) {
-    itemsContainer.innerHTML = state.selectedSubServices.map(s => `
-      <div class="py-2.5 flex items-start justify-between gap-3 text-xs">
-        <div class="flex items-start gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <i data-lucide="${s.icon || 'wrench'}" class="w-4 h-4"></i>
+    itemsContainer.innerHTML = state.selectedSubServices.map((s, idx) => {
+      const pal = getSubServicePalette(s.id, state.selectedService, idx);
+      const photo = getSubServicePhoto(s.id, state.selectedService);
+      return `
+      <div class="py-2.5 flex items-start justify-between gap-3 text-xs border-b border-slate-100 last:border-b-0">
+        <div class="flex items-start gap-2.5 min-w-0">
+          <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 border border-slate-200 relative mt-0.5 bg-slate-100 shadow-xs">
+            <img src="${photo}" alt="${s.title}" class="w-full h-full object-cover" />
+            <div class="absolute bottom-0 right-0 w-4 h-4 rounded-tl ${pal.iconBoxSelected} flex items-center justify-center">
+              <i data-lucide="${s.icon || 'wrench'}" class="w-2.5 h-2.5 text-white"></i>
+            </div>
           </div>
-          <div>
-            <div class="font-black text-slate-900">${s.title}</div>
-            <div class="text-[11px] text-slate-500 leading-tight mt-0.5">${s.desc}</div>
+          <div class="min-w-0">
+            <div class="font-black text-slate-900 flex items-center gap-1.5 flex-wrap">
+              <span class="truncate">${s.title}</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded-full ${pal.badgeSelected} font-black flex-shrink-0">Task ${idx + 1}</span>
+            </div>
+            <div class="text-[11px] text-slate-500 leading-tight mt-0.5 line-clamp-1">${s.desc}</div>
           </div>
         </div>
         <div class="text-right flex-shrink-0">
-          <span class="font-black text-slate-900">₹${s.base.toFixed(2)}</span>
+          <span class="font-black text-slate-900 font-mono">₹${s.base.toFixed(2)}</span>
           <span class="text-[10px] text-emerald-700 font-bold block">✓ Fair Wage</span>
         </div>
       </div>
-    `).join("");
+    `;
+    }).join("");
   }
 
   // Ensure external popup modal is NOT conflicting or showing behind
@@ -4814,12 +5749,20 @@ function renderInvoiceTasksList() {
           <span class="uppercase tracking-wider text-[10px]">Selected Tasks (${state.selectedSubServices.length})</span>
           <span class="text-[10px] text-emerald-700 font-bold">✓ Customer Verified</span>
         </div>
-        ${state.selectedSubServices.map(t => `
-          <div class="flex items-center justify-between text-[11px]">
-            <span class="text-slate-800 font-bold">• ${t.title}</span>
-            <span class="font-mono text-slate-900 font-black">₹${t.base.toFixed(2)}</span>
+        ${state.selectedSubServices.map((t, idx) => {
+      const pal = getSubServicePalette(t.id, state.selectedService, idx);
+      const photo = getSubServicePhoto(t.id, state.selectedService);
+      return `
+          <div class="flex items-center justify-between text-[11px] py-1 border-b border-slate-100/80 last:border-b-0 gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <img src="${photo}" alt="${t.title}" class="w-6 h-6 rounded-md object-cover flex-shrink-0 border border-slate-200 shadow-2xs" />
+              <span class="text-slate-800 font-bold truncate">• ${t.title}</span>
+              <span class="text-[9px] px-1.5 py-0.2 rounded-full ${pal.badgeSelected} font-black flex-shrink-0">Task ${idx + 1}</span>
+            </div>
+            <span class="font-mono text-slate-900 font-black flex-shrink-0">₹${t.base.toFixed(2)}</span>
           </div>
-        `).join("")}
+        `;
+    }).join("")}
       </div>
     `;
   } else {
@@ -5467,6 +6410,15 @@ function closeCompletedBookingCard() {
   if (acceptedBanner) acceptedBanner.classList.add("hidden");
   const completedBar = document.getElementById("booking-completed-action-bar");
   if (completedBar) completedBar.classList.add("hidden");
+  const telemetryHud = document.getElementById("driver-gps-telemetry-hud");
+  if (telemetryHud) telemetryHud.classList.add("hidden");
+  const safetyHelplineBox = document.getElementById("driver-safety-helpline-box");
+  if (safetyHelplineBox) safetyHelplineBox.classList.add("hidden");
+  const custDriverFab = document.getElementById("customer-driver-safety-fab-container");
+  if (custDriverFab) custDriverFab.classList.add("hidden");
+  if (typeof stopDriverTelemetryStream === "function") {
+    stopDriverTelemetryStream();
+  }
   resetCustomerAppMap();
   updateWorkflowStep(1);
   showToast("Proximity radar reset. Ready for next cooperative service.", "info");
@@ -6205,6 +7157,32 @@ function executeBookingConfirmed() {
 
   updateTimeline(bookingResult.timeline);
 
+  // Driver Telemetry HUD & Women Safety Police Helpline integration
+  const isDriver = bookingResult.service_type === "driver";
+  const telemetryHud = document.getElementById("driver-gps-telemetry-hud");
+  const safetyHelplineBox = document.getElementById("driver-safety-helpline-box");
+  const odoContainer = document.getElementById("proof-odometer-container");
+
+  if (isDriver) {
+    if (telemetryHud) telemetryHud.classList.remove("hidden");
+    if (safetyHelplineBox) safetyHelplineBox.classList.remove("hidden");
+    if (odoContainer) odoContainer.classList.remove("hidden");
+    const custDriverFab = document.getElementById("customer-driver-safety-fab-container");
+    if (custDriverFab) custDriverFab.classList.remove("hidden");
+    if (typeof startDriverTelemetryStream === "function") {
+      startDriverTelemetryStream(bookingResult.booking_id);
+    }
+  } else {
+    if (telemetryHud) telemetryHud.classList.add("hidden");
+    if (safetyHelplineBox) safetyHelplineBox.classList.add("hidden");
+    if (odoContainer) odoContainer.classList.add("hidden");
+    const custDriverFab = document.getElementById("customer-driver-safety-fab-container");
+    if (custDriverFab) custDriverFab.classList.add("hidden");
+    if (typeof stopDriverTelemetryStream === "function") {
+      stopDriverTelemetryStream();
+    }
+  }
+
   // Ping badge on Worker Radar tab
   const badge = document.getElementById("worker-radar-ping-badge");
   if (badge) badge.classList.remove("hidden");
@@ -6447,6 +7425,34 @@ function workerAcceptJob() {
     badgeStep1.innerText = isHi ? "आगमन ओटीपी प्रतीक्षारत" : "AWAITING START_OTP";
   }
 
+  // Unlock START_OTP input and buttons now that worker has accepted the request
+  const inputStartOtp = document.getElementById("input-start-otp");
+  if (inputStartOtp) {
+    inputStartOtp.disabled = false;
+    inputStartOtp.removeAttribute("disabled");
+    inputStartOtp.placeholder = "Enter START_OTP (e.g. 4821)";
+  }
+  const btnAutofillStart = document.getElementById("btn-autofill-start-otp");
+  if (btnAutofillStart) {
+    btnAutofillStart.disabled = false;
+    btnAutofillStart.removeAttribute("disabled");
+  }
+  const btnSubmitStart = document.getElementById("btn-submit-start-otp");
+  if (btnSubmitStart) {
+    btnSubmitStart.disabled = false;
+    btnSubmitStart.removeAttribute("disabled");
+  }
+  const otpLockedNotice = document.getElementById("otp-locked-notice");
+  if (otpLockedNotice) {
+    otpLockedNotice.className = "mb-3 p-2.5 bg-emerald-50 border border-emerald-300 rounded-xl flex items-center gap-2 text-xs text-emerald-950 font-medium";
+  }
+  const otpLockMsg = document.getElementById("otp-lock-msg");
+  if (otpLockMsg) {
+    otpLockMsg.innerHTML = isHi
+      ? "<strong>✓ कार्य स्वीकृत:</strong> ग्राहक के परिसर में पहुँचने पर 4-अंकीय आगमन ओटीपी (START_OTP) प्राप्त कर दर्ज करें।"
+      : "<strong>✓ Request Accepted:</strong> Ask customer for 4-digit START_OTP upon reaching premises to commence service.";
+  }
+
   // Populate Citizen Assigned Worker card elements
   const statusWorkerName = document.getElementById("status-worker-name");
   if (statusWorkerName) statusWorkerName.innerText = assignedWorker.name;
@@ -6665,20 +7671,42 @@ function workerRejectJob() {
 // 12. Dual OTP Verification Workflows
 function autoFillStartOtp() {
   sfx.playClick();
-  if (!state.activeBooking) return;
+  const isHi = state.currentLanguage === "hi";
+  if (!state.activeBooking) {
+    showToast(isHi ? "कोई सक्रिय बुकिंग नहीं मिली。" : "No active booking found.", "warning");
+    return;
+  }
+  // Enforce that service request must be accepted by worker first
+  if (state.activeBooking.status !== "ACCEPTED") {
+    if (sfx.playFallbackWarning) sfx.playFallbackWarning();
+    showToast(isHi
+      ? "⚠️ ओटीपी प्रविष्टि लॉक है! पहले 'Accept & Navigate' से कार्य अनुरोध स्वीकार करें।"
+      : "⚠️ OTP Entry Locked: You must accept the service request before filling OTPs!", "warning");
+    return;
+  }
   document.getElementById("input-start-otp").value = state.activeBooking.start_otp;
   showToast(state.currentLanguage === "hi" ? "डेमो शुरुआती ओटीपी स्वतः भरा गया" : "Demo START_OTP auto-filled", "info");
 }
 
 function submitStartOtp() {
   sfx.init();
-  const entered = document.getElementById("input-start-otp").value.trim();
   const isHi = state.currentLanguage === "hi";
 
   if (!state.activeBooking) {
     showToast(isHi ? "कोई सक्रिय बुकिंग नहीं मिली। पहले अनुरोध भेजें।" : "No active booking found. Broadcast a request first.", "warning");
     return;
   }
+
+  // Enforce that service request must be accepted by worker first
+  if (state.activeBooking.status !== "ACCEPTED") {
+    if (sfx.playFallbackWarning) sfx.playFallbackWarning();
+    showToast(isHi
+      ? "⚠️ ओटीपी सत्यापन लॉक है! पहले कार्य अनुरोध स्वीकार करें।"
+      : "⚠️ OTP Entry Locked: You must accept the service request before verifying OTPs!", "warning");
+    return;
+  }
+
+  const entered = document.getElementById("input-start-otp").value.trim();
 
   if (entered === state.activeBooking.start_otp) {
     sfx.playSuccessFanfare();
@@ -6694,6 +7722,13 @@ function submitStartOtp() {
     document.getElementById("booking-badge-status").className = "bg-blue-600 text-white text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm";
 
     updateTimeline(state.activeBooking.timeline);
+
+    // If driver service, reveal odometer reading input in worker step 2
+    if (state.activeBooking.service_type === "driver") {
+      const odoContainer = document.getElementById("proof-odometer-container");
+      if (odoContainer) odoContainer.classList.remove("hidden");
+    }
+
     showToast(isHi ? "✓ शुरुआती ओटीपी सत्यापित! कार्य शुरू हुआ।" : "✓ START_OTP Verified! Service commenced.", "success");
   } else {
     sfx.playFallbackWarning();
@@ -6703,7 +7738,13 @@ function submitStartOtp() {
 
 function autoFillEndOtp() {
   sfx.playClick();
+  const isHi = state.currentLanguage === "hi";
   if (!state.activeBooking) return;
+  if (state.activeBooking.status !== "IN_PROGRESS") {
+    if (sfx.playFallbackWarning) sfx.playFallbackWarning();
+    showToast(isHi ? "⚠️ कार्य शुरू होने से पहले समापन ओटीपी नहीं भरा जा सकता।" : "⚠️ Service must be in progress before filling END_OTP!", "warning");
+    return;
+  }
   document.getElementById("input-end-otp").value = state.activeBooking.end_otp;
   showToast(state.currentLanguage === "hi" ? "डेमो समापन ओटीपी स्वतः भरा गया" : "Demo END_OTP auto-filled", "info");
 }
@@ -6739,6 +7780,46 @@ function submitEndOtp() {
     return;
   }
 
+  // 1. Strict Mandatory Proof of Work Validation Criteria
+  const previewContainer = document.getElementById("proof-preview-container");
+  const previewImg = document.getElementById("proof-preview-img");
+  const hasProofPhoto = previewImg && previewImg.src && !previewContainer.classList.contains("hidden") &&
+    !previewImg.src.endsWith("#") && previewImg.src !== window.location.href && previewImg.src.length > 20;
+
+  if (!hasProofPhoto) {
+    sfx.playFallbackWarning();
+    const notice = document.getElementById("proof-mandatory-notice");
+    if (notice) {
+      notice.classList.add("proof-mandatory-pulse");
+      setTimeout(() => notice.classList.remove("proof-mandatory-pulse"), 2500);
+    }
+    const boxStep2 = document.getElementById("box-step-2");
+    if (boxStep2) {
+      boxStep2.classList.add("ring-2", "ring-rose-500");
+      setTimeout(() => boxStep2.classList.remove("ring-2", "ring-rose-500"), 3000);
+    }
+    showToast(isHi
+      ? "कार्य का प्रमाण (फोटो) अपलोड करना अनिवार्य है! कृपया कैमरा या गैलरी से फोटो संलग्न करें।"
+      : "Proof of Work photo is strictly MANDATORY before job completion! Please snap a photo or attach proof.", "warning");
+    return;
+  }
+
+  // Capture work notes and odometer reading
+  const notesInput = document.getElementById("proof-work-notes");
+  const odoInput = document.getElementById("proof-odometer-reading");
+  const workNotes = notesInput ? notesInput.value.trim() : "";
+  const odoReading = odoInput ? odoInput.value.trim() : "";
+  const isDriver = state.activeBooking.service_type === "driver";
+  const finalOdometer = odoReading || (isDriver ? (state.driverTelemetry ? `${Math.round(state.driverTelemetry.odometerKm)} km` : "24,845 km") : null);
+
+  state.activeBooking.proof_of_work = {
+    image: previewImg.src,
+    notes: workNotes || "Service successfully completed and verified by cooperative technician.",
+    odometer: finalOdometer,
+    timestamp: new Date().toISOString(),
+    verified: true
+  };
+
   if (entered === state.activeBooking.end_otp) {
     sfx.playSuccessFanfare();
     state.activeBooking.status = "COMPLETED";
@@ -6763,6 +7844,13 @@ function submitEndOtp() {
       badgeStatus.className = "bg-emerald-700 text-white text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm";
     }
 
+    // Stop driver telemetry stream on completion
+    if (typeof stopDriverTelemetryStream === "function") {
+      stopDriverTelemetryStream();
+    }
+    const custDriverFab = document.getElementById("customer-driver-safety-fab-container");
+    if (custDriverFab) custDriverFab.classList.add("hidden");
+
     // Update Worker's Earnings and stats
     worker.total_earned = (worker.total_earned || 0) + payout;
     worker.completed_jobs = (worker.completed_jobs || 0) + 1;
@@ -6781,6 +7869,66 @@ function submitEndOtp() {
       payout: payout,
       worker_id: worker.id
     });
+
+    // Save full rich record into Customer and Worker Service History
+    const completedRecord = {
+      booking_id: state.activeBooking.booking_id,
+      customer_name: state.activeBooking.customer_name || state.currentCustomerName || "Aarav Mehta",
+      customer_phone: state.activeBooking.customer_phone || "+91 98765 43210",
+      service_type: state.activeBooking.service_type,
+      sub_service: state.activeBooking.sub_service || "Certified Cooperative Task",
+      booking_date: state.activeBooking.booking_date || "Today",
+      booking_time: state.activeBooking.booking_time || "Now",
+      status: "COMPLETED",
+      worker_id: worker.id,
+      worker_name: worker.name,
+      worker_phone: worker.phone,
+      worker_coop: worker.coop_name,
+      worker_photo: worker.photo,
+      worker_rating: worker.rating || 4.9,
+      payout: payout,
+      citizen_paid: parseFloat((payout * 1.085).toFixed(2)),
+      citizen_savings: parseFloat((payout * 0.72).toFixed(2)),
+      start_otp: state.activeBooking.start_otp,
+      end_otp: state.activeBooking.end_otp,
+      rating: 5,
+      proof_of_work: state.activeBooking.proof_of_work,
+      telemetry: isDriver ? {
+        distance_km: state.driverTelemetry ? state.driverTelemetry.tripDistanceKm.toFixed(1) : "6.2",
+        avg_speed_kmh: 42,
+        peak_speed_kmh: 58,
+        route: "Connaught Place to Destination (Live Verified GPS)",
+        satellites: 12,
+        accuracy_m: "1.2"
+      } : null,
+      completed_at: new Date().toISOString()
+    };
+
+    if (!state.customerServiceHistory) state.customerServiceHistory = [];
+    state.customerServiceHistory.unshift(completedRecord);
+
+    if (!state.workerJobHistory) state.workerJobHistory = [];
+    state.workerJobHistory.unshift(completedRecord);
+
+    if (typeof updateServiceHistoryBadges === "function") {
+      updateServiceHistoryBadges();
+    }
+
+    // Backend sync if online
+    if (state.hasBackendConnection) {
+      fetch(`${API_BASE_URL}/api/service/complete-with-proof`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          booking_id: state.activeBooking.booking_id,
+          worker_id: worker.id,
+          end_otp: entered,
+          proof_image: state.activeBooking.proof_of_work.image,
+          work_notes: state.activeBooking.proof_of_work.notes,
+          odometer_reading: state.activeBooking.proof_of_work.odometer
+        })
+      }).catch(e => console.log("Backend complete-with-proof sync skipped (offline):", e.message));
+    }
 
     // Update Ministry cumulative wages
     state.nationalStats.wages += payout;
@@ -6823,8 +7971,8 @@ function submitEndOtp() {
     }
 
     showToast(isHi
-      ? `🎉 कार्य सफलतापूर्वक संपन्न! ₹${payout.toFixed(2)} सीधे डीसीसीबी खाते में जमा। ग्राहक मानचित्र रीसेट हुआ।`
-      : `🎉 Service Completed! ₹${payout.toFixed(2)} credited to worker. Customer radar map has been reset.`, "success");
+      ? `🎉 कार्य प्रमाण सत्यापित व सेवा संपन्न! ₹${payout.toFixed(2)} सीधे डीसीसीबी खाते में जमा।`
+      : `🎉 Proof Verified & Service Completed! ₹${payout.toFixed(2)} credited to worker passbook.`, "success");
   } else {
     sfx.playFallbackWarning();
     showToast(`Invalid END_OTP. Hint: ${state.activeBooking.end_otp}`, "warning");
@@ -6900,6 +8048,9 @@ function updateWorkerCardUI(worker) {
   }
   if (typeof updateWorkerFreelanceUI === "function") {
     updateWorkerFreelanceUI(worker);
+  }
+  if (typeof updateWorkerGovtSchemesForWorker === "function") {
+    updateWorkerGovtSchemesForWorker(worker);
   }
 }
 
@@ -7447,8 +8598,8 @@ function resetDemoState() {
 
   const badgeStep1 = document.getElementById("badge-step-1");
   if (badgeStep1) {
-    badgeStep1.innerText = "LOCKED";
-    badgeStep1.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 uppercase";
+    badgeStep1.innerText = "LOCKED (ACCEPT FIRST)";
+    badgeStep1.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-600 uppercase";
   }
 
   const badgeStep2 = document.getElementById("badge-step-2");
@@ -7458,7 +8609,28 @@ function resetDemoState() {
   }
 
   const startInput = document.getElementById("input-start-otp");
-  if (startInput) startInput.value = "";
+  if (startInput) {
+    startInput.value = "";
+    startInput.disabled = true;
+    startInput.placeholder = "🔒 Locked — Accept Request First";
+  }
+
+  const btnAutofillStart = document.getElementById("btn-autofill-start-otp");
+  if (btnAutofillStart) btnAutofillStart.disabled = true;
+  const btnSubmitStart = document.getElementById("btn-submit-start-otp");
+  if (btnSubmitStart) btnSubmitStart.disabled = true;
+
+  const otpLockedNotice = document.getElementById("otp-locked-notice");
+  if (otpLockedNotice) {
+    otpLockedNotice.className = "mb-3 p-2.5 bg-amber-50 border border-amber-300 rounded-xl flex items-center gap-2 text-xs text-amber-950 font-medium";
+  }
+  const otpLockMsg = document.getElementById("otp-lock-msg");
+  if (otpLockMsg) {
+    otpLockMsg.innerHTML = "<strong>OTP Entry Locked:</strong> You must accept this service request (click \"Accept &amp; Navigate\") before you can enter or verify OTPs.";
+  }
+
+  const custDriverFab = document.getElementById("customer-driver-safety-fab-container");
+  if (custDriverFab) custDriverFab.classList.add("hidden");
 
   const endInput = document.getElementById("input-end-otp");
   if (endInput) endInput.value = "";
@@ -7874,6 +9046,13 @@ const ORGANISATION_MAINTENANCE_PLANS = {
 };
 
 function initOrganisationAmcSystem() {
+  const isInstEnabled = (typeof ENABLE_INSTITUTIONAL_SERVICES !== "undefined" && ENABLE_INSTITUTIONAL_SERVICES);
+  const card = document.getElementById("organisation-amc-feature-card");
+  if (!isInstEnabled && card) {
+    card.classList.add("hidden");
+    card.style.display = "none";
+    return;
+  }
   state.selectedOrgAmcTier = state.selectedOrgAmcTier || "org_monthly_amc";
   selectOrgAmcTier(state.selectedOrgAmcTier);
   updateOrganisationAmcUI();
@@ -8089,6 +9268,12 @@ function confirmOrganisationAmcActivation() {
 }
 
 function updateOrganisationAmcUI() {
+  const isInstEnabled = (typeof ENABLE_INSTITUTIONAL_SERVICES !== "undefined" && ENABLE_INSTITUTIONAL_SERVICES);
+  const card = document.getElementById("organisation-amc-feature-card");
+  if (!isInstEnabled && card) {
+    card.classList.add("hidden");
+    card.style.display = "none";
+  }
   const plan = state.activeOrganisationPlan;
   const isHi = state.currentLanguage === "hi";
 
@@ -9701,119 +10886,19 @@ function prefillWorkerDemo(persona = "rajesh") {
 // ============================================================================
 
 function initWorkerFreelanceHub() {
-  updateWorkerFreelanceUI(state.activeWorker);
-  renderFreelanceJobs();
-  if (state.workerDutyMode) {
-    setWorkerDutyMode(state.workerDutyMode);
-  }
+  state.workerDutyMode = "COOP_SHIFT";
+  const normalSection = document.getElementById("worker-normal-job-section");
+  if (normalSection) normalSection.classList.remove("hidden");
+  const freelanceSection = document.getElementById("worker-freelance-section");
+  if (freelanceSection) freelanceSection.classList.add("hidden");
 }
 
-function setWorkerDutyMode(mode, silent = false) {
-  if (!silent) sfx.playClick();
-  state.workerDutyMode = mode;
-  const isHi = state.currentLanguage === "hi";
-
-  const btnCoop = document.getElementById("btn-mode-coop");
-  const btnFreelance = document.getElementById("btn-mode-freelance");
-  const btnDutyCoop = document.getElementById("btn-duty-coop");
-  const btnDutyFreelance = document.getElementById("btn-duty-freelance");
-
+function setWorkerDutyMode(mode = "COOP_SHIFT", silent = false) {
+  state.workerDutyMode = "COOP_SHIFT";
   const normalSection = document.getElementById("worker-normal-job-section");
+  if (normalSection) normalSection.classList.remove("hidden");
   const freelanceSection = document.getElementById("worker-freelance-section");
-
-  const dutyBadge = document.getElementById("worker-duty-badge");
-  const dutyText = document.getElementById("worker-duty-text");
-  const dutySubtext = document.getElementById("worker-duty-subtext");
-  const modeIndicatorPill = document.getElementById("worker-mode-indicator-pill");
-
-  if (mode === "FREELANCE") {
-    // 1. Section visibility: Show Freelance Hub, hide Normal Job Radar
-    if (normalSection) normalSection.classList.add("hidden");
-    if (freelanceSection) freelanceSection.classList.remove("hidden");
-
-    // 2. Main persistent control bar buttons
-    if (btnCoop) {
-      btnCoop.className = "px-4 py-2.5 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-900 transition flex items-center gap-2 btn-tactile hover:bg-white/80";
-    }
-    if (btnFreelance) {
-      btnFreelance.className = "px-4 py-2.5 rounded-xl font-black text-xs bg-indigo-600 text-white shadow-md transition flex items-center gap-2 btn-tactile ring-2 ring-indigo-500/30";
-    }
-
-    // 3. Secondary toggle buttons in freelance header
-    if (btnDutyCoop) {
-      btnDutyCoop.className = "px-3.5 py-2 rounded-xl text-xs font-bold transition text-indigo-200 hover:text-white hover:bg-indigo-800/60 flex items-center gap-1.5 btn-tactile";
-    }
-    if (btnDutyFreelance) {
-      btnDutyFreelance.className = "px-3.5 py-2 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow-md flex items-center gap-1.5 btn-tactile";
-    }
-
-    // 4. Status badges and labels
-    if (dutyBadge) {
-      dutyBadge.className = "px-3.5 py-1.5 rounded-2xl bg-indigo-100 text-indigo-900 border border-indigo-300 font-black text-xs flex items-center gap-2 shadow-xs transition-all";
-      dutyBadge.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span><span id="worker-duty-badge-text">${isHi ? "स्वतंत्र फ्रीलांस मोड (100% प्रत्यक्ष)" : "FREELANCE PLATFORM MODE (100% Direct)"}</span>`;
-    }
-    if (dutyText) {
-      dutyText.innerText = isHi ? "स्वतंत्र फ्रीलांसिंग सक्रिय (0% महासंघ शुल्क)" : "Independent Freelancing Active (0% Federation Cut)";
-    }
-    if (dutySubtext) {
-      dutySubtext.innerText = isHi ? "शाम/सप्ताहांत के स्लॉट में सीधे ग्राहकों के कार्य स्वीकारें। कमाई 100% आपके यूपीआई पर।" : "Post-shift open marketplace: choose custom evening/weekend gigs with zero commission.";
-    }
-    if (modeIndicatorPill) {
-      modeIndicatorPill.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 uppercase tracking-wider";
-      modeIndicatorPill.innerText = isHi ? "फ्रीलांस मोड" : "Freelance Mode";
-    }
-
-    renderFreelanceJobs();
-    if (!silent) {
-      showToast(isHi
-        ? "🚀 फ्रीलांस मोड सक्रिय: 100% कमाई सीधे आपके खाते में (0% कटौती)"
-        : "🚀 Freelancing Mode Active: 100% earnings go directly to you with 0% federation cut!", "success");
-    }
-  } else {
-    state.workerDutyMode = "COOP_SHIFT";
-
-    // 1. Section visibility: Show Normal Job Radar, hide Freelance Hub
-    if (normalSection) normalSection.classList.remove("hidden");
-    if (freelanceSection) freelanceSection.classList.add("hidden");
-
-    // 2. Main persistent control bar buttons
-    if (btnCoop) {
-      btnCoop.className = "px-4 py-2.5 rounded-xl font-black text-xs bg-blue-700 text-white shadow-md transition flex items-center gap-2 btn-tactile ring-2 ring-blue-500/20";
-    }
-    if (btnFreelance) {
-      btnFreelance.className = "px-4 py-2.5 rounded-xl font-bold text-xs text-slate-600 hover:text-slate-900 transition flex items-center gap-2 btn-tactile hover:bg-white/80";
-    }
-
-    // 3. Secondary toggle buttons in freelance header
-    if (btnDutyCoop) {
-      btnDutyCoop.className = "px-3.5 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-md flex items-center gap-1.5 btn-tactile";
-    }
-    if (btnDutyFreelance) {
-      btnDutyFreelance.className = "px-3.5 py-2 rounded-xl text-xs font-bold transition text-indigo-200 hover:text-white hover:bg-indigo-800/60 flex items-center gap-1.5 btn-tactile";
-    }
-
-    // 4. Status badges and labels
-    if (dutyBadge) {
-      dutyBadge.className = "px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 border border-blue-300 font-black text-xs flex items-center gap-2 shadow-xs transition-all";
-      dutyBadge.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span><span id="worker-duty-badge-text">${isHi ? "सहकारी ऑन-ड्यूटी शिफ्ट (09:00 - 17:00)" : "COOPERATIVE SHIFT (09:00 - 17:00)"}</span>`;
-    }
-    if (dutyText) {
-      dutyText.innerText = isHi ? "सहकारी ऑन-ड्यूटी शिफ्ट (09:00 - 17:00)" : "Cooperative On-Duty Shift (09:00 - 17:00)";
-    }
-    if (dutySubtext) {
-      dutySubtext.innerText = isHi ? "मानक सहकारी प्रेषण एवं कल्याण निधि संरक्षण" : "Standard cooperative radar dispatch with 3.5% welfare pool reserve";
-    }
-    if (modeIndicatorPill) {
-      modeIndicatorPill.className = "text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-wider";
-      modeIndicatorPill.innerText = isHi ? "सामान्य कार्य मोड" : "Normal Job Mode";
-    }
-
-    if (!silent) {
-      showToast(isHi
-        ? "🏛️ सहकारी शिफ्ट सक्रिय (09:00 - 17:00 मानक प्रेषण)"
-        : "🏛️ Cooperative Shift Active (09:00 - 17:00 Standard Dispatch)", "info");
-    }
-  }
+  if (freelanceSection) freelanceSection.classList.add("hidden");
   safeCreateIcons();
 }
 
@@ -9883,10 +10968,10 @@ function renderFreelanceJobs() {
 
     const card = document.createElement("div");
     card.className = `p-4 rounded-2xl border transition-all ${isClaimedByMe
-        ? "bg-emerald-50/50 border-emerald-300 shadow-sm"
-        : isClaimedByOther
-          ? "bg-slate-50 border-slate-200 opacity-60"
-          : "bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md"
+      ? "bg-emerald-50/50 border-emerald-300 shadow-sm"
+      : isClaimedByOther
+        ? "bg-slate-50 border-slate-200 opacity-60"
+        : "bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md"
       }`;
 
     let buttonHtml = "";
@@ -10418,13 +11503,21 @@ function openWorkerEscalationModal() {
 
   const custInput = document.getElementById("escalate-input-customer");
   if (custInput) {
-    custInput.value = state.activeBooking?.customer_name || "Rohan Verma";
+    if (state.activeBooking && state.activeBooking.customer_name) {
+      custInput.value = state.activeBooking.customer_name;
+    } else if (state.completedBookings && state.completedBookings.length > 0 && state.completedBookings[0].customer_name) {
+      custInput.value = state.completedBookings[0].customer_name;
+    } else {
+      custInput.value = "Rohan Verma";
+    }
   }
   const delayInput = document.getElementById("escalate-input-delay");
-  if (delayInput) delayInput.value = "3.5";
+  if (delayInput) delayInput.value = state.activeBooking ? "2.5" : "0.0";
   const descInput = document.getElementById("escalate-input-description");
   if (descInput) {
-    descInput.value = "Customer booked standard daytime service, gave arrival OTP, but refused to release completion OTP and caused 3+ hours delay without fair compensation.";
+    descInput.value = state.activeBooking
+      ? "Customer booked standard cooperative service, gave arrival OTP, but caused unreasonable delay, refused to release completion OTP or violated safety guidelines."
+      : "24x7 Field Incident Escalation: Technician reporting hazardous working condition, client verbal misconduct, or safety emergency.";
   }
 
   modal.classList.remove("hidden");
@@ -11680,6 +12773,10 @@ if (typeof window !== "undefined") {
   window.openServiceDebarmentModal = openServiceDebarmentModal;
   window.closeServiceDebarmentModal = closeServiceDebarmentModal;
   window.switchToCompliantCitizen = switchToCompliantCitizen;
+  window.handleMainUserLogin = handleMainUserLogin;
+  window.enterMainApp = enterMainApp;
+  window.logoutCitizenToLoginScreen = logoutCitizenToLoginScreen;
+  window.quickFillCitizen = quickFillCitizen;
 
   // Customer Login & Organisation Authentication Exports
   window.setCustomerLoginType = setCustomerLoginType;
@@ -11781,6 +12878,11 @@ if (typeof window !== "undefined") {
   // Global escape key dismissal
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      const schemeDetailsModal = document.getElementById("modal-govt-scheme-details");
+      if (schemeDetailsModal && !schemeDetailsModal.classList.contains("hidden") && schemeDetailsModal.style.display !== "none") {
+        closeGovtSchemeDetails();
+        return;
+      }
       const orgAuthModal = document.getElementById("modal-organisation-auth");
       if (orgAuthModal && !orgAuthModal.classList.contains("hidden") && orgAuthModal.style.display !== "none") {
         cancelOrganisationAuth();
@@ -12798,7 +13900,7 @@ function speakAiMessage(msgId) {
 function speakAiText(text, lang) {
   // All audio sounds permanently removed per specification
   if ("speechSynthesis" in window) {
-    try { window.speechSynthesis.cancel(); } catch (e) {}
+    try { window.speechSynthesis.cancel(); } catch (e) { }
   }
   return;
 }
@@ -12903,7 +14005,1822 @@ function customizeAiBooking(serviceId) {
   openServiceBookingModal(serviceId, 1);
 }
 
-// Global browser window exports for AI Chatbot
+// ============================================================================
+// 20. WORKER GOVERNMENT EMPLOYMENT & WELFARE POLICIES HUB
+// ============================================================================
+
+const GOVT_WORKER_POLICIES = [
+  {
+    id: "pm_vishwakarma",
+    title: "PM Vishwakarma Scheme (पीएम विश्वकर्मा योजना)",
+    title_short: "PM Vishwakarma Scheme",
+    title_hi: "पीएम विश्वकर्मा योजना",
+    ministry: "Ministry of MSME, Govt. of India",
+    ministry_hi: "सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय, भारत सरकार",
+    category: "toolkit_loan",
+    category_label: "Toolkits & Loans",
+    category_label_hi: "टूलकिट एवं ऋण",
+    image: "assets/govt_vishwakarma_toolkit.jpg",
+    entitlement_amount: "₹15,000 + ₹3,00,000",
+    entitlement_pill: "₹15,000 Free Toolkit Voucher + ₹3L Collateral-Free Loan @ 5%",
+    entitlement_pill_hi: "₹15,000 का निःशुल्क टूलकिट वाउचर + ₹3 लाख संपार्श्विक-मुक्त ऋण (5% ब्याज)",
+    benefit_summary: "Free high-grade modern trade toolkit voucher of ₹15,00, 5% subsidized enterprise credit up to ₹3,00,000 in 2 tranches, and 5-7 days skill upskilling with ₹500/day daily stipend.",
+    benefit_summary_hi: "₹15,000 का आधुनिक टूलकिट वाउचर, 5% की रियायती दर पर ₹3 लाख तक का व्यवसाय ऋण और ₹500/दिन वजीफे के साथ निःशुल्क कौशल उन्नयन।",
+    eligible_trades: ["electrician", "plumber", "tailoring", "blacksmith", "pottery", "carpenter", "masonry"],
+    benefits: [
+      "₹15,000 Digital e-Voucher redeemable for brand-new professional trade toolkits & safety gear",
+      "Collateral-free enterprise loan up to ₹3,00,000 (Tranche 1: ₹1L for 18 mos; Tranche 2: ₹2L for 30 mos) at subsidized 5% interest (8% govt interest subvention)",
+      "5-7 days basic skill upskilling with ₹500/day daily stipend credited directly to DBT bank account",
+      "Official PM Vishwakarma Certificate & National ID Card issued by Ministry of MSME",
+      "Digital payment adoption incentives of ₹1 per transaction up to 100 transactions per month"
+    ],
+    helpline: "1800-267-7777",
+    portal_url: "https://pmvishwakarma.gov.in",
+    docs_required: ["Aadhaar Card (UIDAI linked)", "Bank Account with DBT enabled", "Trade Skill / ITI / Guild Certificate", "PACS / Cooperative Member ID"]
+  },
+  {
+    id: "eshram_pmsby",
+    title: "e-Shram Social Security & PMSBY (ई-श्रम व सुरक्षा बीमा योजना)",
+    title_short: "e-Shram & PMSBY",
+    title_hi: "ई-श्रम एवं सुरक्षा बीमा योजना",
+    ministry: "Ministry of Labour & Employment",
+    ministry_hi: "श्रम एवं रोजगार मंत्रालय, भारत सरकार",
+    category: "social_security",
+    category_label: "Social Security",
+    category_label_hi: "सामाजिक सुरक्षा व बीमा",
+    image: "assets/govt_eshram_security.jpg",
+    entitlement_amount: "₹2,00,000 Cover",
+    entitlement_pill: "₹2,00,000 Free Accidental Insurance + Universal e-Shram UAN",
+    entitlement_pill_hi: "₹2 लाख का निःशुल्क दुर्घटना बीमा + सार्वभौमिक सामाजिक सुरक्षा UAN कार्ड",
+    benefit_summary: "Nationwide Universal Account Number (UAN) for gig and field technicians with free ₹2 Lakh accidental death/disability coverage under PMSBY (100% premium paid).",
+    benefit_summary_hi: "गीग व फील्ड तकनीशियनों हेतु सार्वभौमिक सामाजिक सुरक्षा UAN और PMSBY के तहत ₹2 लाख का निःशुल्क दुर्घटना/विकलांगता बीमा कवर।",
+    eligible_trades: ["all"],
+    benefits: [
+      "Universal Account Number (UAN) valid across all 28 states & UTs for inter-state service portability",
+      "₹2,00,000 accidental death & permanent total disability insurance cover under Pradhan Mantri Suraksha Bima Yojana (PMSBY)",
+      "₹1,00,000 partial disability cover with zero premium cost to the worker",
+      "Pre-registration for Pradhan Mantri Shram Yogi Maan-dhan (PM-SYM) monthly pension of ₹3,000 per month after 60",
+      "Direct DBT cash assistance eligibility during state or national emergency lockdowns"
+    ],
+    helpline: "14434",
+    portal_url: "https://eshram.gov.in",
+    docs_required: ["Aadhaar Card with mobile linking", "Active Bank IFSC & Account Details", "Age between 16-59 years", "Not covered under EPFO/ESIC"]
+  },
+  {
+    id: "ayushman_pmjay",
+    title: "Ayushman Bharat - PM-JAY (आयुष्मान भारत जन आरोग्य योजना)",
+    title_short: "Ayushman Bharat PM-JAY",
+    title_hi: "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना",
+    ministry: "National Health Authority & Ministry of Health",
+    ministry_hi: "राष्ट्रीय स्वास्थ्य प्राधिकरण एवं स्वास्थ्य मंत्रालय",
+    category: "healthcare",
+    category_label: "Healthcare",
+    category_label_hi: "आयुष्मान स्वास्थ्य",
+    image: "assets/govt_ayushman_health.jpg",
+    entitlement_amount: "₹5,00,000 / Year",
+    entitlement_pill: "₹5,00,000 100% Cashless Hospitalization Per Family Per Year",
+    entitlement_pill_hi: "₹5 लाख प्रति वर्ष परिवार के लिए पूर्णतः कैशलेस अस्पताल भर्ती सुरक्षा",
+    benefit_summary: "100% cashless & paperless secondary and tertiary hospitalization cover up to ₹5,00,000 per family per year across 29,000+ empaneled government & private hospitals.",
+    benefit_summary_hi: "29,000+ सूचीबद्ध सरकारी व निजी अस्पतालों में प्रति परिवार प्रति वर्ष ₹5 लाख तक का 100% कैशलेस व पेपरलेस अस्पताल भर्ती सुरक्षा कवर।",
+    eligible_trades: ["all"],
+    benefits: [
+      "Annual cashless hospitalization cover of ₹5,00,000 for all eligible family members with no cap on family size",
+      "Covers 1,949 medical procedures including surgeries, cardiac care, ICU charges, and day-care treatments",
+      "Pre-existing diseases covered from Day 1 with zero waiting period",
+      "Pre-hospitalization (up to 3 days) and post-hospitalization (up to 15 days) diagnostic and medicine expenses covered",
+      "Instant generation of Ayushman Golden Card at registered cooperative welfare camps"
+    ],
+    helpline: "14555",
+    portal_url: "https://beneficiary.nha.gov.in",
+    docs_required: ["Aadhaar Card", "Ration Card or Cooperative Federation Family Registry", "Registered Mobile Number"]
+  },
+  {
+    id: "pm_svanidhi_mudra",
+    title: "PM SVANidhi & MUDRA Shishu Credit (पीएम स्वनिधि एवं मुद्रा ऋण)",
+    title_short: "PM SVANidhi Micro-Credit",
+    title_hi: "पीएम स्वनिधि एवं मुद्रा सूक्ष्म ऋण",
+    ministry: "Ministry of Housing and Urban Affairs & Ministry of Finance",
+    ministry_hi: "आवासन एवं शहरी कार्य मंत्रालय व वित्त मंत्रालय",
+    category: "toolkit_loan",
+    category_label: "Toolkits & Loans",
+    category_label_hi: "टूलकिट एवं ऋण",
+    image: "assets/govt_pmsvanidhi_credit.jpg",
+    entitlement_amount: "₹50,000 Credit",
+    entitlement_pill: "₹10,000 → ₹20,000 → ₹50,000 Working Capital + 7% Interest Subsidy",
+    entitlement_pill_hi: "₹10,000 से ₹50,000 तक कार्यशील पूंजी ऋण + 7% ब्याज सब्सिडी",
+    benefit_summary: "Collateral-free graduated working capital loans for mobile technicians and gig workers with 7% interest subvention and up to ₹1,200 annual UPI cashback.",
+    benefit_summary_hi: "बिना किसी गारंटी के ₹50,000 तक की कार्यशील पूंजी, 7% ब्याज सब्सिडी और डिजिटल यूपीआई लेनदेन पर प्रति वर्ष ₹1,200 तक कैशबैक।",
+    eligible_trades: ["electrician", "plumber", "tailoring", "driver", "blacksmith", "painting", "water_plant", "bioclean"],
+    benefits: [
+      "1st Loan Cycle: ₹10,000 (1 year repayment); 2nd Cycle: ₹20,000; 3rd Cycle: ₹50,000 with zero collateral",
+      "7% annual interest subsidy directly credited quarterly into worker bank account upon timely repayment",
+      "Monthly digital transaction cashback: ₹50 to ₹100 per month for accepting UPI payments",
+      "Zero prepayment penalty and build-up of official credit score for higher formal banking loans",
+      "Fast-track processing via District Central Cooperative Banks (DCCBs)"
+    ],
+    helpline: "1800-111-979",
+    portal_url: "https://pmsvanidhi.mohua.gov.in",
+    docs_required: ["Aadhaar Card", "Voter ID / Driving License", "PACS / Labour Guild Membership Letter", "Active UPI QR Virtual Payment Address"]
+  },
+  {
+    id: "skill_india_rpl",
+    title: "Skill India PMKVY 4.0 - RPL Certification (कौशल विकास - पूर्व अनुभव मान्यता)",
+    title_short: "Skill India RPL Degree",
+    title_hi: "प्रधानमंत्री कौशल विकास योजना - पूर्व अनुभव मान्यता (RPL)",
+    ministry: "Ministry of Skill Development & Entrepreneurship (MSDE)",
+    ministry_hi: "कौशल विकास एवं उद्यमिता मंत्रालय, भारत सरकार",
+    category: "skill_cert",
+    category_label: "Skill & Cert",
+    category_label_hi: "कौशल विकास व प्रमाणन",
+    image: "assets/govt_skill_india_cert.jpg",
+    entitlement_amount: "Govt Degree + ₹8,000",
+    entitlement_pill: "Government NCVT Trade Degree + ₹8,000 Training Incentive",
+    entitlement_pill_hi: "सरकारी NCVT ट्रेड प्रमाणन + ₹8,000 प्रशिक्षण वजीफा + टूल किट सहायता",
+    benefit_summary: "Formal Government Certification (NSQF Level 4/5) for on-the-job experienced technicians through Recognition of Prior Learning (RPL) plus ₹8,000 DBT stipend.",
+    benefit_summary_hi: "पूर्व अनुभव की मान्यता (RPL) के तहत अनुभवी तकनीशियनों को बिना परीक्षा सरकारी NCVT डिग्री और ₹8,000 का डीबीटी प्रोत्साहन भत्ता।",
+    eligible_trades: ["all"],
+    benefits: [
+      "Official National Skill Qualification Framework (NSQF) Level 4/5 Certificate issued by NCVT & NSDC",
+      "₹8,000 Direct Benefit Transfer incentive upon clearing orientation & safety assessment",
+      "Free 12-hour orientation covering modern tools, personal safety (PPE), digital invoicing, and client relations",
+      "Accidental insurance cover of ₹2 Lakhs for 3 years included with every certified certificate",
+      "Eligible for enterprise B2B tenders and institutional contracts on Seva Setu"
+    ],
+    helpline: "088000-55555",
+    portal_url: "https://skillindia.gov.in",
+    docs_required: ["Aadhaar Card", "Proof of Trade Experience (Self-declaration / PACS voucher)", "Bank Passbook with DBT linkage"]
+  },
+  {
+    id: "gig_welfare_board",
+    title: "State Gig & Informal Workers Welfare Board (राज्य कामगार कल्याण बोर्ड)",
+    title_short: "State Gig Welfare Board",
+    title_hi: "राज्य गिग एवं असंगठित कामगार कल्याण बोर्ड",
+    ministry: "State Labour Welfare Department & Cooperative Federation",
+    ministry_hi: "राज्य श्रम कल्याण विभाग एवं सहकारी महासंघ",
+    category: "social_security",
+    category_label: "Social Security",
+    category_label_hi: "सामाजिक सुरक्षा व बीमा",
+    image: "assets/govt_gig_welfare_board.jpg",
+    entitlement_amount: "₹5,00,000 Trust + ₹5K Grant",
+    entitlement_pill: "Dedicated Welfare Cess Fund + ₹5,000 Emergency Hazard Grant",
+    entitlement_pill_hi: "समर्पित कल्याण उपकर निधि + ₹5,000 आपातकालीन दुर्घटना राहत सहायता",
+    benefit_summary: "State legislative protection financed by 1-2% platform aggregator cess: immediate ₹5,000 hazard relief, children education scholarships, and legal grievance ombudsman.",
+    benefit_summary_hi: "1-2% प्लेटफॉर्म उपकर से वित्तपोषित राज्य सुरक्षा निधि: ₹5,000 की तत्काल दुर्घटना राहत, बच्चों हेतु छात्रवृत्ति और कानूनी सहायता।",
+    eligible_trades: ["all"],
+    benefits: [
+      "Direct legislative coverage under the Gig and Platform Workers Welfare Act with 1-2% transaction cess trust",
+      "Immediate ₹5,00,000 life cover and ₹5,000 cash grant for on-duty vehicle accident, heatstroke, or injury",
+      "Children education scholarships from ₹3,000 to ₹12,000/year for school and ITI diplomas",
+      "Maternity benefit grant of ₹10,000 for female technicians and spouses of registered workers",
+      "Independent tripartite dispute resolution tribunal against arbitrary account suspensions or client defaults"
+    ],
+    helpline: "1800-180-1551",
+    portal_url: "https://labour.gov.in",
+    docs_required: ["Aadhaar Card", "Active Seva Setu Worker ID & PACS Membership", "Bank Account Details"]
+  }
+];
+
+// Persistent state for worker government policies
+if (!state.claimedSchemes) {
+  state.claimedSchemes = {
+    pm_vishwakarma: { claimed: true, ref: "REF-PMV-2026-DL8921", date: "2026-10-08" },
+    eshram_pmsby: { claimed: true, ref: "UAN-9921-8812-4412", date: "2026-09-15" }
+  };
+}
+if (!state.bookmarkedSchemes) {
+  state.bookmarkedSchemes = { pm_vishwakarma: true };
+}
+state.govtSchemeFilter = "all";
+state.govtSchemeTrade = "all";
+state.govtSchemeSearch = "";
+state.currentActiveModalSchemeId = null;
+state.schemeLoanCalculatorAmount = 100000;
+
+function isWorkerEligibleForScheme(scheme, worker) {
+  if (!scheme || !worker) return true;
+  if (scheme.eligible_trades.includes("all")) return true;
+  const workerSkill = (worker.skill || "").toLowerCase();
+  return scheme.eligible_trades.some(t => workerSkill.includes(t) || t.includes(workerSkill));
+}
+
+function initGovtWorkerSchemes() {
+  renderGovtWorkerSchemes();
+  if (state.activeWorker) {
+    updateWorkerGovtSchemesForWorker(state.activeWorker);
+  }
+}
+
+function updateWorkerGovtSchemesForWorker(worker) {
+  if (!worker) return;
+  const isHi = state.currentLanguage === "hi";
+
+  // 1. Calculate eligible schemes count for active worker
+  const eligibleCount = GOVT_WORKER_POLICIES.filter(s => isWorkerEligibleForScheme(s, worker)).length;
+
+  const headerPillText = document.getElementById("worker-welfare-header-text");
+  if (headerPillText) {
+    headerPillText.innerText = isHi ? `${eligibleCount} योजनाएं स्वीकृत ✓` : `${eligibleCount} Pre-Qualified ✓`;
+  }
+
+  const statEligibleCount = document.getElementById("scheme-stat-eligible-count");
+  if (statEligibleCount) {
+    statEligibleCount.innerText = `${eligibleCount} / ${GOVT_WORKER_POLICIES.length} Active`;
+  }
+
+  const eligibilitySummary = document.getElementById("worker-scheme-eligibility-summary");
+  if (eligibilitySummary) {
+    const pacsId = worker.coop_id || `DL/PACS/2026/${worker.id}`;
+    eligibilitySummary.innerText = `Aadhaar UIDAI Linked • ${pacsId} (${(worker.skill || "technician").toUpperCase()})`;
+  }
+
+  renderGovtWorkerSchemes();
+}
+
+function filterGovtSchemes(category) {
+  sfx.playClick();
+  state.govtSchemeFilter = category;
+
+  const categories = ["all", "toolkit_loan", "social_security", "healthcare", "skill_cert"];
+  categories.forEach(c => {
+    const btn = document.getElementById(`scheme-cat-${c}`);
+    if (btn) {
+      if (c === category) {
+        btn.classList.add("active");
+        btn.classList.remove("bg-slate-100", "text-slate-700");
+      } else {
+        btn.classList.remove("active");
+        btn.classList.add("bg-slate-100", "text-slate-700");
+      }
+    }
+  });
+
+  renderGovtWorkerSchemes();
+}
+
+function filterGovtSchemesByTrade(trade) {
+  sfx.playClick();
+  state.govtSchemeTrade = trade;
+
+  const chips = document.querySelectorAll(".scheme-trade-chip");
+  chips.forEach(chip => {
+    if (chip.getAttribute("data-trade") === trade) {
+      chip.classList.add("active");
+    } else {
+      chip.classList.remove("active");
+    }
+  });
+
+  renderGovtWorkerSchemes();
+}
+
+function handleSchemeSearchInput(e) {
+  state.govtSchemeSearch = (e.target.value || "").toLowerCase().trim();
+  renderGovtWorkerSchemes();
+}
+
+function renderGovtWorkerSchemes() {
+  const grid = document.getElementById("worker-govt-schemes-grid");
+  if (!grid) return;
+  const isHi = state.currentLanguage === "hi";
+  const worker = state.activeWorker || WORKERS[0];
+
+  const filtered = GOVT_WORKER_POLICIES.filter(scheme => {
+    // Category filter
+    if (state.govtSchemeFilter !== "all" && scheme.category !== state.govtSchemeFilter) {
+      return false;
+    }
+
+    // Trade filter
+    if (state.govtSchemeTrade !== "all") {
+      const matchTrade = scheme.eligible_trades.includes("all") ||
+        scheme.eligible_trades.some(t => t.includes(state.govtSchemeTrade) || state.govtSchemeTrade.includes(t));
+      if (!matchTrade) return false;
+    }
+
+    // Keyword search
+    if (state.govtSchemeSearch) {
+      const text = `${scheme.title} ${scheme.title_hi} ${scheme.ministry} ${scheme.ministry_hi} ${scheme.benefit_summary} ${scheme.entitlement_pill}`.toLowerCase();
+      if (!text.includes(state.govtSchemeSearch)) return false;
+    }
+
+    return true;
+  });
+
+  // Update total count badge
+  const countAll = document.getElementById("scheme-count-all");
+  if (countAll) countAll.innerText = String(GOVT_WORKER_POLICIES.length);
+
+  grid.innerHTML = "";
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="col-span-full p-8 text-center bg-white rounded-3xl border border-dashed border-slate-300 text-slate-500 space-y-2">
+        <i data-lucide="search-x" class="w-10 h-10 mx-auto text-slate-400"></i>
+        <h4 class="font-black text-slate-800 text-sm">${isHi ? "कोई योजना नहीं मिली" : "No matching government schemes found"}</h4>
+        <p class="text-xs text-slate-500">${isHi ? "कृपया अन्य फ़िल्टर चुनें या खोज शब्द बदलें।" : "Try clearing filters or search terms to see all available policies."}</p>
+        <button type="button" onclick="filterGovtSchemes('all'); filterGovtSchemesByTrade('all');" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold btn-tactile">
+          ${isHi ? "सभी योजनाएं देखें" : "Show All Schemes"}
+        </button>
+      </div>
+    `;
+    safeCreateIcons();
+    return;
+  }
+
+  filtered.forEach(scheme => {
+    const isEligible = isWorkerEligibleForScheme(scheme, worker);
+    const isClaimed = state.claimedSchemes && state.claimedSchemes[scheme.id]?.claimed;
+    const isBookmarked = state.bookmarkedSchemes && state.bookmarkedSchemes[scheme.id];
+    const claimData = state.claimedSchemes ? state.claimedSchemes[scheme.id] : null;
+
+    const card = document.createElement("div");
+    card.className = "govt-scheme-card bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between group cursor-pointer hover:border-emerald-300";
+    card.id = `govt-scheme-card-${scheme.id}`;
+    card.onclick = (e) => {
+      if (e.target.closest("button") && !e.target.closest(".btn-open-scheme")) return;
+      openGovtSchemeDetails(scheme.id);
+    };
+
+    // Category tag style
+    let catBadgeColor = "bg-amber-100 text-amber-900 border-amber-300";
+    if (scheme.category === "social_security") catBadgeColor = "bg-blue-100 text-blue-900 border-blue-300";
+    if (scheme.category === "healthcare") catBadgeColor = "bg-emerald-100 text-emerald-900 border-emerald-300";
+    if (scheme.category === "skill_cert") catBadgeColor = "bg-purple-100 text-purple-900 border-purple-300";
+
+    card.innerHTML = `
+      <div>
+        <!-- Visual Scheme Image Thumbnail with Overlay Badges -->
+        <div class="relative h-44 overflow-hidden bg-slate-900">
+          <img src="${scheme.image}" class="scheme-img-thumb w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${scheme.title_short}" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30 pointer-events-none"></div>
+
+          <!-- Top Category Badge -->
+          <div class="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+            <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider border backdrop-blur-md ${catBadgeColor}">
+              ${isHi ? scheme.category_label_hi : scheme.category_label}
+            </span>
+          </div>
+
+          <!-- Bookmark Button -->
+          <button type="button" onclick="toggleBookmarkScheme('${scheme.id}', event)" title="Bookmark Scheme"
+            class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-slate-950/60 hover:bg-slate-900 text-white backdrop-blur-md flex items-center justify-center transition btn-tactile">
+            <i data-lucide="star" class="w-4 h-4 ${isBookmarked ? "text-amber-400 fill-amber-400" : "text-white"}"></i>
+          </button>
+
+          <!-- Bottom Image Title Pill -->
+          <div class="absolute bottom-2.5 left-3 right-3 z-10 flex items-center justify-between text-white text-xs">
+            <span class="text-[11px] font-black drop-shadow-md text-amber-300 flex items-center gap-1 truncate">
+              <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>
+              <span>${scheme.entitlement_amount}</span>
+            </span>
+            <span class="text-[10px] font-bold text-slate-300 truncate">${scheme.helpline}</span>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="p-4 sm:p-5 space-y-3">
+          <!-- Ministry Badge -->
+          <div class="flex items-center gap-1 text-[10px] font-black uppercase text-slate-500 tracking-wider">
+            <i data-lucide="landmark" class="w-3.5 h-3.5 text-blue-600 flex-shrink-0"></i>
+            <span class="truncate">${isHi ? scheme.ministry_hi : scheme.ministry}</span>
+          </div>
+
+          <!-- Scheme Name -->
+          <div>
+            <h4 class="text-base font-black text-slate-900 leading-snug group-hover:text-emerald-800 transition">
+              ${isHi ? scheme.title_hi : scheme.title}
+            </h4>
+            <p class="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+              ${isHi ? scheme.benefit_summary_hi : scheme.benefit_summary}
+            </p>
+          </div>
+
+          <!-- Golden Entitlement Banner -->
+          <div class="p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 border border-amber-300 text-amber-950 font-black text-xs flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-600 flex-shrink-0"></i>
+            <span class="text-[11px] leading-tight">${isHi ? scheme.entitlement_pill_hi : scheme.entitlement_pill}</span>
+          </div>
+
+          <!-- Live Worker Qualification Status -->
+          <div class="pt-1 flex items-center justify-between text-xs">
+            <span class="text-[10px] font-bold uppercase text-slate-400">Trade Entitlement:</span>
+            ${isClaimed
+        ? `<span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1">
+                   <i data-lucide="check-check" class="w-3 h-3 text-emerald-600"></i>
+                   <span>Enrolled ✓ (${claimData?.ref || "Active"})</span>
+                 </span>`
+        : (isEligible
+          ? `<span class="bg-emerald-50 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1">
+                     <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-600"></i>
+                     <span>Pre-Qualified (${(worker.skill || "").toUpperCase()} #${worker.id})</span>
+                   </span>`
+          : `<span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                     All Guild Trades Eligible
+                   </span>`
+        )
+      }
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Footer -->
+      <div class="p-4 pt-0 border-t border-slate-100 mt-2 grid grid-cols-2 gap-2">
+        <button type="button" onclick="openGovtSchemeDetails('${scheme.id}')"
+          class="btn-open-scheme py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1 btn-tactile">
+          <i data-lucide="calculator" class="w-3.5 h-3.5 text-blue-600"></i>
+          <span>${isHi ? "पात्रता व विवरण" : "Check Benefits"}</span>
+        </button>
+
+        ${isClaimed
+        ? `<button type="button" onclick="openGovtSchemeDetails('${scheme.id}')"
+               class="btn-open-scheme py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs rounded-xl transition shadow-xs flex items-center justify-center gap-1 btn-tactile">
+               <i data-lucide="badge-check" class="w-3.5 h-3.5 text-amber-300"></i>
+               <span>${isHi ? "वाउचर देखें" : "View Voucher"}</span>
+             </button>`
+        : `<button type="button" onclick="claimGovtScheme('${scheme.id}')"
+               class="py-2.5 px-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs rounded-xl transition shadow-xs flex items-center justify-center gap-1 btn-tactile">
+               <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+               <span>${isHi ? "आवेदन / टोकन" : "1-Click Claim"}</span>
+             </button>`
+      }
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  safeCreateIcons();
+}
+
+function openGovtSchemeDetails(schemeId) {
+  try {
+    if (typeof sfx !== "undefined" && sfx && typeof sfx.playClick === "function") {
+      sfx.playClick();
+    }
+  } catch (e) { }
+
+  const scheme = GOVT_WORKER_POLICIES.find(s => s.id === schemeId);
+  if (!scheme) return;
+  state.currentActiveModalSchemeId = schemeId;
+
+  const isHi = state.currentLanguage === "hi";
+  const worker = state.activeWorker || WORKERS[0];
+  const modal = document.getElementById("modal-govt-scheme-details");
+  if (!modal) return;
+
+  // Ensure modal is direct child of document.body so no overflow container can trap it
+  if (modal.parentElement && typeof document !== "undefined" && document.body && modal.parentElement !== document.body) {
+    try {
+      document.body.appendChild(modal);
+    } catch (e) { }
+  }
+
+  // 1. Populate Header
+  const heroImg = document.getElementById("scheme-modal-hero-img");
+  if (heroImg) heroImg.src = scheme.image;
+
+  const catBadge = document.getElementById("scheme-modal-cat-badge");
+  if (catBadge) catBadge.innerText = isHi ? scheme.category_label_hi : scheme.category_label;
+
+  const minBadge = document.getElementById("scheme-modal-ministry-badge");
+  if (minBadge) minBadge.innerText = isHi ? scheme.ministry_hi : scheme.ministry;
+
+  const titleEl = document.getElementById("scheme-modal-title");
+  if (titleEl) titleEl.innerText = isHi ? scheme.title_hi : scheme.title;
+
+  const subTitleEl = document.getElementById("scheme-modal-subtitle");
+  if (subTitleEl) subTitleEl.innerText = isHi ? scheme.entitlement_pill_hi : scheme.entitlement_pill;
+
+  // 2. Entitlement Card
+  const entDesc = document.getElementById("scheme-modal-entitlement-desc");
+  if (entDesc) entDesc.innerText = isHi ? scheme.benefit_summary_hi : scheme.benefit_summary;
+
+  // 3. Worker Persona Check
+  const workerNameEl = document.getElementById("scheme-modal-worker-name");
+  if (workerNameEl) workerNameEl.innerText = worker ? worker.name : "Active Worker";
+
+  const tradeBadgeEl = document.getElementById("scheme-modal-trade-badge");
+  if (tradeBadgeEl) tradeBadgeEl.innerText = worker ? `${(worker.skill || "technician").toUpperCase()} (${worker.cert_title || "Verified"})` : "Verified Technician";
+
+  // 4. Interactive Calculator Box
+  renderSchemeModalCalculator(scheme, worker);
+
+  // 5. Benefits List
+  const benefitsUl = document.getElementById("scheme-modal-benefits-list");
+  if (benefitsUl) {
+    benefitsUl.innerHTML = "";
+    if (Array.isArray(scheme.benefits)) {
+      scheme.benefits.forEach(b => {
+        const li = document.createElement("li");
+        li.className = "flex items-start gap-2 text-slate-700";
+        li.innerHTML = `<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"></i> <span>${b}</span>`;
+        benefitsUl.appendChild(li);
+      });
+    }
+  }
+
+  // 6. Helpline & Portal
+  const helplineEl = document.getElementById("scheme-modal-helpline");
+  if (helplineEl) helplineEl.innerText = scheme.helpline;
+
+  const portalLink = document.getElementById("scheme-modal-portal-link");
+  if (portalLink) portalLink.href = scheme.portal_url;
+
+  // 7. Claim Status / Voucher Box
+  const claimSuccessBox = document.getElementById("scheme-modal-claim-success");
+  const claimBtn = document.getElementById("btn-modal-claim-scheme");
+  const isClaimed = state.claimedSchemes && state.claimedSchemes[schemeId]?.claimed;
+  const claimData = state.claimedSchemes ? state.claimedSchemes[schemeId] : null;
+
+  if (isClaimed) {
+    if (claimSuccessBox) {
+      claimSuccessBox.classList.remove("hidden");
+      claimSuccessBox.style.display = "block";
+      const vTitle = document.getElementById("scheme-voucher-title");
+      if (vTitle) vTitle.innerText = `${scheme.title_short} Entitlement Voucher`;
+      const vRef = document.getElementById("scheme-voucher-ref");
+      if (vRef) vRef.innerText = claimData?.ref || `REF-${scheme.id.toUpperCase()}-2026`;
+      const vAmt = document.getElementById("scheme-voucher-amount");
+      if (vAmt) vAmt.innerText = scheme.entitlement_amount;
+    }
+    if (claimBtn) {
+      claimBtn.disabled = true;
+      claimBtn.className = "px-6 py-2.5 bg-slate-200 text-emerald-800 font-black rounded-xl text-xs cursor-default flex items-center gap-1.5";
+      claimBtn.innerHTML = `<i data-lucide="check-check" class="w-4 h-4 text-emerald-600"></i> <span>Enrolled &amp; Approved ✓</span>`;
+    }
+  } else {
+    if (claimSuccessBox) {
+      claimSuccessBox.classList.add("hidden");
+      claimSuccessBox.style.display = "none";
+    }
+    if (claimBtn) {
+      claimBtn.disabled = false;
+      claimBtn.className = "px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black rounded-xl text-xs shadow-md transition flex items-center gap-2 btn-tactile cursor-pointer";
+      claimBtn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i> <span id="btn-modal-claim-text">${isHi ? "आवेदन करें व वाउचर प्राप्त करें" : "Register Interest & Claim Entitlement"}</span>`;
+    }
+  }
+
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+  modal.style.visibility = "visible";
+  modal.style.opacity = "1";
+  modal.style.pointerEvents = "auto";
+  document.body.classList.add("overflow-hidden");
+  safeCreateIcons();
+}
+
+function renderSchemeModalCalculator(scheme, worker) {
+  const box = document.getElementById("scheme-modal-calculator-box");
+  if (!box) return;
+  const isHi = state.currentLanguage === "hi";
+
+  if (scheme.id === "pm_vishwakarma" || scheme.id === "pm_svanidhi_mudra") {
+    const defaultLoan = scheme.id === "pm_vishwakarma" ? 100000 : 20000;
+    const maxLoan = scheme.id === "pm_vishwakarma" ? 300000 : 50000;
+    const minLoan = scheme.id === "pm_vishwakarma" ? 25000 : 10000;
+    state.schemeLoanCalculatorAmount = defaultLoan;
+
+    box.innerHTML = `
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-black text-blue-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <i data-lucide="calculator" class="w-4 h-4 text-blue-600"></i>
+            <span>Interactive Subsidized Credit &amp; EMI Calculator</span>
+          </span>
+          <span class="text-[10px] font-black px-2 py-0.5 rounded bg-blue-100 text-blue-800">5% Subsidized Rate</span>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+            <span>Selected Loan Amount:</span>
+            <span class="text-emerald-700 font-mono text-sm" id="calc-loan-amount-display">₹${defaultLoan.toLocaleString("en-IN")}</span>
+          </div>
+          <input type="range" id="calc-loan-slider" min="${minLoan}" max="${maxLoan}" step="5000" value="${defaultLoan}"
+            oninput="handleLoanSliderChange(this.value)"
+            class="w-full accent-emerald-600 cursor-pointer" />
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+            <span>₹${minLoan.toLocaleString("en-IN")}</span>
+            <span>₹${maxLoan.toLocaleString("en-IN")}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-blue-200 text-xs">
+          <div>
+            <span class="text-[10px] text-slate-400 block font-bold">MONTHLY EMI (5% GOVT RATE)</span>
+            <span class="text-base font-black text-emerald-700" id="calc-monthly-emi">₹5,778.00 / mo</span>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block font-bold">INTEREST SAVED VS PRIVATE (18%)</span>
+            <span class="text-base font-black text-amber-600" id="calc-interest-saved">₹11,124.00</span>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-900 font-medium">
+          ✓ ${scheme.id === "pm_vishwakarma" ? "Includes ₹15,000 brand-new trade toolkit voucher + 18-month easy repayment." : "Includes 7% interest subvention credited directly into your PACS bank account quarterly."}
+        </div>
+      </div>
+    `;
+    updateSchemeLoanCalculations(defaultLoan);
+  } else if (scheme.id === "ayushman_pmjay") {
+    box.innerHTML = `
+      <div class="space-y-2">
+        <span class="font-black text-blue-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <i data-lucide="shield-plus" class="w-4 h-4 text-emerald-600"></i>
+          <span>Universal Family Health Cover Portfolio</span>
+        </span>
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+          <div class="p-2.5 bg-white rounded-xl border border-blue-200">
+            <span class="text-[10px] text-slate-400 block font-bold">ANNUAL COVER</span>
+            <strong class="text-emerald-700 text-sm">₹5,00,000</strong>
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-blue-200">
+            <span class="text-[10px] text-slate-400 block font-bold">HOSPITALS</span>
+            <strong class="text-blue-800 text-sm">29,000+</strong>
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-blue-200">
+            <span class="text-[10px] text-slate-400 block font-bold">OUT-OF-POCKET</span>
+            <strong class="text-emerald-700 text-sm">₹0 (100% Free)</strong>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-600">Full cashless coverage for worker, spouse, children, and dependent parents. Pre-existing illness covered from Day 1.</p>
+      </div>
+    `;
+  } else {
+    box.innerHTML = `
+      <div class="space-y-2">
+        <span class="font-black text-blue-950 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
+          <span>Official Government Certification &amp; Insurance Protection</span>
+        </span>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="p-2.5 bg-white rounded-xl border border-blue-200">
+            <span class="text-[10px] text-slate-400 block font-bold">BENEFIT AMOUNT</span>
+            <strong class="text-purple-700 text-sm">${scheme.entitlement_amount}</strong>
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-blue-200">
+            <span class="text-[10px] text-slate-400 block font-bold">PROCESSING MODE</span>
+            <strong class="text-emerald-700 text-sm">Direct Benefit Transfer (DBT)</strong>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function handleLoanSliderChange(val) {
+  const amt = parseInt(val) || 100000;
+  state.schemeLoanCalculatorAmount = amt;
+  const disp = document.getElementById("calc-loan-amount-display");
+  if (disp) disp.innerText = `₹${amt.toLocaleString("en-IN")}`;
+  updateSchemeLoanCalculations(amt);
+}
+
+function updateSchemeLoanCalculations(amt) {
+  // 5% rate over 18 months
+  const monthlyRateGovt = 0.05 / 12;
+  const months = 18;
+  const emiGovt = (amt * monthlyRateGovt * Math.pow(1 + monthlyRateGovt, months)) / (Math.pow(1 + monthlyRateGovt, months) - 1);
+
+  // 18% commercial rate
+  const monthlyRateComm = 0.18 / 12;
+  const emiComm = (amt * monthlyRateComm * Math.pow(1 + monthlyRateComm, months)) / (Math.pow(1 + monthlyRateComm, months) - 1);
+
+  const totalGovt = emiGovt * months;
+  const totalComm = emiComm * months;
+  const saved = Math.max(0, totalComm - totalGovt);
+
+  const emiEl = document.getElementById("calc-monthly-emi");
+  if (emiEl) emiEl.innerText = `₹${emiGovt.toFixed(2)} / mo`;
+
+  const savedEl = document.getElementById("calc-interest-saved");
+  if (savedEl) savedEl.innerText = `₹${saved.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
+}
+
+function closeGovtSchemeDetails() {
+  try {
+    if (typeof sfx !== "undefined" && sfx && typeof sfx.playClick === "function") {
+      sfx.playClick();
+    }
+  } catch (e) { }
+  const modal = document.getElementById("modal-govt-scheme-details");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.style.display = "none";
+    modal.style.pointerEvents = "none";
+  }
+  document.body.classList.remove("overflow-hidden");
+  state.currentActiveModalSchemeId = null;
+}
+
+function openGovtSchemesOverviewModal() {
+  openGovtSchemeDetails("pm_vishwakarma");
+}
+
+function claimGovtScheme(schemeId) {
+  try {
+    if (typeof sfx !== "undefined" && sfx && typeof sfx.playSuccessFanfare === "function") {
+      sfx.playSuccessFanfare();
+    } else if (typeof sfx !== "undefined" && sfx && typeof sfx.playClick === "function") {
+      sfx.playClick();
+    }
+  } catch (e) { }
+
+  const scheme = GOVT_WORKER_POLICIES.find(s => s.id === schemeId);
+  if (!scheme) return;
+
+  const worker = state.activeWorker || WORKERS[0];
+  const refCode = `REF-${scheme.id.toUpperCase().substring(0, 3)}-2026-DL${Math.floor(1000 + Math.random() * 9000)}`;
+
+  if (!state.claimedSchemes) state.claimedSchemes = {};
+  state.claimedSchemes[schemeId] = {
+    claimed: true,
+    ref: refCode,
+    date: new Date().toISOString().slice(0, 10),
+    worker_id: worker.id
+  };
+
+  showToast(`🎉 Congratulations ${worker.name}! Successfully claimed ${scheme.title_short}. Token: ${refCode}`, "success");
+
+  // Re-render
+  renderGovtWorkerSchemes();
+  if (state.activeWorker) {
+    updateWorkerGovtSchemesForWorker(state.activeWorker);
+  }
+
+  // Open modal with claimed state and reveal voucher immediately
+  openGovtSchemeDetails(schemeId);
+}
+
+function handleModalClaimSubmit() {
+  if (state.currentActiveModalSchemeId) {
+    claimGovtScheme(state.currentActiveModalSchemeId);
+  }
+}
+
+function toggleBookmarkScheme(schemeId, event) {
+  if (event) event.stopPropagation();
+  sfx.playClick();
+
+  if (!state.bookmarkedSchemes) state.bookmarkedSchemes = {};
+  if (state.bookmarkedSchemes[schemeId]) {
+    delete state.bookmarkedSchemes[schemeId];
+    showToast("Scheme removed from saved list", "info");
+  } else {
+    state.bookmarkedSchemes[schemeId] = true;
+    showToast("⭐ Scheme bookmarked to your favorites!", "success");
+  }
+  renderGovtWorkerSchemes();
+}
+
+function downloadSchemeVoucher(schemeId) {
+  sfx.playClick();
+  const targetId = schemeId || state.currentActiveModalSchemeId || "pm_vishwakarma";
+  const scheme = GOVT_WORKER_POLICIES.find(s => s.id === targetId) || GOVT_WORKER_POLICIES[0];
+  const worker = state.activeWorker || WORKERS[0];
+  const claimData = state.claimedSchemes ? state.claimedSchemes[targetId] : { ref: "REF-PMV-2026-DL8921", date: new Date().toISOString().slice(0, 10) };
+
+  const voucherText = `===============================================================
+GOVERNMENT OF INDIA & NATIONAL COOPERATIVE FEDERATION
+DIRECT BENEFIT TRANSFER (DBT) & WORKER ENTITLEMENT VOUCHER
+===============================================================
+Voucher Reference Token: ${claimData?.ref || "REF-PMV-2026-DL8921"}
+Issue Date:              ${claimData?.date || new Date().toLocaleDateString()}
+Official Scheme:         ${scheme.title}
+Governing Ministry:      ${scheme.ministry}
+
+BENEFICIARY DETAILS:
+---------------------------------------------------------------
+Worker Name:             ${worker.name}
+Cooperative Registry ID: ${worker.coop_id || `DL/PACS/2026/${worker.id}`}
+Cooperative Federation:  ${worker.coop_name || "Delhi Central Labour Cooperative"}
+Certified Trade Skill:   ${(worker.skill || "technician").toUpperCase()}
+Aadhaar e-KYC:           ${worker.aadhaar || "XXXX-XXXX-8921"} (UIDAI OTP Verified)
+
+DIRECT ENTITLEMENT SUMMARY:
+---------------------------------------------------------------
+Entitlement Benefit:     ${scheme.entitlement_pill}
+Benefit Amount:          ${scheme.entitlement_amount}
+DBT Settlement Mode:     Direct Bank Transfer to DCCB Primary Account
+Subsidized Interest:     5.0% per annum (Govt Interest Subvention: 8.0%)
+
+MANDATORY INSTRUCTIONS:
+---------------------------------------------------------------
+1. Present this digital voucher slip along with your original Aadhaar
+   at your nearest PACS or CSC Seva Kendra to collect physical toolkits.
+2. For loan disbursement, submit your PACS membership passbook.
+3. National Toll-Free Helpline: ${scheme.helpline}
+4. Official Portal: ${scheme.portal_url}
+
+Digitally Authenticated by:
+Ministry of Cooperation & Ministry of MSME, Government of India
+"Sahakar Se Samriddhi - Atmanirbhar Shramik"
+===============================================================`;
+
+  const blob = new Blob([voucherText], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Govt_Welfare_Voucher_${scheme.id.toUpperCase()}_${worker.name.replace(/\s+/g, "_")}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`✓ Downloaded official voucher slip for ${scheme.title_short}!`, "success");
+}
+
+function scrollToGovtSchemesHub() {
+  sfx.playClick();
+  const hub = document.getElementById("worker-govt-schemes-hub");
+  if (hub) {
+    hub.scrollIntoView({ behavior: "smooth", block: "start" });
+    hub.classList.add("ring-4", "ring-emerald-400", "scale-[1.01]");
+    setTimeout(() => {
+      hub.classList.remove("ring-4", "ring-emerald-400", "scale-[1.01]");
+    }, 1200);
+  }
+}
+
+// ============================================================================
+// 28. SERVICE HISTORY, DRIVER TELEMETRY HUD & EMERGENCY SAFETY HELPLINE
+// ============================================================================
+
+const SAMPLE_PROOF_PHOTOS = {
+  driver: [
+    "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80"
+  ],
+  electrician: [
+    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80"
+  ],
+  plumber: [
+    "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=600&q=80"
+  ],
+  tailoring: [
+    "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=600&q=80"
+  ],
+  carpentry: [
+    "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
+  ]
+};
+
+function snapCameraProofSimulation() {
+  sfx.playClick();
+  const serviceType = state.activeBooking?.service_type || "electrician";
+  const pool = SAMPLE_PROOF_PHOTOS[serviceType] || SAMPLE_PROOF_PHOTOS.electrician;
+  const chosen = pool[Math.floor(Math.random() * pool.length)];
+
+  const previewImg = document.getElementById("proof-preview-img");
+  const container = document.getElementById("proof-preview-container");
+  if (previewImg && container) {
+    previewImg.src = chosen;
+    container.classList.remove("hidden");
+  }
+
+  // If driver service and odometer empty, auto-populate current simulated odometer
+  if (serviceType === "driver") {
+    autofillOdometer();
+  }
+
+  // Pre-fill notes if empty
+  const notesInput = document.getElementById("proof-work-notes");
+  if (notesInput && !notesInput.value.trim()) {
+    notesInput.value = serviceType === "driver"
+      ? "Trip concluded safely. Passenger dropped at destination, vehicle checked and parked."
+      : "Work inspected, live testing verified, and premises cleared with customer approval.";
+  }
+
+  const notice = document.getElementById("proof-mandatory-notice");
+  if (notice) notice.classList.remove("proof-mandatory-pulse");
+
+  const boxStep2 = document.getElementById("box-step-2");
+  if (boxStep2) boxStep2.classList.remove("ring-2", "ring-rose-500");
+
+  showToast(state.currentLanguage === "hi"
+    ? "📷 कार्य की लाइव फोटो ली गई व प्रमाण संलग्न हुआ!"
+    : "📷 Work proof snapshot captured & attached!", "success");
+}
+
+function autofillOdometer() {
+  sfx.playClick();
+  const odoInput = document.getElementById("proof-odometer-reading");
+  if (odoInput) {
+    const odo = state.driverTelemetry?.odometerKm
+      ? `${Math.round(state.driverTelemetry.odometerKm).toLocaleString()} km`
+      : "24,842 km";
+    odoInput.value = odo;
+    showToast(state.currentLanguage === "hi"
+      ? `वाहन ओडोमीटर स्वतः भरा गया: ${odo}`
+      : `Vehicle odometer auto-filled: ${odo}`, "info");
+  }
+}
+
+function openProofLightbox(src, title = "Proof of Work Inspection") {
+  sfx.playClick();
+  const modal = document.getElementById("modal-proof-lightbox");
+  const imgEl = document.getElementById("proof-lightbox-img");
+  const titleEl = document.getElementById("proof-lightbox-title");
+  if (!modal || !imgEl) return;
+
+  imgEl.src = src;
+  if (titleEl) titleEl.innerText = title;
+  modal.classList.remove("hidden");
+  safeCreateIcons();
+}
+
+function openProofLightboxFromPreview() {
+  const previewImg = document.getElementById("proof-preview-img");
+  if (previewImg && previewImg.src && !previewImg.src.endsWith("#")) {
+    const sName = state.activeBooking?.service_type?.toUpperCase() || "SERVICE";
+    openProofLightbox(previewImg.src, `Active Job #${state.activeBooking?.booking_id || ""} • ${sName} Completion Proof`);
+  }
+}
+
+function closeProofLightbox() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-proof-lightbox");
+  if (modal) modal.classList.add("hidden");
+}
+
+// ----------------- DRIVER TELEMETRY HUD CONTROLLER -----------------
+
+function initDriverTelemetryHUD() {
+  // If active booking is driver, start stream
+  if (state.activeBooking && state.activeBooking.service_type === "driver") {
+    startDriverTelemetryStream(state.activeBooking.booking_id);
+  }
+}
+
+function startDriverTelemetryStream(bookingId) {
+  if (state.driverTelemetry.intervalId) {
+    clearInterval(state.driverTelemetry.intervalId);
+  }
+  state.driverTelemetry.active = true;
+
+  // Initial HUD render
+  updateDriverTelemetryHUD();
+
+  state.driverTelemetry.intervalId = setInterval(() => {
+    if (!state.driverTelemetry.active) return;
+
+    // Simulate realistic smooth vehicular motion
+    const speedVariation = (Math.random() - 0.48) * 4.5;
+    let newSpeed = Math.max(0, Math.min(65, state.driverTelemetry.speed + speedVariation));
+    state.driverTelemetry.speed = parseFloat(newSpeed.toFixed(1));
+
+    // Smooth heading alteration
+    state.driverTelemetry.heading = (state.driverTelemetry.heading + (Math.random() > 0.6 ? 2 : -1) + 360) % 360;
+    state.driverTelemetry.headingDirection = getCompassDirection(state.driverTelemetry.heading);
+
+    // Minor coordinate jitter (moving northeast along Barakhamba / Connaught Circle)
+    const latDelta = 0.00008 + (Math.random() * 0.00002);
+    const lngDelta = 0.00010 + (Math.random() * 0.00003);
+    state.driverTelemetry.lat += latDelta;
+    state.driverTelemetry.lng += lngDelta;
+
+    // Incremental trip odometer
+    const distDelta = (newSpeed / 3600); // km per second
+    state.driverTelemetry.tripDistanceKm += distDelta;
+    state.driverTelemetry.odometerKm += distDelta;
+
+    // Altitude fluctuation
+    state.driverTelemetry.altitude += (Math.random() - 0.5) * 0.4;
+
+    updateDriverTelemetryHUD();
+
+    // Sync to backend if connected
+    if (state.hasBackendConnection && bookingId) {
+      fetch(`${API_BASE_URL}/api/driver/telemetry/${bookingId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          speed_kmh: state.driverTelemetry.speed,
+          heading: state.driverTelemetry.heading,
+          latitude: state.driverTelemetry.lat,
+          longitude: state.driverTelemetry.lng,
+          trip_distance_km: parseFloat(state.driverTelemetry.tripDistanceKm.toFixed(2)),
+          odometer_reading: `${Math.round(state.driverTelemetry.odometerKm)} km`,
+          gps_accuracy_m: state.driverTelemetry.signalAccuracyM
+        })
+      }).catch(e => {});
+    }
+  }, 1200);
+}
+
+function stopDriverTelemetryStream() {
+  if (state.driverTelemetry.intervalId) {
+    clearInterval(state.driverTelemetry.intervalId);
+    state.driverTelemetry.intervalId = null;
+  }
+  state.driverTelemetry.active = false;
+}
+
+function getCompassDirection(deg) {
+  const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+  const idx = Math.round(deg / 22.5) % 16;
+  return directions[idx];
+}
+
+function updateDriverTelemetryHUD() {
+  const t = state.driverTelemetry;
+  const speedEl = document.getElementById("telemetry-speed-val");
+  if (speedEl) speedEl.innerText = Math.round(t.speed);
+
+  const headingEl = document.getElementById("telemetry-heading-val");
+  if (headingEl) headingEl.innerText = `${Math.round(t.heading)}° ${t.headingDirection}`;
+
+  const needle = document.getElementById("telemetry-compass-needle");
+  if (needle) {
+    needle.style.transform = `rotate(${t.heading}deg)`;
+  }
+
+  const latEl = document.getElementById("telemetry-coords-lat");
+  if (latEl) latEl.innerText = `${t.lat.toFixed(4)}° N`;
+  const lngEl = document.getElementById("telemetry-coords-lng");
+  if (lngEl) lngEl.innerText = `${t.lng.toFixed(4)}° E`;
+  const coordsEl = document.getElementById("telemetry-coords-val");
+  if (coordsEl) coordsEl.innerText = `${t.lat.toFixed(4)}° N, ${t.lng.toFixed(4)}° E`;
+
+  const accEl = document.getElementById("telemetry-accuracy-val");
+  if (accEl) accEl.innerText = `±${t.signalAccuracyM} m`;
+
+  const distEl = document.getElementById("telemetry-distance-val");
+  if (distEl) distEl.innerText = `${t.tripDistanceKm.toFixed(1)} km`;
+
+  const altEl = document.getElementById("telemetry-altitude-val");
+  if (altEl) altEl.innerText = `${Math.round(t.altitude)} m MSL`;
+
+  const satsEl = document.getElementById("telemetry-satellites-val");
+  if (satsEl) satsEl.innerText = `${t.satellites} Sats (NavIC / GPS)`;
+
+  // Update speed bar gauge
+  const bar = document.getElementById("telemetry-speed-bar");
+  if (bar) {
+    const pct = Math.min(100, Math.round((t.speed / 80) * 100));
+    bar.style.width = `${pct}%`;
+  }
+
+  // Update in Call Modal if active
+  const callCoords = document.getElementById("call-telemetry-coords");
+  if (callCoords) callCoords.innerText = `${t.lat.toFixed(4)}° N, ${t.lng.toFixed(4)}° E`;
+  const callVeh = document.getElementById("call-telemetry-vehicle");
+  if (callVeh) callVeh.innerText = `DL-1Z-9021 • ${Math.round(t.speed)} km/h`;
+}
+
+function toggleTelemetryDiagnostics() {
+  sfx.playClick();
+  const panel = document.getElementById("telemetry-diag-panel");
+  const btn = document.getElementById("btn-toggle-telemetry-diag");
+  if (panel) {
+    panel.classList.toggle("hidden");
+    state.driverTelemetry.diagnosticsOpen = !panel.classList.contains("hidden");
+    if (btn) {
+      btn.innerText = panel.classList.contains("hidden") ? "Expand Diagnostics" : "Collapse Diagnostics";
+    }
+  }
+}
+
+// ----------------- EMERGENCY SAFETY & POLICE HELPLINE CALL SIMULATOR -----------------
+
+function initEmergencyHelplineSystem() {
+  // Safe initialization
+}
+
+const EMERGENCY_OPERATOR_DIALOGUES = [
+  "ERSS 112 Control Room: Officer Sharma on line. We have received your live cooperative cab telemetry at Connaught Place Outer Circle, moving at 42 km/h. Driver Vikram Singh (DL-1YB-4921) registered with Delhi Labour Cooperative. Are you in a safe position? PCR Van 24 has been alerted.",
+  "ERSS 112 Dispatch: Telemetry link validated. PCR #14 is on Barakhamba Road, 800m from your vehicle. Remain calm, keep this live link open. Live GPS beacon is broadcasting continuously.",
+  "Women Safety Cell (1091): Live emergency beacon active. If the driver takes any detour off your registered route, our automated geofencing will trigger an immediate interception by Delhi Police traffic patrol."
+];
+
+function startSimulatedEmergencyCall(type = "police", crimeContext = null) {
+  sfx.playAlert();
+  const modal = document.getElementById("modal-emergency-helpline-call");
+  if (!modal) return;
+
+  const t = state.driverTelemetry;
+  const isHi = state.currentLanguage === "hi";
+
+  state.emergencyCall.active = true;
+  state.emergencyCall.secondsElapsed = 0;
+  state.emergencyCall.currentStatus = "DIALING";
+  state.emergencyCall.isMuted = false;
+  state.emergencyCall.isSpeaker = true;
+
+  const titleEl = document.getElementById("emergency-call-title");
+  if (titleEl) {
+    if (crimeContext) {
+      titleEl.innerText = "🚨 Emergency PCR Crime Interception Desk (112)";
+    } else {
+      titleEl.innerText = type === "women"
+        ? "National Commission for Women Helpline (1091)"
+        : "Delhi Police & Women Safety Helpline (112 / 1091)";
+    }
+  }
+
+  const badgeEl = document.getElementById("emergency-call-badge");
+  if (badgeEl) {
+    badgeEl.className = "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-600/40 border border-amber-400 text-amber-200 inline-block";
+    badgeEl.innerText = isHi ? "112 / 1091 से जोड़ा जा रहा है..." : "Connecting to 112 / 1091...";
+  }
+
+  const timerEl = document.getElementById("emergency-call-timer");
+  if (timerEl) {
+    timerEl.innerText = isHi ? "ऑपरेटर डायल हो रहा है..." : "Dialing Emergency Dispatcher...";
+  }
+
+  const transcriptEl = document.getElementById("emergency-dispatcher-transcript");
+  if (transcriptEl) {
+    transcriptEl.innerText = isHi
+      ? "सुरक्षा नियंत्रण कक्ष से संपर्क स्थापित हो रहा है... लाइव टेलीमेट्री पैकेट भेजा गया।"
+      : "Establishing encrypted emergency channel with Police Command Center... Transmitting live GPS telemetry.";
+  }
+
+  // Populate driver and telemetry metadata in modal
+  const callDriver = document.getElementById("call-telemetry-driver");
+  if (callDriver) {
+    callDriver.innerText = state.activeBooking?.assigned_worker?.name || "Vikram Singh (PSV Badge Verified)";
+  }
+  const callCoords = document.getElementById("call-telemetry-coords");
+  if (callCoords) {
+    callCoords.innerText = `${t.lat.toFixed(4)}° N, ${t.lng.toFixed(4)}° E`;
+  }
+  const callVeh = document.getElementById("call-telemetry-vehicle");
+  if (callVeh) {
+    callVeh.innerText = `DL-1Z-9021 • ${Math.round(t.speed)} km/h`;
+  }
+
+  modal.classList.remove("hidden");
+  safeCreateIcons();
+
+  // Simulated Ringing transition to Connected after 1.5s
+  setTimeout(() => {
+    if (!state.emergencyCall.active) return;
+    sfx.playSuccessFanfare();
+    state.emergencyCall.currentStatus = "CONNECTED";
+
+    if (badgeEl) {
+      badgeEl.className = "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-600/40 border border-emerald-400 text-emerald-200 inline-block animate-pulse";
+      badgeEl.innerText = isHi ? "कॉल कनेक्टेड • लाइव पुलिस ऑपरेटर" : "CALL CONNECTED • LIVE POLICE DISPATCH";
+    }
+
+    if (transcriptEl) {
+      if (crimeContext) {
+        transcriptEl.innerHTML = `<span class="text-rose-300 font-bold block mb-1">🚨 EMERGENCY CRIME PRIORITY ESCALATION</span>` +
+          `<span class="text-slate-100">"PCR Dispatcher Insp. Sunita Rao: Emergency crime report received regarding vehicle DL-1Z-9021 (Driver: ${state.activeBooking?.assigned_worker?.name || "Vikram Singh"}). Category: ${crimeContext.category}. Telemetry coordinates [${t.lat.toFixed(4)}, ${t.lng.toFixed(4)}] locked on radar. PCR Van #14 deployed for immediate interception."</span>`;
+      } else {
+        transcriptEl.innerText = EMERGENCY_OPERATOR_DIALOGUES[0];
+      }
+    }
+
+    // Start seconds counter
+    state.emergencyCall.timerInterval = setInterval(() => {
+      state.emergencyCall.secondsElapsed++;
+      const mins = String(Math.floor(state.emergencyCall.secondsElapsed / 60)).padStart(2, "0");
+      const secs = String(state.emergencyCall.secondsElapsed % 60).padStart(2, "0");
+      if (timerEl) timerEl.innerText = `Call Active • ${mins}:${secs}`;
+    }, 1000);
+
+    // Backend logging of simulated helpline call
+    if (state.hasBackendConnection) {
+      fetch(`${API_BASE_URL}/api/emergency/helpline-call`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer_name: state.currentCustomerName || "Aarav Mehta",
+          helpline_type: type,
+          coordinates: [t.lat, t.lng],
+          driver_name: state.activeBooking?.assigned_worker?.name || "Vikram Singh",
+          vehicle_number: "DL-1Z-9021",
+          speed_kmh: t.speed,
+          incident_summary: crimeContext
+            ? `Reported Driver Misconduct/Crime: ${crimeContext.category} - ${crimeContext.description}`
+            : "Simulated emergency helpline call demonstration"
+        })
+      }).catch(e => {});
+    }
+  }, 1500);
+}
+
+function endSimulatedEmergencyCall() {
+  sfx.playClick();
+  state.emergencyCall.active = false;
+  if (state.emergencyCall.timerInterval) {
+    clearInterval(state.emergencyCall.timerInterval);
+    state.emergencyCall.timerInterval = null;
+  }
+
+  const modal = document.getElementById("modal-emergency-helpline-call");
+  if (modal) modal.classList.add("hidden");
+
+  showToast(state.currentLanguage === "hi"
+    ? "✓ हेल्पलाइन सिमुलेशन कॉल समाप्त। पीसीआर घटना संदर्भ: #ERSS-DEL-8819"
+    : "✓ Helpline simulation ended. Police ticket reference logged: #ERSS-DEL-8819", "info");
+}
+
+function toggleEmergencyMute() {
+  sfx.playClick();
+  state.emergencyCall.isMuted = !state.emergencyCall.isMuted;
+  const btn = document.getElementById("btn-emergency-mute");
+  if (btn) {
+    btn.innerHTML = `<i data-lucide="${state.emergencyCall.isMuted ? 'mic-off' : 'mic'}" class="w-5 h-5 text-white"></i>`;
+    safeCreateIcons();
+  }
+  showToast(state.emergencyCall.isMuted ? "Microphone Muted" : "Microphone Active", "info");
+}
+
+function toggleEmergencySpeaker() {
+  sfx.playClick();
+  state.emergencyCall.isSpeaker = !state.emergencyCall.isSpeaker;
+  showToast(state.emergencyCall.isSpeaker ? "Speakerphone ON" : "Speakerphone OFF", "info");
+}
+
+function sendEmergencyTelemetryPing() {
+  sfx.playAlert();
+  const transcriptEl = document.getElementById("emergency-dispatcher-transcript");
+  if (transcriptEl) {
+    transcriptEl.innerText = `Emergency Beacon Re-Transmitted: GPS telemetry packet [${state.driverTelemetry.lat.toFixed(4)}, ${state.driverTelemetry.lng.toFixed(4)} at ${Math.round(state.driverTelemetry.speed)} km/h] refreshed on PCR #14 dashboard.`;
+  }
+  showToast("📡 High-priority emergency telemetry ping sent to ERSS 112!", "emergency");
+}
+
+function sendEmergencyVoiceResponse(message) {
+  sfx.playClick();
+  const transcriptEl = document.getElementById("emergency-dispatcher-transcript");
+  if (transcriptEl) {
+    transcriptEl.innerHTML = `<span class="text-amber-300 font-bold block mb-1">Citizen: "${message}"</span>` +
+      `<span class="text-cyan-200">Dispatcher: "Understood. Maintaining real-time vehicle interception radar on DL-1Z-9021. Stay on call."</span>`;
+  }
+  showToast(`Reported to Dispatcher: "${message}"`, "info");
+}
+
+// ----------------- CUSTOMER DRIVER MISCONDUCT & POLICE CRIME REPORTING -----------------
+
+function openCustomerDriverReportModal() {
+  sfx.playAlert();
+  const modal = document.getElementById("modal-customer-driver-report");
+  if (!modal) return;
+
+  const driverNameEl = document.getElementById("report-driver-name");
+  const driverVehEl = document.getElementById("report-driver-vehicle");
+  const driverCoordsEl = document.getElementById("report-driver-coords");
+  const driverSpeedEl = document.getElementById("report-driver-speed");
+
+  const driver = state.activeBooking?.assigned_worker || { name: "Vikram Singh" };
+  const t = state.driverTelemetry || { lat: 28.6328, lng: 77.2197, speed: 41.2 };
+
+  if (driverNameEl) driverNameEl.innerText = driver.name || "Vikram Singh";
+  if (driverVehEl) driverVehEl.innerText = "DL-1Z-9021";
+  if (driverCoordsEl) driverCoordsEl.innerText = `${t.lat ? t.lat.toFixed(4) : "28.6328"}° N, ${t.lng ? t.lng.toFixed(4) : "77.2197"}° E`;
+  if (driverSpeedEl) driverSpeedEl.innerText = `${Math.round(t.speed || 41)} km/h`;
+
+  modal.classList.remove("hidden");
+  safeCreateIcons();
+}
+
+function closeCustomerDriverReportModal() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-customer-driver-report");
+  if (modal) modal.classList.add("hidden");
+}
+
+function quickFillReportChip(text) {
+  sfx.playClick();
+  const descEl = document.getElementById("report-input-description");
+  if (descEl) {
+    descEl.value = text;
+    descEl.focus();
+  }
+}
+
+function handleCustomerDriverReportSubmit(e) {
+  if (e) e.preventDefault();
+  submitCustomerDriverReport(e, true);
+}
+
+async function submitCustomerDriverReport(e, andCallHelpline = false) {
+  if (e) e.preventDefault();
+  sfx.playAlert();
+  const isHi = state.currentLanguage === "hi";
+
+  const categorySelect = document.getElementById("report-input-category");
+  const descInput = document.getElementById("report-input-description");
+  const category = categorySelect ? categorySelect.value : "CRIME_HARASSMENT";
+  const description = descInput ? descInput.value.trim() : "";
+
+  if (!description) {
+    showToast(isHi ? "कृपया घटना का विवरण दर्ज करें।" : "Please enter incident details describing what happened.", "warning");
+    if (descInput) descInput.focus();
+    return;
+  }
+
+  const driver = state.activeBooking?.assigned_worker || { id: 104, name: "Vikram Singh" };
+  const t = state.driverTelemetry || { lat: 28.6328, lng: 77.2197, speed: 41.2 };
+  const ticketId = `POLICE-CRIME-${Date.now()}`;
+
+  const crimeRecord = {
+    ticket_id: ticketId,
+    customer_name: state.currentCustomerName || "Aarav Mehta",
+    driver_name: driver.name || "Vikram Singh",
+    driver_id: driver.id || 104,
+    vehicle_number: "DL-1Z-9021",
+    category: category,
+    description: description,
+    priority: "CRITICAL",
+    telemetry: {
+      lat: t.lat || 28.6328,
+      lng: t.lng || 77.2197,
+      speed_kmh: Math.round(t.speed || 41.2)
+    },
+    police_status: "POLICE_FIR_INITIATED",
+    driver_suspended: true,
+    timestamp: new Date().toISOString()
+  };
+
+  if (!state.customerComplaints) state.customerComplaints = [];
+  state.customerComplaints.unshift({
+    complaint_id: ticketId,
+    worker_id: driver.id || 104,
+    worker_name: driver.name || "Vikram Singh",
+    customer_name: state.currentCustomerName || "Aarav Mehta",
+    category: category,
+    category_title: `Police Crime Report: ${category}`,
+    description: description,
+    severity: "CRITICAL_CRIME",
+    timestamp: new Date().toISOString()
+  });
+
+  closeCustomerDriverReportModal();
+
+  // If driver exists in active workers list, suspend them locally
+  if (driver.id) {
+    const workerInList = WORKERS.find(w => w.id === driver.id);
+    if (workerInList) {
+      workerInList.is_available = false;
+      workerInList.disciplinary_status = "SUSPENDED_POLICE_INQUIRY";
+    }
+  }
+
+  // Send to backend
+  if (state.hasBackendConnection) {
+    try {
+      await fetch(`${API_BASE_URL}/api/customer/driver/report-crime`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          booking_id: state.activeBooking?.booking_id || 1001,
+          customer_name: state.currentCustomerName || "Aarav Mehta",
+          driver_name: driver.name || "Vikram Singh",
+          driver_id: driver.id || 104,
+          vehicle_number: "DL-1Z-9021",
+          category: category,
+          priority: "CRITICAL",
+          description: description,
+          lat: t.lat || 28.6328,
+          lng: t.lng || 77.2197,
+          speed_kmh: Math.round(t.speed || 41.2),
+          call_helpline_now: andCallHelpline
+        })
+      });
+    } catch (err) {
+      console.warn("Backend crime report sync offline fallback:", err);
+    }
+  }
+
+  showToast(isHi
+    ? `🚨 पुलिस रिपोर्ट दर्ज (#${ticketId})! पीसीआर इंटरसेप्टर व महिला सुरक्षा सेल को सूचना भेजी गई। चालक निलंबित।`
+    : `🚨 Police Report Filed (#${ticketId})! PCR Interceptor & Women Safety Cell notified. Driver suspended from radar.`, "emergency");
+
+  if (andCallHelpline) {
+    setTimeout(() => {
+      startSimulatedEmergencyCall("POLICE_SOS", { category, description });
+    }, 400);
+  }
+}
+
+// ----------------- CITIZEN SERVICE HISTORY MODAL -----------------
+
+function initServiceHistorySystem() {
+  updateServiceHistoryBadges();
+
+  // Search input listeners
+  const citizenSearch = document.getElementById("citizen-history-search-input");
+  if (citizenSearch) {
+    citizenSearch.addEventListener("input", (e) => handleCitizenHistorySearch(e.target.value));
+  }
+  const workerSearch = document.getElementById("worker-history-search-input");
+  if (workerSearch) {
+    workerSearch.addEventListener("input", (e) => handleWorkerHistorySearch(e.target.value));
+  }
+}
+
+function updateServiceHistoryBadges() {
+  const cBadge = document.getElementById("badge-citizen-service-history-count");
+  if (cBadge) {
+    const cCount = state.customerServiceHistory ? state.customerServiceHistory.length : 0;
+    cBadge.innerText = cCount;
+    cBadge.classList.toggle("hidden", cCount === 0);
+  }
+
+  const wBadge = document.getElementById("badge-worker-job-history-count");
+  if (wBadge) {
+    const wCount = state.workerJobHistory
+      ? state.workerJobHistory.filter(j => j.worker_id === state.activeWorker.id).length
+      : 0;
+    wBadge.innerText = wCount;
+    wBadge.classList.toggle("hidden", wCount === 0);
+  }
+}
+
+function openCitizenServiceHistoryModal() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-citizen-service-history");
+  if (!modal) return;
+
+  // Calculate KPIs
+  const history = state.customerServiceHistory || [];
+  const totalCompleted = history.filter(h => h.status === "COMPLETED").length;
+  const totalSavings = history.reduce((sum, h) => sum + (parseFloat(h.citizen_savings) || 0), 0);
+  const totalVerified = history.filter(h => h.proof_of_work && h.proof_of_work.verified).length;
+
+  const kpiTotal = document.getElementById("citizen-history-kpi-total");
+  if (kpiTotal) kpiTotal.innerText = totalCompleted;
+
+  const kpiSavings = document.getElementById("citizen-history-kpi-savings");
+  if (kpiSavings) kpiSavings.innerText = `₹${Math.round(totalSavings).toLocaleString()}`;
+
+  const kpiVerified = document.getElementById("citizen-history-kpi-verified");
+  if (kpiVerified) kpiVerified.innerText = `${totalVerified}/${history.length}`;
+
+  renderCitizenServiceHistory(history);
+  modal.classList.remove("hidden");
+  safeCreateIcons();
+}
+
+function closeCitizenServiceHistoryModal() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-citizen-service-history");
+  if (modal) modal.classList.add("hidden");
+}
+
+function filterCitizenHistory(category) {
+  sfx.playClick();
+  state.citizenHistoryFilter = category;
+
+  // Update filter pill UI active classes
+  const pills = document.querySelectorAll(".citizen-history-filter-pill");
+  pills.forEach(p => {
+    const cat = p.getAttribute("data-category") || "all";
+    if (cat === category) {
+      p.className = "citizen-history-filter-pill px-3 py-1 rounded-full text-xs font-bold bg-blue-600 text-white shadow-sm border border-blue-500 transition";
+    } else {
+      p.className = "citizen-history-filter-pill px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 transition";
+    }
+  });
+
+  const fullList = state.customerServiceHistory || [];
+  const filtered = category === "all"
+    ? fullList
+    : fullList.filter(item => item.service_type === category || (category === "emergency" && item.service_type === "driver"));
+
+  renderCitizenServiceHistory(filtered);
+}
+
+function handleCitizenHistorySearch(query) {
+  const q = (query || "").toLowerCase().trim();
+  const fullList = state.customerServiceHistory || [];
+  if (!q) {
+    renderCitizenServiceHistory(fullList);
+    return;
+  }
+  const filtered = fullList.filter(item => {
+    return (
+      item.booking_id.toString().includes(q) ||
+      (item.sub_service || "").toLowerCase().includes(q) ||
+      (item.service_type || "").toLowerCase().includes(q) ||
+      (item.worker_name || "").toLowerCase().includes(q) ||
+      (item.worker_coop || "").toLowerCase().includes(q)
+    );
+  });
+  renderCitizenServiceHistory(filtered);
+}
+
+function renderCitizenServiceHistory(items) {
+  const container = document.getElementById("citizen-service-history-list");
+  if (!container) return;
+  const isHi = state.currentLanguage === "hi";
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-12 text-slate-500 space-y-3">
+        <i data-lucide="inbox" class="w-12 h-12 mx-auto text-slate-300"></i>
+        <p class="font-bold text-sm">${isHi ? "कोई सेवा इतिहास नहीं मिला।" : "No historical service records found matching criteria."}</p>
+      </div>
+    `;
+    safeCreateIcons();
+    return;
+  }
+
+  container.innerHTML = items.map(item => {
+    const hasProof = item.proof_of_work && item.proof_of_work.image;
+    const isDriver = item.service_type === "driver";
+    return `
+      <div class="service-history-card bg-slate-50 hover:bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3 transition">
+        <!-- Top Row: Service Title, Date, Status -->
+        <div class="flex items-start justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold shadow-sm">
+              <i data-lucide="${item.service_type === 'driver' ? 'car' : item.service_type === 'electrician' ? 'zap' : item.service_type === 'plumber' ? 'droplet' : 'scissors'}" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-black text-slate-900 text-sm sm:text-base">${item.sub_service || item.service_type.toUpperCase()}</h4>
+                <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded">#${item.booking_id}</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium">
+                📅 ${item.booking_date} • 🕒 ${item.booking_time}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+              ✓ ${isHi ? "सत्यापित संपन्न" : "COMPLETED"}
+            </span>
+          </div>
+        </div>
+
+        <!-- Worker Information & Dual OTP Ledger Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-white rounded-xl border border-slate-100 text-xs">
+          <div class="flex items-center gap-3">
+            <img src="${item.worker_photo || 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=100'}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm" alt="worker">
+            <div>
+              <div class="font-bold text-slate-800 flex items-center gap-1">
+                <span>${item.worker_name}</span>
+                <span class="text-amber-500 text-[11px]">★ ${item.worker_rating || '4.9'}</span>
+              </div>
+              <p class="text-[11px] text-slate-500 truncate">${item.worker_coop}</p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center space-y-1 sm:border-l sm:border-slate-100 sm:pl-3">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-500 font-mono">Dual-OTP Verified:</span>
+              <span class="font-mono font-bold text-slate-700">START: <strong class="text-emerald-700">${item.start_otp || '----'}</strong> • END: <strong class="text-emerald-700">${item.end_otp || '----'}</strong></span>
+            </div>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-slate-500">Citizen Paid:</span>
+              <span class="font-black text-slate-900">₹${item.citizen_paid} <span class="text-emerald-700 font-bold text-[10px]">(Saved ₹${item.citizen_savings})</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Driver Telemetry Tag if applicable -->
+        ${isDriver && item.telemetry ? `
+          <div class="p-2.5 bg-blue-900 text-white rounded-xl text-[11px] font-mono flex items-center justify-between flex-wrap gap-2 border border-blue-700">
+            <div class="flex items-center gap-2">
+              <i data-lucide="navigation-2" class="w-4 h-4 text-cyan-300"></i>
+              <span><strong>Telemetry Verified:</strong> ${item.telemetry.distance_km} km trip • Avg: ${item.telemetry.avg_speed_kmh} km/h</span>
+            </div>
+            <span class="text-cyan-300 text-[10px] font-bold">GPS Route & Odometer Locked</span>
+          </div>
+        ` : ''}
+
+        <!-- Proof of Work Thumbnail & Action Buttons -->
+        <div class="flex items-center justify-between pt-2 border-t border-slate-200 flex-wrap gap-2">
+          ${hasProof ? `
+            <div class="flex items-center gap-2.5">
+              <img src="${item.proof_of_work.image}" class="w-12 h-12 rounded-lg object-cover border border-slate-300 shadow-sm cursor-pointer hover:opacity-90 transition"
+                alt="Proof Photo" onclick="openProofLightbox('${item.proof_of_work.image}', 'Booking #${item.booking_id} Verified Proof of Work')">
+              <div class="text-[11px] max-w-[240px] sm:max-w-xs">
+                <span class="font-black text-emerald-800 flex items-center gap-1">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i> Verified Proof of Work
+                </span>
+                <p class="text-slate-500 truncate text-[10px]">${item.proof_of_work.notes || 'Inspection completed.'}</p>
+                ${item.proof_of_work.odometer ? `<span class="text-[10px] font-mono text-slate-600 font-bold">Odo: ${item.proof_of_work.odometer}</span>` : ''}
+              </div>
+            </div>
+          ` : `
+            <span class="text-[11px] text-slate-400 italic">No photo attached</span>
+          `}
+
+          <div class="flex items-center gap-2 ml-auto">
+            ${hasProof ? `
+              <button type="button" onclick="openProofLightbox('${item.proof_of_work.image}', 'Booking #${item.booking_id} Verified Proof of Work')"
+                class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 flex items-center gap-1.5 transition">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-slate-500"></i>
+                <span>View Photo</span>
+              </button>
+            ` : ''}
+            <button type="button" onclick="downloadCoopReceipt(${item.booking_id})"
+              class="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1.5 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-blue-600"></i>
+              <span>Receipt</span>
+            </button>
+            <button type="button" onclick="rebookHistoricalService('${item.service_type}')"
+              class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-black text-white flex items-center gap-1.5 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Book Again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  safeCreateIcons();
+}
+
+function downloadCoopReceipt(bookingId) {
+  sfx.playClick();
+  const history = state.customerServiceHistory || [];
+  const booking = history.find(b => b.booking_id === bookingId) || history[0];
+  if (!booking) {
+    showToast("Receipt record not found", "warning");
+    return;
+  }
+
+  const invoiceTxt = `===============================================================
+       SEVA SETU (सेवा सेतु) - COOPERATIVE TAX INVOICE
+   Ministry of Cooperation, GoI • Catchphrase: Seva Se Samriddhi
+===============================================================
+Booking ID     : #${booking.booking_id}
+Date & Time    : ${booking.booking_date} | ${booking.booking_time}
+Service Trade  : ${booking.service_type.toUpperCase()} (${booking.sub_service})
+Customer Name  : ${booking.customer_name} (${booking.customer_phone})
+Worker Name    : ${booking.worker_name} (ID: ${booking.worker_id})
+Cooperative    : ${booking.worker_coop}
+---------------------------------------------------------------
+Direct Worker Wage Payout (100% to Worker) : Rs. ${booking.payout.toFixed(2)}
+Certified Toolkit & Consumables Allowance  : Rs.  30.00
+Cooperative Social Protection Cess (3.5%) : Rs.  ${(booking.payout * 0.035).toFixed(2)}
+Statutory GST (5.0%)                       : Rs.  ${(booking.payout * 0.05).toFixed(2)}
+---------------------------------------------------------------
+TOTAL CUSTOMER PAYABLE                     : Rs. ${booking.citizen_paid}
+CITIZEN SAVINGS VS PRIVATE AGGREGATORS     : Rs. ${booking.citizen_savings}
+---------------------------------------------------------------
+DUAL-OTP VERIFICATION AUDIT:
+- Arrival START_OTP    : [VERIFIED: ${booking.start_otp}]
+- Completion END_OTP   : [VERIFIED: ${booking.end_otp}]
+- Proof of Work Status : ATTACHED & VALIDATED PHOTOGRAPHICALLY
+${booking.proof_of_work?.odometer ? `- Vehicle Odometer : ${booking.proof_of_work.odometer}\n` : ''}${booking.telemetry ? `- Real-time GPS Telemetry: Verified (${booking.telemetry.distance_km} km)\n` : ''}---------------------------------------------------------------
+This invoice certifies 0% middleman exploitation under national
+cooperative federation bylaws. Direct DBT settlement executed.
+===============================================================`;
+
+  const blob = new Blob([invoiceTxt], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `SevaSetu_Receipt_Booking_${booking.booking_id}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`✓ Downloaded Cooperative Receipt for Booking #${booking.booking_id}`, "success");
+}
+
+function rebookHistoricalService(serviceType) {
+  closeCitizenServiceHistoryModal();
+  selectService(serviceType, true);
+  showToast(`Selected ${serviceType.toUpperCase()} for re-booking`, "info");
+}
+
+// ----------------- WORKER SERVICE HISTORY MODAL -----------------
+
+function openWorkerServiceHistoryModal() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-worker-service-history");
+  if (!modal) return;
+
+  const activeWorkerId = state.activeWorker.id;
+  const history = (state.workerJobHistory || []).filter(j => j.worker_id === activeWorkerId || activeWorkerId === 101);
+
+  const totalTakehome = history.reduce((sum, j) => sum + (parseFloat(j.payout) || 0), 0);
+  const completedCount = history.filter(j => j.status === "COMPLETED").length;
+
+  const kpiTakehome = document.getElementById("worker-history-kpi-takehome");
+  if (kpiTakehome) kpiTakehome.innerText = `₹${Math.round(totalTakehome).toLocaleString()}`;
+
+  const kpiCount = document.getElementById("worker-history-kpi-completed");
+  if (kpiCount) kpiCount.innerText = completedCount;
+
+  renderWorkerServiceHistory(history);
+  modal.classList.remove("hidden");
+  safeCreateIcons();
+}
+
+function closeWorkerServiceHistoryModal() {
+  sfx.playClick();
+  const modal = document.getElementById("modal-worker-service-history");
+  if (modal) modal.classList.add("hidden");
+}
+
+function filterWorkerHistory(category) {
+  sfx.playClick();
+  state.workerHistoryFilter = category;
+
+  const activeWorkerId = state.activeWorker.id;
+  const fullList = (state.workerJobHistory || []).filter(j => j.worker_id === activeWorkerId || activeWorkerId === 101);
+
+  const filtered = category === "all"
+    ? fullList
+    : fullList.filter(item => item.service_type === category);
+
+  renderWorkerServiceHistory(filtered);
+}
+
+function handleWorkerHistorySearch(query) {
+  const q = (query || "").toLowerCase().trim();
+  const activeWorkerId = state.activeWorker.id;
+  const fullList = (state.workerJobHistory || []).filter(j => j.worker_id === activeWorkerId || activeWorkerId === 101);
+
+  if (!q) {
+    renderWorkerServiceHistory(fullList);
+    return;
+  }
+  const filtered = fullList.filter(item => {
+    return (
+      item.booking_id.toString().includes(q) ||
+      (item.customer_name || "").toLowerCase().includes(q) ||
+      (item.sub_service || "").toLowerCase().includes(q) ||
+      (item.service_type || "").toLowerCase().includes(q)
+    );
+  });
+  renderWorkerServiceHistory(filtered);
+}
+
+function renderWorkerServiceHistory(items) {
+  const container = document.getElementById("worker-service-history-list");
+  if (!container) return;
+  const isHi = state.currentLanguage === "hi";
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-12 text-slate-500 space-y-3">
+        <i data-lucide="briefcase" class="w-12 h-12 mx-auto text-slate-300"></i>
+        <p class="font-bold text-sm">${isHi ? "कोई कार्य लॉग नहीं मिला।" : "No worker job records logged for this profile yet."}</p>
+      </div>
+    `;
+    safeCreateIcons();
+    return;
+  }
+
+  container.innerHTML = items.map(item => {
+    const hasProof = item.proof_of_work && item.proof_of_work.image;
+    return `
+      <div class="service-history-card bg-slate-50 hover:bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3 transition">
+        <div class="flex items-start justify-between gap-2 flex-wrap">
+          <div>
+            <div class="flex items-center gap-2">
+              <h4 class="font-black text-slate-900 text-sm sm:text-base">${item.sub_service || item.service_type.toUpperCase()}</h4>
+              <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded">Job #${item.booking_id}</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">
+              Client: <strong>${item.customer_name}</strong> • 📅 ${item.booking_date} • 🕒 ${item.booking_time}
+            </p>
+          </div>
+          <div class="text-right">
+            <span class="text-base font-black text-emerald-700 block">+ ₹${item.payout.toFixed(2)}</span>
+            <span class="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">100% Wage DBT</span>
+          </div>
+        </div>
+
+        <!-- Proof of work review banner in worker card -->
+        ${hasProof ? `
+          <div class="flex items-center gap-3 p-2.5 bg-white rounded-xl border border-slate-200">
+            <img src="${item.proof_of_work.image}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm cursor-pointer hover:opacity-90"
+              alt="Proof" onclick="openProofLightbox('${item.proof_of_work.image}', 'Job #${item.booking_id} Proof of Work')">
+            <div class="text-[11px] flex-1 truncate">
+              <span class="font-bold text-slate-800 block">Proof of Work Verified</span>
+              <p class="text-slate-500 truncate text-[10px]">${item.proof_of_work.notes || 'Inspection completed.'}</p>
+              ${item.proof_of_work.odometer ? `<span class="text-[10px] font-mono text-cyan-800 font-bold">Odometer: ${item.proof_of_work.odometer}</span>` : ''}
+            </div>
+            <button type="button" onclick="openProofLightbox('${item.proof_of_work.image}', 'Job #${item.booking_id} Proof of Work')"
+              class="px-2.5 py-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 rounded-lg">
+              Zoom
+            </button>
+          </div>
+        ` : ''}
+
+        <!-- Dual OTP settlement & DBT Status -->
+        <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-200 flex-wrap gap-2">
+          <div class="font-mono text-[11px]">
+            <span>Settled Dual-OTP: START <strong>${item.start_otp}</strong> • END <strong>${item.end_otp}</strong></span>
+          </div>
+          <div class="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px]">
+            <i data-lucide="check-check" class="w-4 h-4 text-emerald-600"></i>
+            <span>${item.dbt_status || 'SETTLED_TO_DCCB'}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  safeCreateIcons();
+}
+
+// Global browser window exports for AI Chatbot, Worker Govt Schemes, Service History & Driver Safety
 if (typeof window !== "undefined") {
   window.openAiChatModal = openAiChatModal;
   window.closeAiChatModal = closeAiChatModal;
@@ -12935,5 +15852,69 @@ if (typeof window !== "undefined") {
   window.openOrganisationAmcCertificateModal = openOrganisationAmcCertificateModal;
   window.closeOrganisationAmcCertificateModal = closeOrganisationAmcCertificateModal;
   window.printOrganisationAmcCertificate = printOrganisationAmcCertificate;
+  window.focusOrSelectService = focusOrSelectService;
+  window.renderVisualServiceNavRibbon = renderVisualServiceNavRibbon;
+  window.SUB_SERVICE_PHOTOS = SUB_SERVICE_PHOTOS;
+  window.SUB_SERVICE_PALETTES = SUB_SERVICE_PALETTES;
+  window.getSubServicePalette = getSubServicePalette;
+  window.getSubServicePhoto = getSubServicePhoto;
+  window.renderSubServices = renderSubServices;
+  // Worker Government Schemes Exports
+  window.GOVT_WORKER_POLICIES = GOVT_WORKER_POLICIES;
+  window.initGovtWorkerSchemes = initGovtWorkerSchemes;
+  window.renderGovtWorkerSchemes = renderGovtWorkerSchemes;
+  window.filterGovtSchemes = filterGovtSchemes;
+  window.filterGovtSchemesByTrade = filterGovtSchemesByTrade;
+  window.handleSchemeSearchInput = handleSchemeSearchInput;
+  window.openGovtSchemeDetails = openGovtSchemeDetails;
+  window.closeGovtSchemeDetails = closeGovtSchemeDetails;
+  window.openGovtSchemesOverviewModal = openGovtSchemesOverviewModal;
+  window.claimGovtScheme = claimGovtScheme;
+  window.handleModalClaimSubmit = handleModalClaimSubmit;
+  window.toggleBookmarkScheme = toggleBookmarkScheme;
+  window.downloadSchemeVoucher = downloadSchemeVoucher;
+  window.scrollToGovtSchemesHub = scrollToGovtSchemesHub;
+  window.updateWorkerGovtSchemesForWorker = updateWorkerGovtSchemesForWorker;
+  window.handleLoanSliderChange = handleLoanSliderChange;
+  // Service History, Telemetry & Safety Exports
+  window.snapCameraProofSimulation = snapCameraProofSimulation;
+  window.autofillOdometer = autofillOdometer;
+  window.openProofLightbox = openProofLightbox;
+  window.openProofLightboxFromPreview = openProofLightboxFromPreview;
+  window.closeProofLightbox = closeProofLightbox;
+  window.initDriverTelemetryHUD = initDriverTelemetryHUD;
+  window.startDriverTelemetryStream = startDriverTelemetryStream;
+  window.stopDriverTelemetryStream = stopDriverTelemetryStream;
+  window.updateDriverTelemetryHUD = updateDriverTelemetryHUD;
+  window.toggleTelemetryDiagnostics = toggleTelemetryDiagnostics;
+  window.initEmergencyHelplineSystem = initEmergencyHelplineSystem;
+  window.startSimulatedEmergencyCall = startSimulatedEmergencyCall;
+  window.endSimulatedEmergencyCall = endSimulatedEmergencyCall;
+  window.toggleEmergencyMute = toggleEmergencyMute;
+  window.toggleEmergencySpeaker = toggleEmergencySpeaker;
+  window.sendEmergencyTelemetryPing = sendEmergencyTelemetryPing;
+  window.sendEmergencyVoiceResponse = sendEmergencyVoiceResponse;
+  window.initServiceHistorySystem = initServiceHistorySystem;
+  window.updateServiceHistoryBadges = updateServiceHistoryBadges;
+  window.openCitizenServiceHistoryModal = openCitizenServiceHistoryModal;
+  window.closeCitizenServiceHistoryModal = closeCitizenServiceHistoryModal;
+  window.renderCitizenServiceHistory = renderCitizenServiceHistory;
+  window.filterCitizenHistory = filterCitizenHistory;
+  window.handleCitizenHistorySearch = handleCitizenHistorySearch;
+  window.downloadCoopReceipt = downloadCoopReceipt;
+  window.rebookHistoricalService = rebookHistoricalService;
+  window.openWorkerServiceHistoryModal = openWorkerServiceHistoryModal;
+  window.closeWorkerServiceHistoryModal = closeWorkerServiceHistoryModal;
+  window.renderWorkerServiceHistory = renderWorkerServiceHistory;
+  window.filterWorkerHistory = filterWorkerHistory;
+  window.handleWorkerHistorySearch = handleWorkerHistorySearch;
+  // Customer Driver Misconduct & Police Crime Reporting Exports
+  window.openCustomerDriverReportModal = openCustomerDriverReportModal;
+  window.closeCustomerDriverReportModal = closeCustomerDriverReportModal;
+  window.quickFillReportChip = quickFillReportChip;
+  window.handleCustomerDriverReportSubmit = handleCustomerDriverReportSubmit;
+  window.submitCustomerDriverReport = submitCustomerDriverReport;
 }
+
+
 

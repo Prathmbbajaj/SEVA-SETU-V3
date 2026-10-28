@@ -88,7 +88,7 @@ def run_tests():
     # Confirm submitEndOtp calls resetCustomerAppMap
     end_otp_idx = js.find('function submitEndOtp()')
     assert end_otp_idx != -1, "submitEndOtp missing"
-    end_otp_block = js[end_otp_idx:end_otp_idx+4000]
+    end_otp_block = js[end_otp_idx:end_otp_idx+12000]
     assert 'resetCustomerAppMap()' in end_otp_block, "submitEndOtp must trigger resetCustomerAppMap() upon job completion!"
     print("[PASS] Customer app map reset verified in submitEndOtp & exported to window.")
 

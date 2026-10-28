@@ -835,7 +835,7 @@ def parse_intent_fallback(user_text: str, detected_lang: str) -> Dict[str, Any]:
             )
     else:
         # Single-service reply (preserves existing rich format 100%)
-        service_key = str(primary["service_id"])
+        service_key = primary["service_id"]
         service_info = SERVICES_CATALOG[service_key]
         best_sub_services: List[Dict[str, Any]] = list(primary["sub_services"])
         sub_titles_en = ", ".join([f"'{s['title']}' (₹{s['base']})" for s in best_sub_services])

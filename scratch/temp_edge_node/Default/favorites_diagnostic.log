@@ -1,0 +1,51 @@
+2026-10-21 12:08:21.416: [INFO] CurrentProfilePath: C:\Users\Pratham\OneDrive\Desktop\Seva Setu App\scratch\temp_edge_node\Default
+2026-10-21 12:08:21.416: [INFO] Profiles total count: 1
+2026-10-21 12:08:21.416: [INFO] Profile: name=Profile 1 path=C:\Users\Pratham\OneDrive\Desktop\Seva Setu App\scratch\temp_edge_node\Default lastActive=null
+2026-10-21 12:08:21.416: [INFO] LastUsedProfileDir: C:\Users\Pratham\OneDrive\Desktop\Seva Setu App\scratch\temp_edge_node\Default
+2026-10-21 12:08:21.417: [INFO] VisibilityChanged: 0
+2026-10-21 12:08:21.447: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:21.447: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:21.447: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:21.447: [INFO] OnDoneLoading sync enabled: 0
+2026-10-21 12:08:21.447: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-21 12:08:21.447: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-21 12:08:21.447: [INFO] BookmarksSnapshot Startup total=3 bar=3 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-21 12:08:21.456: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-10-21 12:08:22.269: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-10-21 12:08:22.275: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.278: [INFO] Primary account changed.
+2026-10-21 12:08:22.278: [INFO] OnPrimaryAccountChanged PrimaryAccountChangeEvent::Type::kSet
+2026-10-21 12:08:22.297: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.319: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.647: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.650: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.653: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.657: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.660: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.662: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-10-21 12:08:22.672: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 4
+2026-10-21 12:08:25.055: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.055: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.055: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.055: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.056: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.056: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.057: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.057: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.057: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.058: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.058: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.059: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.059: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.059: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.060: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.060: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.060: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.061: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.061: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.061: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.061: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.062: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.062: [INFO] BookmarkNodeAdded, ABU: 0
+2026-10-21 12:08:25.075: [INFO] BookmarkBarPrefChanged showBar=0 showBarNTP=0
+2026-10-21 12:08:25.128: [INFO] VisibilityChanged: 1

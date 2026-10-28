@@ -11,7 +11,7 @@
   --coop-emerald: #059669;
   --coop-emerald-dark: #047857;
   --coop-red: #dc2626;
-  --coop-bg: #f8fafc;
+  --coop-bg: #98b18d;
   --coop-surface: #ffffff;
 }
 
@@ -21,7 +21,7 @@
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f8fafc;
+  background-color: #98b18d !important;
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -441,9 +441,200 @@ code, .font-mono {
 .service-tab-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;
   overflow-wrap: break-word;
 }
+
+/* Visual Navigation Ribbon & Micro-Badges */
+.service-visual-nav-btn {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-visual-nav-btn:hover {
+  transform: translateY(-2px);
+}
+
+.service-visual-nav-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* =======================================================
+   SUB-SERVICE TAB CARDS: MULTI-SERVICE POPUP MEDIA & PALETTES
+   ======================================================= */
+.subservice-tab-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease, background-color 0.2s ease;
+  will-change: transform, box-shadow;
+  box-sizing: border-box;
+}
+
+.subservice-tab-card:hover {
+  transform: translateY(-3px);
+}
+
+.subservice-tab-card:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.subservice-tab-card .subservice-img-thumb {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+
+.subservice-tab-card:hover .subservice-img-thumb {
+  transform: scale(1.08);
+}
+
+/* =======================================================
+   WORKER APP: GOVERNMENT EMPLOYMENT & WELFARE POLICIES HUB
+   ======================================================= */
+.govt-scheme-card {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.22s ease;
+  will-change: transform, box-shadow;
+  box-sizing: border-box;
+}
+
+.govt-scheme-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px -6px rgba(15, 23, 42, 0.12), 0 6px 12px -2px rgba(15, 23, 42, 0.06);
+}
+
+.govt-scheme-card .scheme-img-thumb {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.govt-scheme-card:hover .scheme-img-thumb {
+  transform: scale(1.06);
+}
+
+.tricolor-strip {
+  height: 4px;
+  background: linear-gradient(90deg, #ff9933 0%, #ff9933 33.3%, #ffffff 33.3%, #ffffff 66.6%, #138808 66.6%, #138808 100%);
+  border-radius: 9999px;
+}
+
+.scheme-filter-btn {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scheme-filter-btn.active {
+  background: #1e3a8a !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -1px rgba(30, 58, 138, 0.35) !important;
+}
+
+.scheme-trade-chip.active {
+  background: #065f46 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.3) !important;
+}
+
+.voucher-card-preview {
+  background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #042f2e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.voucher-card-preview::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ================= DRIVER GPS TELEMETRY & HUD STYLING ================= */
+.telemetry-hud-card {
+  background: linear-gradient(135deg, #090d16 0%, #0f172a 60%, #172554 100%);
+  border: 1.5px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.telemetry-speed-gauge {
+  background: radial-gradient(circle at center, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.95) 70%);
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.25);
+}
+
+.telemetry-hud-chip {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.compass-dial-ring {
+  border: 2px dashed rgba(59, 130, 246, 0.6);
+  border-radius: 9999px;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compass-needle {
+  width: 3px;
+  height: 48%;
+  background: linear-gradient(to top, transparent, #ef4444);
+  position: absolute;
+  top: 2%;
+  left: calc(50% - 1.5px);
+  transform-origin: bottom center;
+}
+
+/* ================= EMERGENCY HELPLINE CALL SIMULATOR STYLING ================= */
+.emergency-call-overlay {
+  background: radial-gradient(circle at top, #1e1b4b 0%, #09090b 60%, #000000 100%);
+}
+
+@keyframes call-ring-pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 26px rgba(220, 38, 38, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.call-ring-anim {
+  animation: call-ring-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes waveform-bounce {
+  0%, 100% { height: 6px; }
+  50% { height: 26px; }
+}
+
+.audio-bar {
+  width: 4px;
+  border-radius: 9999px;
+  background: #38bdf8;
+  animation: waveform-bounce 1.1s infinite ease-in-out;
+}
+
+.audio-bar:nth-child(2) { animation-delay: 0.15s; background: #818cf8; }
+.audio-bar:nth-child(3) { animation-delay: 0.3s; background: #ec4899; }
+.audio-bar:nth-child(4) { animation-delay: 0.45s; background: #38bdf8; }
+.audio-bar:nth-child(5) { animation-delay: 0.2s; background: #34d399; }
+.audio-bar:nth-child(6) { animation-delay: 0.35s; background: #fbbf24; }
+
+/* ================= MANDATORY PROOF OF WORK HIGHLIGHT ================= */
+@keyframes proof-border-pulse {
+  0%, 100% { border-color: #f59e0b; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  50% { border-color: #dc2626; box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.2); }
+}
+
+.proof-mandatory-pulse {
+  animation: proof-border-pulse 1.5s infinite ease-in-out !important;
+}
+
+.service-history-card {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.08);
+}
+
 

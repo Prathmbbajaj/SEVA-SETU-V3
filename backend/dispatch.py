@@ -8,9 +8,97 @@ from seed_data import WORKERS, DEBARRED_CUSTOMERS, WORKER_REJECTIONS_LOG
 from pricing import calculate_transparent_fare
 
 # In-memory storage for prototype bookings and rejection tracking
-BOOKINGS_DB: Dict[int, Dict[str, Any]] = {}
+BOOKINGS_DB: Dict[int, Dict[str, Any]] = {
+    1088: {
+        "booking_id": 1088,
+        "customer_name": "Aarav Mehta",
+        "customer_phone": "+91 98765 43210",
+        "service_type": "driver",
+        "sub_service": "Emergency & Outstation Highway Driver",
+        "booking_date": "2026-10-20",
+        "booking_time": "02:00 PM - 05:00 PM",
+        "status": "COMPLETED",
+        "start_otp": "3819",
+        "end_otp": "9021",
+        "start_otp_verified": True,
+        "end_otp_verified": True,
+        "assigned_worker": {
+            "id": 104,
+            "name": "Vikram Singh",
+            "phone": "+91 98911 34567",
+            "skill": "driver",
+            "coop_name": "Delhi Transport Guild Cooperative",
+            "rating": 4.9,
+            "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120"
+        },
+        "pricing": {
+            "cooperative_wage_payout": 580.0,
+            "total_payable": 629.3,
+            "statutory_tax": 29.0
+        },
+        "proof_of_work": {
+            "image_url": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600",
+            "work_notes": "Executive transit completed safely from Connaught Place to Airport T3. Keys handed over.",
+            "odometer_reading": "24,842 km",
+            "timestamp": "2026-10-20T17:14:00Z",
+            "verified": True
+        },
+        "telemetry": {
+            "distance_km": 18.4,
+            "avg_speed_kmh": 44.0,
+            "route": "Connaught Place -> Dhaula Kuan -> NH-48 -> IGI T3"
+        },
+        "timeline": [
+            "Job initialized for DRIVER",
+            "Dispatched to Vikram Singh",
+            "Customer verified START_OTP",
+            "Proof of work attached & verified",
+            "Dual-OTP verified and payout released"
+        ]
+    },
+    1072: {
+        "booking_id": 1072,
+        "customer_name": "Aarav Mehta",
+        "customer_phone": "+91 98765 43210",
+        "service_type": "electrician",
+        "sub_service": "Modular MCB & DB Dressing",
+        "booking_date": "2026-10-18",
+        "booking_time": "10:00 AM - 12:30 PM",
+        "status": "COMPLETED",
+        "start_otp": "8812",
+        "end_otp": "4509",
+        "start_otp_verified": True,
+        "end_otp_verified": True,
+        "assigned_worker": {
+            "id": 101,
+            "name": "Rajesh Kumar",
+            "phone": "+91 98765 43210",
+            "skill": "electrician",
+            "coop_name": "Delhi Central Labour Cooperative",
+            "rating": 4.9,
+            "photo": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=120"
+        },
+        "pricing": {
+            "cooperative_wage_payout": 420.0,
+            "total_payable": 455.7
+        },
+        "proof_of_work": {
+            "image_url": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600",
+            "work_notes": "Replaced tripping MCB with 32A breaker, full load tested.",
+            "odometer_reading": None,
+            "timestamp": "2026-10-18T12:28:00Z",
+            "verified": True
+        },
+        "timeline": [
+            "Job initialized for ELECTRICIAN",
+            "Dispatched to Rajesh Kumar",
+            "START_OTP verified",
+            "Photo proof validated and completed"
+        ]
+    }
+}
 BOOKING_REJECTIONS: Dict[int, List[int]] = {} # booking_id -> list of worker_ids who rejected
-BOOKING_COUNTER = 1000
+BOOKING_COUNTER = 1100
 
 def find_nearest_workers(
     customer_coords: tuple[float, float],
@@ -250,10 +338,18 @@ def verify_start_otp(booking_id: int, entered_otp: str) -> Dict[str, Any]:
     """
     Worker enters START_OTP provided by the customer upon arrival.
     Unlocks work commencement.
+    Ensures service request has been ACCEPTED by worker first.
     """
     booking = BOOKINGS_DB.get(booking_id)
     if not booking:
         return {"success": False, "message": "Booking not found"}
+
+    # Enforce worker acceptance before allowing OTP fill/verification
+    if booking.get("status") not in ["ACCEPTED", "IN_PROGRESS"]:
+        return {
+            "success": False,
+            "message": "Cannot verify OTP: Service request must be ACCEPTED by worker first before OTP can be entered."
+        }
 
     if booking["start_otp"] == entered_otp.strip():
         booking["start_otp_verified"] = True
@@ -263,18 +359,39 @@ def verify_start_otp(booking_id: int, entered_otp: str) -> Dict[str, Any]:
     else:
         return {"success": False, "message": "Invalid START_OTP. Please ask customer to show their screen."}
 
-def complete_job_with_proof(booking_id: int, entered_otp: str, proof_image: Optional[str] = None) -> Dict[str, Any]:
+def complete_job_with_proof(
+    booking_id: int,
+    entered_otp: str,
+    proof_image: Optional[str] = None,
+    work_notes: Optional[str] = None,
+    odometer_reading: Optional[str] = None
+) -> Dict[str, Any]:
     """
     Worker uploads completion proof-of-work and enters customer's END_OTP.
+    Enforces mandatory Proof of Work before allowing service completion.
     Finalizes the service, logs direct payout, and registers in Ministry records.
     """
     booking = BOOKINGS_DB.get(booking_id)
     if not booking:
         return {"success": False, "message": "Booking not found"}
 
+    # Mandatory Proof of Work validation
+    if not proof_image or not proof_image.strip():
+        return {
+            "success": False,
+            "message": "Mandatory Criteria Violation: Service cannot be completed without verified Proof of Work! Please attach completion photo."
+        }
+
     if booking["end_otp"] == entered_otp.strip():
         booking["end_otp_verified"] = True
-        booking["proof_of_work_url"] = proof_image or "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80"
+        booking["proof_of_work_url"] = proof_image
+        booking["proof_of_work"] = {
+            "image_url": proof_image,
+            "work_notes": work_notes or "Cooperative standard quality service completed with photo verification.",
+            "odometer_reading": odometer_reading,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "verified": True
+        }
         booking["status"] = "COMPLETED"
         payout = booking["pricing"].get("cooperative_wage_payout", 0.0)
         booking["timeline"].append("Job successfully completed. Proof of work uploaded and END_OTP validated.")
@@ -292,8 +409,30 @@ def complete_job_with_proof(booking_id: int, entered_otp: str, proof_image: Opti
         return {
             "success": True,
             "status": "COMPLETED",
-            "message": "Service successfully completed! Direct wage disbursed.",
+            "message": "Service successfully completed! Direct wage disbursed with verified Proof of Work.",
             "booking": booking
         }
     else:
         return {"success": False, "message": "Invalid END_OTP. Please ask customer for completion OTP."}
+
+def get_customer_service_history(customer_name: str) -> List[Dict[str, Any]]:
+    """Retrieve full service history for a specific citizen."""
+    results = []
+    c_lower = customer_name.strip().lower()
+    for b in BOOKINGS_DB.values():
+        if b.get("customer_name", "").strip().lower() == c_lower:
+            results.append(b)
+    # Sort newest first
+    results.sort(key=lambda x: x.get("booking_id", 0), reverse=True)
+    return results
+
+def get_worker_service_history(worker_id: int) -> List[Dict[str, Any]]:
+    """Retrieve all jobs undertaken or completed by a specific cooperative worker."""
+    results = []
+    for b in BOOKINGS_DB.values():
+        assigned = b.get("assigned_worker")
+        if assigned and assigned.get("id") == worker_id:
+            results.append(b)
+    results.sort(key=lambda x: x.get("booking_id", 0), reverse=True)
+    return results
+
